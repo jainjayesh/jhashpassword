@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ <string name="app_name">JHashPassword</string>
+ <string name="app_pro">PRO</string>
+ <string name="app_free">FREE</string>
+ <string name="version">1.1.7</string>
+ <string name="ext_storage_dir">JHashPassword</string>
+ <string name="myHomepage"> http://janbusch.dyndns.info/</string>
+ <string name="myMailAddress">jan.n.busch@googlemail.com</string>
+ <string name="donateLink">
+		<![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K59FW98EB79HE]]>
+ </string>
+ <string name="hp">hashPassword</string>
+ <string name="host">currentHost</string>
+ <string name="login">currentLogin</string>
+ <string name="selectedFile">selectedFile</string>
+</resources>

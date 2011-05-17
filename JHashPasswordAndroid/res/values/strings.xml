@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+ <!-- App Description -->
+ <string name="app_desc">JHashPassword creates secure different passwords for each host (websites, banking, ...) using one passphrase!</string>
+
+ <!-- Activity names -->
+ <string name="app_name_settings">Settings</string>
+ <string name="app_name_host">Hosts - Logins</string>
+ <string name="app_name_impexp">Import - Backup</string>
+ <string name="app_name_filechooser">Import - Backup</string>
+ <string name="app_name_sync">Synchronization</string>
+ <string name="app_name_gopro">Go pro!</string>
+
+ <!-- Notifications -->
+ <string name="notificationClipboard">Removed password from clipboard!</string>
+
+ <!-- Activation-Mail -->
+ <string name="mailSubject">Activate JHashPassword - Go Pro</string>
+ <string name="mailBody">Please add your PayPal-name to assign your donation!</string>
+
+ <!-- Dialog Buttons -->
+ <string name="OK">OK</string>
+ <string name="Abort">Abort</string>
+ <string name="Yes">Yes</string>
+ <string name="Permanent">Permanent</string>
+ <string name="No">No</string>
+
+ <!-- GUI Elements -->
+ <string name="txtConnectionEstablished">Connection established.</string>
+ <string name="txtNoConnection">No connection.</string>
+ <string name="txtSerialNo">Serial-No:</string>
+ <string name="txtActivationCode">Activation-Code:</string>
+ <string name="txtSync">Synchronization state:</string>
+ <string name="txtChooseFile">Please select a file:</string>
+ <string name="txtImport">Choose import source:</string>
+ <string name="txtExport">Export:</string>
+ <string name="txtHostname">Choose host:</string>
+ <string name="txtLoginname">Choose login:</string>
+ <string name="txtPassphraseOne">Enter passphrase:</string>
+ <string name="txtPassphraseTwo">Reenter passphrase:</string>
+ <string name="txtHashtype">Choose hashtype:</string>
+ <string name="txtCharset">Edit characterset:</string>
+ <string name="txtPasswordLength">Passwordlength:</string>
+ <string name="btnGoPro">Go Pro!</string>
+ <string name="btnStartSync">Start sync</string>
+ <string name="btnStopSync">Stop sync</string>
+ <string name="btnDelete">Delete XML-File</string>
+ <string name="btnReset">Reset to standard values</string>
+ <string name="btnEditHL">Edit hostinformations</string>
+ <string name="btnEditLN">Edit logininformation</string>
+ <string name="btnAdd">Add</string>
+ <string name="btnRem">Remove</string>
+ <string name="btnChooseFile">Choose file</string>
+ <string name="btnImport">Import</string>
+ <string name="btnExport">Export</string>
+ <string name="btnGenPW">Generate password</string>
+ <string name="btnExit">Exit</string>
+ <string name="btnSaveNReturn">Save</string>
+ <string name="btnCancelNReturn">Discard</string>
+ <string name="btnShowClipboard">Show clipboard</string>
+ <string name="btnClearClipboard">Empty clipboard</string>
+ <string name="btnDonate">Donate</string>
+ <string name="btnActivate">Activate</string>
+ <string name="btnSendActCode">Send mail</string>
+
+ <!-- HPHome Options-Menu -->
+ <string name="optmen_Settings">Settings</string>
+ <string name="optmen_SettingsXML">Hosts and logins</string>
+ <string name="optmen_SettingsIE">Import and backup</string>
+ <string name="optmen_SettingsSync">Synchronization</string>
+ <string name="optmen_Aboutjhp">About</string>
+ <string name="optmen_Help">Help</string>
+
+
+ <!-- Spinner prompts -->
+ <string name="hostname_prompt">Host:</string>
+ <string name="loginname_prompt">Login:</string>
+
+ <!-- Dialog Titles -->
+ <string name="titleAcceptConnection">Incoming connection:</string>
+ <string name="titleClipboard">Clipboard:</string>
+ <string name="titleXMLFile">HashPassword.xml</string>
+ <string name="titleAddHost">Add host</string>
+ <string name="titleExport">Backup</string>
+ <string name="titleAddLogin">Add login</string>
+ <string name="titleImport">Import XML-File</string>
+ <string name="titleSaveSettings">Save changes</string>
+
+ <!-- Dialog Messages -->
+ <string name="msgClearClipboardQuestion"> Do you want to clear the clipboard?</string>
+ <string name="msgSerialRejected"> The entered serial-number is not valid. Please ensure that the entered serial-number is correct and contact me, if the one I send you is not working!</string>
+ <string name="msgSerialAccepted"> The entered serial-number is valid. Restarting JHashPassword...</string>
+ <string name="msgWrongSerial"> The entered serial-number is not valid. Please check the entered serial-number and contact me, if the one I send you is not working.</string>
+ <string name="msgWifiNotEnabled"> Wifi is not enabled. Please enable wifi for using the synchronization.</string>
+ <string name="msgConnectionRejected"> Connection rejected. Synchronization aborted.</string>
+ <string name="msgClipboardCleared"> Clipboard cleared!</string>
+ <string name="msgAcceptConnection"> Do you accept the incoming connection request from</string>
+ <string name="msgWaitingForSync"> Waiting for incoming synchronization-request...</string>
+ <string name="msgOnlyInPro"> Sorry, but this feature is only available in the pro version of JHashPassword.</string>
+ <string name="msgFileImported"> File imported!</string>
+ <string name="msgSelectedFile"> Selected file:</string>
+ <string name="msgPasswordCreated"> Password created and stored in clipboard! The password will be removed from clipboard after 3 minutes.</string>
+ <string name="msgDelete"> Attention! You are going to delete the HashPassword.xml.\nIt is possible, that you are no longer able to recover your passwords! \n\nAre you really sure that you want to delete it?</string>
+ <string name="msgNotMounted"> There is no sdcard mounted or there is no write permission. Due to this situation, you can\'t make an import or backup.</string>
+ <string name="msgCantWrite"> Could not write on sdcard. Please check your permissions.</string>
+ <string name="msgExportSuccess"> Backup was successfull. The XML-file was exported into the folder \'JHashPassword\' on your sdcard.</string>
+ <string name="msgAddHost"> Please enter the new hostname:</string>
+ <string name="msgAddLogin"> Please enter the new loginname:</string>
+ <string name="msgImport"> Attention! You are going to overwrite the existing HashPassword.xml with the one you chose.\nIt is possible, that you are no longer able to recover your passwords! \n\nAre you really sure that you want to overwrite it?</string>
+ <string name="msgSaveSettings"> Attention!\n\nIf you save the changes, it is possible, that you are no longer able to recover your passwords! You can recover the passwords, if you have a backup of the HashPassword.xml or you if remember the original values! \n\nAre you really sure that you want to save the changes?</string>
+ <string name="msgXMLNotFound"> Welcome!\nThis is the first start.\n\nIf you need help, press the menu-key and click \'help\'.\nIf you want to import an existing XML-file go to the settings-menu by clicking the menu-key.</string>
+ <string name="msgXMLFailure"> Error while reading XML-file. The file maybe has been corrupted. Validate it\'s content or replace it by a backup.\n\nDo you want to do an import? JHashpassword will exit otherwise.</string>
+ <string name="msgAboutJHP">testitest</string>
+
+ <!-- Help -->
+ <string name="helpFile"> jhphelp/help.html</string>
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/submenu" android:title="@string/optmen_Settings"
+		android:icon="@android:drawable/ic_menu_manage">
+		<menu>
+			<item android:id="@+id/settingsXML" android:title="@string/optmen_SettingsXML"
+				android:icon="@android:drawable/ic_menu_manage" />
+			<item android:id="@+id/settingsIE" android:title="@string/optmen_SettingsIE"
+				android:icon="@android:drawable/ic_menu_manage" />
+			<item android:id="@+id/settingsSync" android:title="@string/optmen_SettingsSync"
+				android:icon="@android:drawable/ic_menu_manage" android:enabled="true" />
+		</menu>
+	</item>
+	<item android:id="@+id/clearclipb" android:icon="@android:drawable/ic_menu_delete"
+		android:title="@string/btnClearClipboard" />
+	<item android:id="@+id/goPro" android:icon="@drawable/paypal_logo" />
+	<item android:id="@+id/aboutjhp" android:title="@string/optmen_Aboutjhp"
+		android:icon="@drawable/icon_50px" />
+	<item android:id="@+id/help" android:title="@string/optmen_Help"
+		android:icon="@android:drawable/ic_menu_help" />
+	<item android:id="@+id/exit" android:icon="@android:drawable/ic_menu_close_clear_cancel"
+		android:title="@string/btnExit" />
+</menu>
