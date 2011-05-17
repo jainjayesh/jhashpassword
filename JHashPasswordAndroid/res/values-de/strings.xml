@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- App Description -->
+	<string name="app_desc">JHashPassword erzeugt sichere, unterschiedliche
+		Passwörter für jeden Host (Websites, Online-Banking, ...) mit einer
+		einzigen Passphrase!</string>
+
+	<!-- Activity names -->
+	<string name="app_name_settings">Einstellungen</string>
+	<string name="app_name_sync">Synchronisation</string>
+
+	<!-- Notifications -->
+	<string name="notificationClipboard">Passwort aus Zwischenablage entfernt!</string>
+
+	<!-- Activation-Mail -->
+	<string name="mailSubject">JHashPassword aktivieren - Go Pro</string>
+	<string name="mailBody">Bitte fügen Sie Ihren PayPal-Namen hinzu, damit ich
+		Ihre Spende zuordnen kann!</string>
+
+	<!-- Dialog Buttons -->
+	<string name="OK">OK</string>
+	<string name="Abort">Abbrechen</string>
+	<string name="Yes">Ja</string>
+	<string name="Permanent">Dauerhaft</string>
+	<string name="No">Nein</string>
+
+	<!-- GUI Elements -->
+	<string name="txtConnectionEstablished">Verbindung hergestellt.</string>
+	<string name="txtNoConnection">Keine Verbindung.</string>
+	<string name="txtGoProDesc">Und so geht\'s: Einfach per PayPal einen beliebigen Betrag spenden, den Activation-Code per Mail an mich schicken und nach Eingang der Spende schicke ich sofort die Serial-Number zurück. Die Serial-Number gilt nur für das Gerät auf dem der Activation-Code generiert wurde. Der Activation-Code wird auf Basis der IMEI Ihres Geräts generiert und wird nicht an mich übertragen. Ich kann keine Rückschlüsse auf Ihre IMEI aus dem Activation-Code ziehen, da ich einen Hashalgorithmus benutze um Ihre IMEI zu verschleiern.\nNach Eingabe der Serial-Number steht Ihnen sofort auch die Synchronisationsfunktion zur Verfügung mit der Sie die Einstellungen von JHashPassword zwischen Ihrem Android-Phone und dem PC abgeglichen werden können.</string>
+	<string name="txtSync">Synchronisationsstatus:</string>
+	<string name="txtChooseFile">Bitte wählen Sie eine Datei aus:</string>
+	<string name="txtImport">Wählen Sie die Quelldatei:</string>
+	<string name="txtExport">Backup:</string>
+	<string name="txtHostname">Hostnamen wählen:</string>
+	<string name="txtLoginname">Loginnamen wählen:</string>
+	<string name="txtPassphraseOne">Passphrase eingeben:</string>
+	<string name="txtPassphraseTwo">Passphrase wiederholen:</string>
+	<string name="txtHashtype">Hashtype wählen:</string>
+	<string name="txtCharset">Characterset bearbeiten:</string>
+	<string name="txtPasswordLength">Passwortlänge:</string>
+
+	<string name="btnStartSync">Sync starten</string>
+	<string name="btnStopSync">Sync stoppen</string>
+	<string name="btnDelete">XML-Datei löschen</string>
+	<string name="btnReset">Auf Standardwerte zurücksetzen</string>
+	<string name="btnEditHL">Hostinformationen bearbeiten</string>
+ <string name="btnEditLN">Logininformation bearbeiten</string>
+	<string name="btnAdd">Hinzufügen</string>
+	<string name="btnRem">Entfernen</string>
+	<string name="btnChooseFile">Datei wählen</string>
+	<string name="btnImport">Import</string>
+	<string name="btnExport">Export</string>
+	<string name="btnGenPW">Passwort generieren</string>
+	<string name="btnExit">Beenden</string>
+	<string name="btnSaveNReturn">Speichern</string>
+	<string name="btnCancelNReturn">Verwerfen</string>
+	<string name="btnShowClipboard">Zwischenablage zeigen</string>
+	<string name="btnClearClipboard">Zwischenablage leeren</string>
+	<string name="btnDonate">Spenden</string>
+	<string name="btnActivate">Aktivieren</string>
+	<string name="btnSendActCode">Mail senden</string>
+
+	<!-- HPHome Options-Menu -->
+	<string name="optmen_Settings">Einstellungen</string><string name="optmen_Aboutjhp">Über</string>
+	<string name="optmen_SettingsXML">Hosts und Logins</string>
+	<string name="optmen_SettingsIE">Import und Backup</string>
+	<string name="optmen_SettingsSync">Synchronisation</string>
+	<string name="optmen_Help">Hilfe</string>
+
+	<!-- Spinner prompts -->
+	<string name="hostname_prompt">Host:</string>
+	<string name="loginname_prompt">Login:</string>
+
+	<!-- Dialog Titles -->
+	<string name="titleAcceptConnection">Eingehende Verbindung:</string>
+	<string name="titleClipboard">Zwischenablage:</string>
+	<string name="titleAddHost">Host hinzufügen</string>
+	<string name="titleExport">Backup</string>
+	<string name="titleAddLogin">Login hinzufügen</string>
+	<string name="titleImport">Import XML-Datei</string>
+	<string name="titleSaveSettings">Änderungen speichern</string>
+
+	<!-- Dialog Messages -->
+	<string name="msgClearClipboardQuestion">
+		Soll die Zwischenablage geleert werden?
+	</string>
+	<string name="msgSerialRejected">
+		Die eingegebene Serien-Nummer ist ungültig. Bitte überprüfen Sie die eingegebene Serien-Nummer und kontaktieren Sie mich, falls die von mir gesendete nicht funktionieren sollte!
+	</string>
+	<string name="msgSerialAccepted">
+		Die eingegebene Serien-Nummer wurde akzeptiert. Starte JHashPassword neu...
+	</string>
+	<string name="msgWrongSerial">
+		Die eingegebene Seriennummer ist ungültig. Bitte
+		überprüfen Sie die eingegebene Seriennummer und kontaktieren Sie mich,
+		falls die die ich Ihnen geschickt habe nicht funktioniert.
+	</string>
+	<string name="msgWifiNotEnabled">
+		Das W-Lan ist deaktiviert. Bitte aktivieren Sie das
+		W-Lan für die Synchronization.
+	</string>
+	<string name="msgConnectionRejected">
+		Verbindung zurückgesetzt. Synchronisation
+		abgebrochen.
+	</string>
+	<string name="msgClipboardCleared">
+		Zwischenablage geleert!
+	</string>
+	<string name="msgAcceptConnection">
+		Nehmen Sie die eingehende Verbindungsanfrage an von
+	</string>
+	<string name="msgWaitingForSync">
+		Warte auf eingehende Synchronisationsanfrage...
+	</string>
+	<string name="msgOnlyInPro">
+		Entschuldigung, aber dieses Feature ist nur in der
+		Pro-Version von JHashPassword enthalten.
+	</string>
+	<string name="msgFileImported">
+		Datei wurde importiert!
+	</string>
+	<string name="msgSelectedFile">
+		Ausgewählte Datei:
+	</string>
+	<string name="msgPasswordCreated">
+		Passwort erzeugt und in Zwischenablage abgelegt!
+		Das Passwort wird nach 3 Min. aus der Zwischenablage entfernt.
+	</string>
+	<string name="msgDelete">
+		Achtung! Sie sind dabei die
+		HashPassword.xml zu
+		löschen.\nEs ist möglich,
+		dass Sie Ihre Passwörter nicht
+		wiederherstellen können!
+		\n\nSind Sie
+		100%ig sicher, dass Sie sie
+		löschen möchten?
+	</string>
+	<string name="msgNotMounted">
+		Es ist keine SD-Karte eingelegt oder es existiert
+		keine Schreibberechtigung. Auf Grund dessen, können Sie kein Import
+		durchführen oder Backup
+		erstellen.
+	</string>
+	<string name="msgCantWrite">
+		Konnte nicht auf SD-Karte schreiben. Bitte
+		Schreibrechte prüfen.
+	</string>
+	<string name="msgExportSuccess">
+		Das Backup wurde ausgeführt. Die XML-Datei wurde in
+		das Verzeichnis
+		\'JHashPassword\' auf Ihrer SD-Karte geschrieben.
+	</string>
+	<string name="msgAddHost">
+		Bitte geben Sie den Namen des neuen Host ein:
+	</string>
+	<string name="msgAddLogin">
+		Bitte geben Sie den Namen des neuen Login ein:
+	</string>
+	<string name="msgImport">
+		Achtung! Sie sind dabei eine existierende
+		HashPassword.xml mit der gewählten zu überschreiben.\nEs ist möglich,
+		dass Sie Ihre Passwörter nicht wiederherstellen können!
+		\n\nSind Sie
+		100%ig sicher, dass Sie sie überscheiben möchten?
+	</string>
+	<string name="msgSaveSettings">
+		Achtung!\n\nWenn Sie fortfahren sind Sie u.U. nicht
+		mehr in der Lage die Passwörter
+		wiederherzustellen, sofern Sie kein
+		Backup der HashPassword.xml haben
+		bzw. sich den ursprünglichen
+		Einstellungen nicht gemerkt haben!\n\nSind
+		Sie 100%ig sicher, dass Sie
+		die Änderungen übernehmen möchten?
+		</string>
+	<string name="msgXMLNotFound">
+ Willkommen!\nDies ist der erste Start.\n\nSollten Sie Hilfe benötigen, wählen Sie \'Hilfe\' über den Menü-Knopf.\nWenn Sie eine bestehende XML-Datei importieren möchten, gehen Sie in das Einstellungsmenü ebenfalls über den Menü-Knopf.</string>
+	<string name="msgXMLFailure">Fehler beim Einlesen der XML-Datei. Die Datei wurde
+		wahrscheinlich beschädigt oder verändert. Prüfen Sie den Inhalt der
+		Datei oder tauschen Sie sie gegebenenfalls gegen ein Backup aus.
+		\nMöchten Sie eine XML-Datei importieren? JHashpassword wird
+		andernfalls beendet.
+	</string>
+
+	<!-- Help -->
+	<string name="helpFile">
+		jhphelp/hilfe.html
+	</string>
+
+</resources>
