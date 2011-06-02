@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content" android:layout_height="wrap_content"
-	android:orientation="vertical">
+	android:orientation="vertical" android:gravity="fill">
 	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:id="@+id/top_control_bar">
@@ -15,8 +15,7 @@
 				android:paddingLeft="5dip" android:shadowColor="#FF000000"
 				android:shadowDx="0" android:shadowDy="-1" android:shadowRadius="0.2"
 				android:textSize="18dip" android:textStyle="bold"
-				android:gravity="center|center_horizontal" android:layout_width="wrap_content"
-				android:layout_gravity="center_vertical|left"></TextView>
+				android:gravity="center|center_horizontal" android:layout_gravity="center_vertical|left" android:layout_width="wrap_content"></TextView>
 		</LinearLayout>
 	</RelativeLayout>
 	<LinearLayout android:id="@+id/bottom_control_bar"
@@ -25,49 +24,49 @@
 		android:orientation="vertical" android:paddingLeft="3dip"
 		android:paddingRight="3dip" android:paddingTop="6dip"
 		android:paddingBottom="4dip">
+		<Button android:text="@string/btnGenPW" android:onClick="onButtonClicked" android:layout_width="fill_parent" android:enabled="false" android:layout_weight="1" android:layout_height="wrap_content" android:id="@+id/btnGenPW"></Button>
+		<Button android:text="@string/btnShowClipboard" android:onClick="onButtonClicked" android:layout_width="fill_parent" android:layout_weight="1" android:layout_height="wrap_content" android:id="@+id/btnShowClipboard"></Button>
 	</LinearLayout>
-	<RelativeLayout android:layout_width="fill_parent"
-		android:orientation="vertical" android:layout_height="fill_parent"
-		android:layout_below="@id/top_control_bar" android:layout_above="@id/bottom_control_bar">
+	<RelativeLayout android:orientation="vertical"
+		android:layout_below="@id/top_control_bar" android:layout_above="@id/bottom_control_bar"
+		android:layout_height="fill_parent" android:layout_width="fill_parent">
 		<ScrollView android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<LinearLayout android:orientation="vertical"
-				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:gravity="center" android:layout_centerHorizontal="true"
-				android:layout_centerVertical="true">
+			android:layout_height="wrap_content" android:gravity="center"
+			android:layout_centerVertical="true">
+			<LinearLayout android:gravity="center"
+				android:layout_centerHorizontal="true"
+				android:layout_centerVertical="true" android:orientation="vertical"
+				android:layout_gravity="center_vertical" android:layout_width="wrap_content"
+				android:layout_height="wrap_content">
 				<TextView android:text="@string/txtHostname" android:id="@+id/txtHostname"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<Spinner android:id="@+id/sprHostname" android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:prompt="@string/hostname_prompt"></Spinner>
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:layout_gravity="left"></TextView>
+				<Spinner android:id="@+id/sprHostname" android:prompt="@string/hostname_prompt"
+					android:layout_height="wrap_content" android:layout_width="fill_parent"
+					android:hapticFeedbackEnabled="true" android:longClickable="true" android:layout_weight="1"></Spinner>
 				<TextView android:text="@string/txtLoginname" android:id="@+id/txtLoginname"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+					android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:layout_gravity="left"></TextView>
 				<Spinner android:id="@+id/sprLoginname"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:prompt="@string/loginname_prompt"></Spinner>
+					android:prompt="@string/loginname_prompt"
+					android:hapticFeedbackEnabled="true" android:longClickable="true" android:layout_weight="1"></Spinner>
 
-				<View android:layout_height="5dip" android:layout_width="wrap_content" />
+				<View android:layout_height="5dip" android:layout_width="wrap_content" android:layout_weight="1"/>
 				<View android:layout_height="2dip" android:background="#FF909090"
-					android:layout_width="fill_parent" />
-				<View android:layout_height="5dip" android:layout_width="wrap_content" />
+					android:layout_width="fill_parent" android:layout_weight="1"/>
+				<View android:layout_height="5dip" android:layout_width="wrap_content" android:layout_weight="1"/>
 
 				<TextView android:text="@string/txtPassphraseOne"
 					android:id="@+id/tvPassphraseOne" android:layout_width="wrap_content"
-					android:layout_height="wrap_content"></TextView>
+					android:layout_height="wrap_content" android:layout_weight="1" android:layout_gravity="left"></TextView>
 				<EditText android:id="@+id/etPasswordOne"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:inputType="textPassword"></EditText>
+					android:inputType="textPassword" android:layout_weight="1"></EditText>
 				<TextView android:text="@string/txtPassphraseTwo"
 					android:id="@+id/tvPassphraseTwo" android:layout_width="wrap_content"
-					android:layout_height="wrap_content"></TextView>
+					android:layout_height="wrap_content" android:layout_weight="1" android:layout_gravity="left"></TextView>
 				<EditText android:id="@+id/etPasswordTwo"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:inputType="textPassword"></EditText>
-				<Button android:text="@string/btnGenPW" android:id="@+id/btnGenPW"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:enabled="false" android:onClick="onButtonClicked"></Button>
-				<Button android:text="@string/btnShowClipboard" android:id="@+id/btnShowClipboard"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:onClick="onButtonClicked"></Button>
+					android:inputType="textPassword" android:layout_weight="1"></EditText>
 			</LinearLayout>
 		</ScrollView>
 	</RelativeLayout>

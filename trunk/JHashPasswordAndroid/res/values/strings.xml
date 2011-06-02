@@ -12,7 +12,7 @@
  <string name="app_name_gopro">Go pro!</string>
 
  <!-- Notifications -->
- <string name="notificationClipboard">Removed password from clipboard!</string>
+ <string name="notificationClipboard">Remove password from clipboard...</string>
 
  <!-- Activation-Mail -->
  <string name="mailSubject">Activate JHashPassword - Go Pro</string>
@@ -87,6 +87,9 @@
  <string name="titleSaveSettings">Save changes</string>
 
  <!-- Dialog Messages -->
+ <string name="msgCopiedToClipboard">
+	Selection copied to clipboard.
+ </string>
  <string name="msgClearClipboardQuestion"> Do you want to clear the clipboard?</string>
  <string name="msgSerialRejected"> The entered serial-number is not valid. Please ensure that the entered serial-number is correct and contact me, if the one I send you is not working!</string>
  <string name="msgSerialAccepted"> The entered serial-number is valid. Restarting JHashPassword...</string>
@@ -111,6 +114,8 @@
  <string name="msgXMLNotFound"> Welcome!\nThis is the first start.\n\nIf you need help, press the menu-key and click \'help\'.\nIf you want to import an existing XML-file go to the settings-menu by clicking the menu-key.</string>
  <string name="msgXMLFailure"> Error while reading XML-file. The file maybe has been corrupted. Validate it\'s content or replace it by a backup.\n\nDo you want to do an import? JHashpassword will exit otherwise.</string>
  <string name="msgAboutJHP">testitest</string>
+ <string name="settingsSaved">Saved settings!</string>
+ <string name="settingsSavingDiscarded">Saving settings has been rejected!</string>
 
  <!-- Help -->
  <string name="helpFile"> jhphelp/help.html</string>

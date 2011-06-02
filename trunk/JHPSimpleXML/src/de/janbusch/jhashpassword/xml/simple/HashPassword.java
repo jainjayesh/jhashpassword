@@ -19,7 +19,7 @@ public class HashPassword implements Serializable {
 	 * SerialVersionUID
 	 */
 	private static final long serialVersionUID = 4420194836998361651L;
-	public static final String jhpSXMLVersion = "2.2"; 
+	public static final String jhpSXMLVersion = "2.3"; 
 	
 	@Element(name = "Hosts", required = false)
 	private Hosts hosts;
@@ -33,8 +33,8 @@ public class HashPassword implements Serializable {
 	private String defaultPasswordLength;
 	@Attribute(name = "LastHost", required = false)
 	private String lastHost;
-	@Attribute(name = "SerialNo", required = false)
-	private String serialNo;
+	@Attribute(name = "Timeout", required = false)
+	private Integer timeout;
 
 	/**
 	 * Gets the value of the hosts property.
@@ -169,24 +169,24 @@ public class HashPassword implements Serializable {
 	}
 
 	/**
-	 * Gets the value of the serialNo property.
+	 * Gets the value of the timeout property.
 	 * 
-	 * @return possible object is {@link String }
+	 * @return possible object is {@link Integer }
 	 * 
 	 */
-	public String getSerialNo() {
-		return serialNo;
+	public Integer getTimeOut() {
+		return timeout;
 	}
 
 	/**
-	 * Sets the value of the serialNo property.
+	 * Sets the value of the timeout property.
 	 * 
 	 * @param value
-	 *            allowed object is {@link String }
+	 *            allowed object is {@link Integer }
 	 * 
 	 */
-	public void setSerialNo(String value) {
-		this.serialNo = value;
+	public void setTimeout(Integer value) {
+		this.timeout = value;
 	}
 
 }

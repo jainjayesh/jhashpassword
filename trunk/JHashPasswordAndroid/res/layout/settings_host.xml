@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="wrap_content" android:layout_height="wrap_content"
-	android:orientation="vertical">
+	android:orientation="vertical" android:gravity="fill">
 	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:id="@+id/top_control_bar">
@@ -30,11 +30,12 @@
 		android:orientation="vertical" android:layout_height="fill_parent"
 		android:layout_below="@id/top_control_bar" android:layout_above="@id/bottom_control_bar">
 		<ScrollView android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content" android:layout_centerVertical="true"
+			android:layout_gravity="center_vertical">
 			<LinearLayout android:orientation="vertical"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:gravity="center" android:layout_centerHorizontal="true"
-				android:layout_centerVertical="true">
+				android:layout_centerVertical="true" android:layout_gravity="center_vertical">
 
 				<TextView android:text="@string/txtHashtype" android:id="@+id/txtHashtype"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
@@ -68,19 +69,6 @@
 				<Button android:text="@string/btnReset" android:id="@+id/btnReset"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:onClick="onButtonClicked"></Button>
-
-				<TableLayout android:id="@+id/tblSaveCancelBtn"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:stretchColumns="*">
-					<TableRow android:id="@+id/tblSaveCancelBtnRow1">
-						<Button android:text="@string/btnSaveNReturn" android:id="@+id/btnSaveNReturn"
-							android:layout_width="fill_parent" android:layout_height="wrap_content"
-							android:onClick="onButtonClicked" android:enabled="false"></Button>
-						<Button android:text="@string/btnCancelNReturn" android:id="@+id/btnCancelNReturn"
-							android:layout_width="fill_parent" android:layout_height="wrap_content"
-							android:onClick="onButtonClicked"></Button>
-					</TableRow>
-				</TableLayout>
 
 			</LinearLayout>
 		</ScrollView>

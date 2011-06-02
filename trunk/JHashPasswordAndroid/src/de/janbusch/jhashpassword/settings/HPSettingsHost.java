@@ -2,18 +2,11 @@ package de.janbusch.jhashpassword.settings;
 
 import jhashpassword.gui.android.R;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
@@ -51,8 +44,6 @@ public class HPSettingsHost extends Activity {
 		etCharset = (EditText) findViewById(R.id.etCharset);
 		sprHashtype = (Spinner) findViewById(R.id.sprHashtype);
 
-		setWatcher();
-
 		int hashTypePos = -1;
 		etPWLen.setText(currentHost.getPasswordLength().replaceAll(
 				PWLEN_REGEXP, ""));
@@ -60,14 +51,14 @@ public class HPSettingsHost extends Activity {
 		hashTypePos = ((ArrayAdapter<CharSequence>) sprHashtype.getAdapter())
 				.getPosition(currentHost.getHashType());
 		if (currentLogin != null) {
-			try{
-			etPWLen.setText(currentLogin.getPasswordLength().replaceAll(
-					PWLEN_REGEXP, ""));
-			etCharset.setText(currentLogin.getCharset());
-			hashTypePos = ((ArrayAdapter<CharSequence>) sprHashtype
-					.getAdapter()).getPosition(currentLogin.getHashType());
+			try {
+				etPWLen.setText(currentLogin.getPasswordLength().replaceAll(
+						PWLEN_REGEXP, ""));
+				etCharset.setText(currentLogin.getCharset());
+				hashTypePos = ((ArrayAdapter<CharSequence>) sprHashtype
+						.getAdapter()).getPosition(currentLogin.getHashType());
 			} catch (NullPointerException e) {
-				//No logininfos
+				// No logininfos
 			}
 		}
 
@@ -86,44 +77,6 @@ public class HPSettingsHost extends Activity {
 	@SuppressWarnings("unchecked")
 	public boolean onButtonClicked(View btn) {
 		switch (btn.getId()) {
-		case R.id.btnSaveNReturn:
-			// Pop up an input dialog.
-			Builder inputDialog = new AlertDialog.Builder(this);
-			inputDialog.setTitle(R.string.titleSaveSettings);
-			inputDialog.setMessage(R.string.msgSaveSettings);
-			inputDialog.setPositiveButton(getString(R.string.Yes),
-					new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							if (currentLogin == null) {
-								currentHost.setCharset(etCharset.getText()
-										.toString().replaceAll("[\r\n]+", ""));
-								currentHost.setPasswordLength(etPWLen.getText()
-										.toString());
-								currentHost.setHashType(sprHashtype
-										.getSelectedItem().toString());
-							} else {
-								currentLogin.setCharset(etCharset.getText()
-										.toString().replaceAll("[\r\n]+", ""));
-								currentLogin.setPasswordLength(etPWLen
-										.getText().toString());
-								currentLogin.setHashType(sprHashtype
-										.getSelectedItem().toString());
-							}
-							setResult(Activity.RESULT_OK, new Intent()
-									.putExtra(getString(R.string.hp),
-											hashPassword));
-							finish();
-						}
-					});
-			inputDialog.setNegativeButton(getString(R.string.No), null);
-			inputDialog.show();
-			return true;
-		case R.id.btnCancelNReturn:
-			Log.d(this.toString(), "Changes canceled!");
-			setResult(Activity.RESULT_CANCELED);
-			finish();
-			return true;
 		case R.id.btnReset:
 			etCharset.setText(hashPassword.getDefaultCharset());
 			etPWLen.setText(hashPassword.getDefaultPasswordLength().replaceAll(
@@ -140,62 +93,22 @@ public class HPSettingsHost extends Activity {
 		}
 	}
 
-	/**
-	 * Sets all watchers for this activity.
-	 */
-	private void setWatcher() {
-		final Button btnSave = (Button) findViewById(R.id.btnSaveNReturn);
-
-		TextWatcher charsetWatcher = new TextWatcher() {
-			@Override
-			public void afterTextChanged(Editable s) {
-				if (etCharset.getText().toString().length() > 0) {
-					btnSave.setEnabled(true);
-				} else {
-					btnSave.setEnabled(false);
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Nothing
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// Nothing
-
-			}
-		};
-		TextWatcher pwWatcher = new TextWatcher() {
-			@Override
-			public void afterTextChanged(Editable s) {
-				String pwLen = etPWLen.getText().toString();
-				if (pwLen.matches("[0-9]+")) {
-					btnSave.setEnabled(true);
-				} else {
-					btnSave.setEnabled(false);
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// Nothing
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// Nothing
-
-			}
-		};
-
-		etCharset.addTextChangedListener(charsetWatcher);
-		etPWLen.addTextChangedListener(pwWatcher);
+	@Override
+	public void onBackPressed() {
+		if (currentLogin == null) {
+			currentHost.setCharset(etCharset.getText().toString()
+					.replaceAll("[\r\n]+", ""));
+			currentHost.setPasswordLength(etPWLen.getText().toString());
+			currentHost.setHashType(sprHashtype.getSelectedItem().toString());
+		} else {
+			currentLogin.setCharset(etCharset.getText().toString()
+					.replaceAll("[\r\n]+", ""));
+			currentLogin.setPasswordLength(etPWLen.getText().toString());
+			currentLogin.setHashType(sprHashtype.getSelectedItem().toString());
+		}
+		setResult(Activity.RESULT_OK,
+				new Intent().putExtra(getString(R.string.hp), hashPassword));
+		finish();
 	}
 
 }

@@ -10,7 +10,7 @@
 	<string name="app_name_sync">Synchronisation</string>
 
 	<!-- Notifications -->
-	<string name="notificationClipboard">Passwort aus Zwischenablage entfernt!</string>
+	<string name="notificationClipboard">Passwort aus der Zwischenablage entfernen...</string>
 
 	<!-- Activation-Mail -->
 	<string name="mailSubject">JHashPassword aktivieren - Go Pro</string>
@@ -45,7 +45,7 @@
 	<string name="btnDelete">XML-Datei löschen</string>
 	<string name="btnReset">Auf Standardwerte zurücksetzen</string>
 	<string name="btnEditHL">Hostinformationen bearbeiten</string>
- <string name="btnEditLN">Logininformation bearbeiten</string>
+ 	<string name="btnEditLN">Logininformation bearbeiten</string>
 	<string name="btnAdd">Hinzufügen</string>
 	<string name="btnRem">Entfernen</string>
 	<string name="btnChooseFile">Datei wählen</string>
@@ -64,9 +64,16 @@
 	<!-- HPHome Options-Menu -->
 	<string name="optmen_Settings">Einstellungen</string><string name="optmen_Aboutjhp">Über</string>
 	<string name="optmen_SettingsXML">Hosts und Logins</string>
+	<string name="optmen_SettingsXMLDesc">Hosts und Logins hinzufügen und deren Einstellungen verändern.</string>
 	<string name="optmen_SettingsIE">Import und Backup</string>
+	<string name="optmen_SettingsIEDesc">Importieren und Sichern der Einstellungen</string>
 	<string name="optmen_SettingsSync">Synchronisation</string>
+	<string name="optmen_SettingsSyncDesc">Synchronisation mit einem PC</string>
 	<string name="optmen_Help">Hilfe</string>
+	<string name="optmen_Timeout">Zwischenablagen-Timeout</string>
+	<string name="optmen_TimeoutDesc">Zeit bis Passwort aus der Zwischenablage entfernt wird.</string>
+	<string name="programmSettings">Programmeinstellungen</string>
+	<string name="xmlSettings">XML-spezifische Einstellungen</string>
 
 	<!-- Spinner prompts -->
 	<string name="hostname_prompt">Host:</string>
@@ -82,6 +89,9 @@
 	<string name="titleSaveSettings">Änderungen speichern</string>
 
 	<!-- Dialog Messages -->
+	<string name="msgCopiedToClipboard">
+		Auswahl in die Zwischenablage kopiert.
+	</string>
 	<string name="msgClearClipboardQuestion">
 		Soll die Zwischenablage geleert werden?
 	</string>
@@ -176,13 +186,15 @@
 		die Änderungen übernehmen möchten?
 		</string>
 	<string name="msgXMLNotFound">
- Willkommen!\nDies ist der erste Start.\n\nSollten Sie Hilfe benötigen, wählen Sie \'Hilfe\' über den Menü-Knopf.\nWenn Sie eine bestehende XML-Datei importieren möchten, gehen Sie in das Einstellungsmenü ebenfalls über den Menü-Knopf.</string>
+ 		Willkommen!\nDies ist der erste Start.\n\nSollten Sie Hilfe benötigen, wählen Sie \'Hilfe\' über den Menü-Knopf.\nWenn Sie eine bestehende XML-Datei importieren möchten, gehen Sie in das Einstellungsmenü ebenfalls über den Menü-Knopf.</string>
 	<string name="msgXMLFailure">Fehler beim Einlesen der XML-Datei. Die Datei wurde
 		wahrscheinlich beschädigt oder verändert. Prüfen Sie den Inhalt der
 		Datei oder tauschen Sie sie gegebenenfalls gegen ein Backup aus.
 		\nMöchten Sie eine XML-Datei importieren? JHashpassword wird
 		andernfalls beendet.
 	</string>
+	<string name="settingsSaved">Einstellungen gespeichert!</string>
+ 	<string name="settingsSavingDiscarded">Einstellungen verworfen!</string>
 
 	<!-- Help -->
 	<string name="helpFile">

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:background="@drawable/banner" android:textColor="#FFFFFFFF" android:paddingLeft="5dip" android:shadowColor="#FF000000" android:shadowDx="0" android:shadowDy="-1" android:shadowRadius="0.2" android:textSize="18dip" xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/list_header_title" android:layout_width="fill_parent" android:layout_height="wrap_content"
+ android:paddingTop="2dip" android:paddingBottom="2dip" style="?android:attr/listSeparatorTextViewStyle" />
