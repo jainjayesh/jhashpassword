@@ -175,6 +175,9 @@ public class HashPassword implements Serializable {
 	 * 
 	 */
 	public Integer getTimeOut() {
+		if(timeout == null) {
+			timeout = 180000;
+		}
 		return timeout;
 	}
 

@@ -5,11 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import de.janbusch.hashpassword.core.CoreInformation;
-import de.janbusch.jhashpassword.impexp.HPImpExp;
-import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
-
 import jhashpassword.gui.android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,6 +20,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+import de.janbusch.hashpassword.core.CoreInformation;
+import de.janbusch.jhashpassword.impexp.HPImpExp;
+import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
+import de.janbusch.jhashpassword.xml.simple.HashPassword;
 
 public class Settings extends Activity {
 	public final static String ITEM_TITLE = "title";
@@ -179,6 +178,11 @@ public class Settings extends Activity {
 			}
 			break;
 		case REQUESTCODE_IMPEXP:
+			try {
+				hashPassword = SimpleXMLUtil.getXML(getApplicationContext());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			Log.d(this.toString(), "Resultcode: " + resultCode);
 			break;
 		default:

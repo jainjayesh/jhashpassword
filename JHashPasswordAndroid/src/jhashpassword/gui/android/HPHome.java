@@ -46,7 +46,6 @@ public class HPHome extends Activity {
 	private static final int REQUESTCODE_IMPEXP = 1;
 	private static final int REQUESTCODE_CLEAR_CLIPBOARD = 2;
 
-	private static final int TIMER_DELAY = 180000;
 	private static final int NOTIFICATION_ID = 1337;
 
 	private HashPassword hashPassword;
@@ -136,6 +135,21 @@ public class HPHome extends Activity {
 		super.onResume();
 		loadHostNames();
 		loadLoginNames();
+
+		Integer clearClipboard = getIntent().getIntExtra(
+				"REQUESTCODE_CLEAR_CLIPBOARD", -1);
+		if (clearClipboard == REQUESTCODE_CLEAR_CLIPBOARD) {
+			clipboard.setText("");
+			Toast.makeText(getBaseContext(),
+					getString(R.string.msgClipboardCleared), Toast.LENGTH_SHORT)
+					.show();
+			hpTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					finish();
+				}
+			}, 100);
+		}
 	}
 
 	/**
@@ -426,25 +440,27 @@ public class HPHome extends Activity {
 			}
 
 			clipboard.setText(pw);
-
 			txtPassphraseOne.setText(new String());
 			txtPassphraseTwo.setText(new String());
 
 			Notification n = new Notification(R.drawable.icon,
 					getString(R.string.notificationClipboard),
 					System.currentTimeMillis());
+			Intent notificationIntent = new Intent(this, HPHome.class);
+			notificationIntent.putExtra("REQUESTCODE_CLEAR_CLIPBOARD",
+					REQUESTCODE_CLEAR_CLIPBOARD);
+			PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, notificationIntent, 0);
 			n.setLatestEventInfo(getApplicationContext(),
 					getString(R.string.app_name),
-					getString(R.string.notificationClipboard),
-					PendingIntent.getActivity(HPHome.this,
-							REQUESTCODE_CLEAR_CLIPBOARD, getIntent(), 0));
+					getString(R.string.notificationClipboard), contentIntent);
+
+			n.flags |= Notification.FLAG_AUTO_CANCEL;
 			notifitcationManager.notify(NOTIFICATION_ID, n);
 
 			hpTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					clipboard.setText("");
-
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
@@ -453,17 +469,17 @@ public class HPHome extends Activity {
 									Toast.LENGTH_SHORT).show();
 						}
 					});
-
 					notifitcationManager.cancel(NOTIFICATION_ID);
 					Log.d(this.toString(), "Removed password from clipboard!");
 				}
-			}, TIMER_DELAY);
+			}, hashPassword.getTimeOut());
 
 			Toast.makeText(getBaseContext(),
 					getString(R.string.msgPasswordCreated), Toast.LENGTH_LONG)
 					.show();
 
 			Log.d(this.toString(), "Password generated, timer started.");
+			finish();
 			return true;
 		case R.id.btnShowClipboard:
 			AlertDialog.Builder infoDialog = new AlertDialog.Builder(this);
@@ -526,7 +542,8 @@ public class HPHome extends Activity {
 			closeJHP();
 			return true;
 		default:
-			Log.d(this.toString(), "Clicked menu button has no case: " + item.getItemId());
+			Log.d(this.toString(),
+					"Clicked menu button has no case: " + item.getItemId());
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
