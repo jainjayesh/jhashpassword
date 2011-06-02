@@ -299,34 +299,17 @@ public class HPSettings extends Activity {
 				loadLoginNames();
 			}
 			return true;
-		case R.id.btnSaveNReturn:
-			// Pop up an input dialog.
-			inputDialog = new AlertDialog.Builder(this);
-			inputDialog.setTitle(R.string.titleSaveSettings);
-			inputDialog.setMessage(R.string.msgSaveSettings);
-			inputDialog.setPositiveButton(getString(R.string.Yes),
-					new OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							Log.d(this.toString(), "Changes saved!");
-							setResult(Activity.RESULT_OK, new Intent()
-									.putExtra(getString(R.string.hp),
-											hashPassword));
-							finish();
-						}
-					});
-			inputDialog.setNegativeButton(getString(R.string.No), null);
-			inputDialog.show();
-			return true;
-		case R.id.btnCancelNReturn:
-			Log.d(this.toString(), "Changes canceled!");
-			setResult(Activity.RESULT_CANCELED);
-			finish();
-			return true;
 		default:
 			Log.d(this.toString(), "Clicked button has no case.");
 			return false;
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		setResult(Activity.RESULT_OK, new Intent().putExtra(
+				getString(R.string.hp), hashPassword));
+		finish();
 	}
 
 	@Override

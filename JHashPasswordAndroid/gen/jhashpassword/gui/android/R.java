@@ -20,229 +20,239 @@ public final class R {
         public static final int paypal_logo=0x7f020003;
     }
     public static final class id {
-        public static final int aboutjhp=0x7f070045;
+        public static final int aboutjhp=0x7f070043;
         public static final int bottom_control_bar=0x7f070002;
-        public static final int btnActivate=0x7f07002f;
-        public static final int btnAddHost=0x7f07001b;
-        public static final int btnAddLogin=0x7f070020;
-        public static final int btnCancelNReturn=0x7f070026;
-        public static final int btnChooseFileImport=0x7f070011;
-        public static final int btnDelete=0x7f070015;
-        public static final int btnDonate=0x7f070029;
-        public static final int btnEditHost=0x7f07001d;
-        public static final int btnEditLogin=0x7f070022;
-        public static final int btnExport=0x7f070014;
-        public static final int btnGenPW=0x7f07000b;
-        public static final int btnImport=0x7f070012;
-        public static final int btnRemHost=0x7f07001c;
-        public static final int btnRemLogin=0x7f070021;
-        public static final int btnReset=0x7f070036;
-        public static final int btnSaveNReturn=0x7f070025;
-        public static final int btnSendActCode=0x7f07002c;
-        public static final int btnShowClipboard=0x7f07000c;
-        public static final int btnStartSync=0x7f07003d;
-        public static final int btnStopSync=0x7f07003e;
-        public static final int clearclipb=0x7f070043;
-        public static final int etActCode=0x7f07002b;
-        public static final int etCharset=0x7f070035;
-        public static final int etImport=0x7f07000e;
-        public static final int etPasswordLength=0x7f070033;
-        public static final int etPasswordOne=0x7f070008;
-        public static final int etPasswordTwo=0x7f07000a;
-        public static final int etSerialNo=0x7f07002e;
-        public static final int exit=0x7f070047;
-        public static final int goPro=0x7f070044;
-        public static final int help=0x7f070046;
-        public static final int lstFiles=0x7f070018;
-        public static final int scrlView=0x7f070027;
-        public static final int settingsIE=0x7f070041;
-        public static final int settingsSync=0x7f070042;
-        public static final int settingsXML=0x7f070040;
-        public static final int sprHashtype=0x7f070031;
-        public static final int sprHostname=0x7f070004;
-        public static final int sprLoginname=0x7f070006;
-        public static final int submenu=0x7f07003f;
-        public static final int tblHostBtn=0x7f070019;
-        public static final int tblHostBtnRow1=0x7f07001a;
-        public static final int tblImport=0x7f07000f;
-        public static final int tblImportRow1=0x7f070010;
-        public static final int tblLoginBtn=0x7f07001e;
-        public static final int tblLoginBtnRow1=0x7f07001f;
-        public static final int tblSaveCancelBtn=0x7f070023;
-        public static final int tblSaveCancelBtnRow1=0x7f070024;
-        public static final int tblSyncControl1=0x7f070037;
-        public static final int tblSyncControl2=0x7f07003b;
-        public static final int tblSyncControlRow11=0x7f070038;
-        public static final int tblSyncControlRow21=0x7f07003c;
+        public static final int btnActivate=0x7f070030;
+        public static final int btnAddHost=0x7f070020;
+        public static final int btnAddLogin=0x7f070025;
+        public static final int btnChooseFileImport=0x7f070012;
+        public static final int btnDelete=0x7f070016;
+        public static final int btnDonate=0x7f07002a;
+        public static final int btnEditHost=0x7f070022;
+        public static final int btnEditLogin=0x7f070027;
+        public static final int btnExport=0x7f070015;
+        public static final int btnGenPW=0x7f070003;
+        public static final int btnImport=0x7f070013;
+        public static final int btnRemHost=0x7f070021;
+        public static final int btnRemLogin=0x7f070026;
+        public static final int btnReset=0x7f070037;
+        public static final int btnSendActCode=0x7f07002d;
+        public static final int btnShowClipboard=0x7f070004;
+        public static final int btnStartSync=0x7f07003e;
+        public static final int btnStopSync=0x7f07003f;
+        public static final int clearclipb=0x7f070041;
+        public static final int etActCode=0x7f07002c;
+        public static final int etCharset=0x7f070036;
+        public static final int etImport=0x7f07000f;
+        public static final int etPasswordLength=0x7f070034;
+        public static final int etPasswordOne=0x7f07000a;
+        public static final int etPasswordTwo=0x7f07000c;
+        public static final int etSerialNo=0x7f07002f;
+        public static final int exit=0x7f070045;
+        public static final int goPro=0x7f070042;
+        public static final int help=0x7f070044;
+        public static final int list_complex_caption=0x7f07001b;
+        public static final int list_complex_title=0x7f07001a;
+        public static final int list_header_title=0x7f07001c;
+        public static final int list_item_title=0x7f07001d;
+        public static final int lstFiles=0x7f070019;
+        public static final int lstSettings=0x7f07000d;
+        public static final int scrlView=0x7f070028;
+        public static final int settings=0x7f070040;
+        public static final int sprHashtype=0x7f070032;
+        public static final int sprHostname=0x7f070006;
+        public static final int sprLoginname=0x7f070008;
+        public static final int tblHostBtn=0x7f07001e;
+        public static final int tblHostBtnRow1=0x7f07001f;
+        public static final int tblImport=0x7f070010;
+        public static final int tblImportRow1=0x7f070011;
+        public static final int tblLoginBtn=0x7f070023;
+        public static final int tblLoginBtnRow1=0x7f070024;
+        public static final int tblSyncControl1=0x7f070038;
+        public static final int tblSyncControl2=0x7f07003c;
+        public static final int tblSyncControlRow11=0x7f070039;
+        public static final int tblSyncControlRow21=0x7f07003d;
         public static final int top_control_bar=0x7f070000;
-        public static final int tvPassphraseOne=0x7f070007;
-        public static final int tvPassphraseTwo=0x7f070009;
-        public static final int txtActivationCode=0x7f07002a;
+        public static final int tvPassphraseOne=0x7f070009;
+        public static final int tvPassphraseTwo=0x7f07000b;
+        public static final int txtActivationCode=0x7f07002b;
         public static final int txtApp_name=0x7f070001;
-        public static final int txtCharset=0x7f070034;
-        public static final int txtChooseFile=0x7f070016;
-        public static final int txtCurrentDir=0x7f070017;
-        public static final int txtExport=0x7f070013;
-        public static final int txtGoProDesc=0x7f070028;
-        public static final int txtHashtype=0x7f070030;
-        public static final int txtHostname=0x7f070003;
-        public static final int txtImport=0x7f07000d;
-        public static final int txtLoginname=0x7f070005;
-        public static final int txtPasswordLength=0x7f070032;
-        public static final int txtSerialNo=0x7f07002d;
-        public static final int txtSync=0x7f070039;
-        public static final int txtSyncState=0x7f07003a;
+        public static final int txtCharset=0x7f070035;
+        public static final int txtChooseFile=0x7f070017;
+        public static final int txtCurrentDir=0x7f070018;
+        public static final int txtExport=0x7f070014;
+        public static final int txtGoProDesc=0x7f070029;
+        public static final int txtHashtype=0x7f070031;
+        public static final int txtHostname=0x7f070005;
+        public static final int txtImport=0x7f07000e;
+        public static final int txtLoginname=0x7f070007;
+        public static final int txtPasswordLength=0x7f070033;
+        public static final int txtSerialNo=0x7f07002e;
+        public static final int txtSync=0x7f07003a;
+        public static final int txtSyncState=0x7f07003b;
     }
     public static final class layout {
         public static final int home=0x7f030000;
-        public static final int imp_exp=0x7f030001;
-        public static final int imp_exp_chooser=0x7f030002;
-        public static final int settings=0x7f030003;
-        public static final int settings_gopro=0x7f030004;
-        public static final int settings_host=0x7f030005;
-        public static final int sync=0x7f030006;
+        public static final int hpsettings=0x7f030001;
+        public static final int imp_exp=0x7f030002;
+        public static final int imp_exp_chooser=0x7f030003;
+        public static final int list_complex=0x7f030004;
+        public static final int list_header=0x7f030005;
+        public static final int list_item=0x7f030006;
+        public static final int settings=0x7f030007;
+        public static final int settings_gopro=0x7f030008;
+        public static final int settings_host=0x7f030009;
+        public static final int sync=0x7f03000a;
     }
     public static final class menu {
         public static final int options_menu=0x7f060000;
     }
     public static final class string {
-        public static final int Abort=0x7f040017;
-        public static final int No=0x7f04001a;
+        public static final int Abort=0x7f040015;
+        public static final int No=0x7f040018;
         /**  Dialog Buttons 
  Dialog Buttons 
          */
-        public static final int OK=0x7f040016;
-        public static final int Permanent=0x7f040019;
-        public static final int Yes=0x7f040018;
+        public static final int OK=0x7f040014;
+        public static final int Permanent=0x7f040017;
+        public static final int Yes=0x7f040016;
         /**  App Description 
  App Description 
          */
-        public static final int app_desc=0x7f04000c;
-        public static final int app_free=0x7f040002;
+        public static final int app_desc=0x7f04000a;
         public static final int app_name=0x7f040000;
-        public static final int app_name_filechooser=0x7f040010;
-        public static final int app_name_gopro=0x7f040012;
-        public static final int app_name_host=0x7f04000e;
-        public static final int app_name_impexp=0x7f04000f;
+        public static final int app_name_filechooser=0x7f04000e;
+        public static final int app_name_gopro=0x7f040010;
+        public static final int app_name_host=0x7f04000c;
+        public static final int app_name_impexp=0x7f04000d;
         /**  Activity names 
  Activity names 
          */
-        public static final int app_name_settings=0x7f04000d;
-        public static final int app_name_sync=0x7f040011;
-        public static final int app_pro=0x7f040001;
-        public static final int btnActivate=0x7f04003d;
-        public static final int btnAdd=0x7f040031;
-        public static final int btnCancelNReturn=0x7f040039;
-        public static final int btnChooseFile=0x7f040033;
-        public static final int btnClearClipboard=0x7f04003b;
-        public static final int btnDelete=0x7f04002d;
-        public static final int btnDonate=0x7f04003c;
-        public static final int btnEditHL=0x7f04002f;
-        public static final int btnEditLN=0x7f040030;
-        public static final int btnExit=0x7f040037;
-        public static final int btnExport=0x7f040035;
-        public static final int btnGenPW=0x7f040036;
-        public static final int btnGoPro=0x7f04002a;
-        public static final int btnImport=0x7f040034;
-        public static final int btnRem=0x7f040032;
-        public static final int btnReset=0x7f04002e;
-        public static final int btnSaveNReturn=0x7f040038;
-        public static final int btnSendActCode=0x7f04003e;
-        public static final int btnShowClipboard=0x7f04003a;
-        public static final int btnStartSync=0x7f04002b;
-        public static final int btnStopSync=0x7f04002c;
-        public static final int donateLink=0x7f040007;
-        public static final int ext_storage_dir=0x7f040004;
+        public static final int app_name_settings=0x7f04000b;
+        public static final int app_name_sync=0x7f04000f;
+        public static final int btnActivate=0x7f04003b;
+        public static final int btnAdd=0x7f04002f;
+        public static final int btnCancelNReturn=0x7f040037;
+        public static final int btnChooseFile=0x7f040031;
+        public static final int btnClearClipboard=0x7f040039;
+        public static final int btnDelete=0x7f04002b;
+        public static final int btnDonate=0x7f04003a;
+        public static final int btnEditHL=0x7f04002d;
+        public static final int btnEditLN=0x7f04002e;
+        public static final int btnExit=0x7f040035;
+        public static final int btnExport=0x7f040033;
+        public static final int btnGenPW=0x7f040034;
+        public static final int btnGoPro=0x7f040028;
+        public static final int btnImport=0x7f040032;
+        public static final int btnRem=0x7f040030;
+        public static final int btnReset=0x7f04002c;
+        public static final int btnSaveNReturn=0x7f040036;
+        public static final int btnSendActCode=0x7f04003c;
+        public static final int btnShowClipboard=0x7f040038;
+        public static final int btnStartSync=0x7f040029;
+        public static final int btnStopSync=0x7f04002a;
+        public static final int donateLink=0x7f040005;
+        public static final int ext_storage_dir=0x7f040002;
         /**  Help 
  Help 
          */
-        public static final int helpFile=0x7f040067;
-        public static final int host=0x7f040009;
+        public static final int helpFile=0x7f040068;
+        public static final int host=0x7f040007;
         /**  Spinner prompts 
  Spinner prompts 
          */
-        public static final int hostname_prompt=0x7f040045;
-        public static final int hp=0x7f040008;
-        public static final int login=0x7f04000a;
-        public static final int loginname_prompt=0x7f040046;
-        public static final int mailBody=0x7f040015;
+        public static final int hostname_prompt=0x7f040043;
+        public static final int hp=0x7f040006;
+        public static final int login=0x7f040008;
+        public static final int loginname_prompt=0x7f040044;
+        public static final int mailBody=0x7f040013;
         /**  Activation-Mail 
  Activation-Mail 
          */
-        public static final int mailSubject=0x7f040014;
-        public static final int msgAboutJHP=0x7f040066;
-        public static final int msgAcceptConnection=0x7f040056;
-        public static final int msgAddHost=0x7f040060;
-        public static final int msgAddLogin=0x7f040061;
-        public static final int msgCantWrite=0x7f04005e;
+        public static final int mailSubject=0x7f040012;
+        public static final int msgAboutJHP=0x7f040065;
+        public static final int msgAcceptConnection=0x7f040055;
+        public static final int msgAddHost=0x7f04005f;
+        public static final int msgAddLogin=0x7f040060;
+        public static final int msgCantWrite=0x7f04005d;
+        public static final int msgClearClipboardQuestion=0x7f04004e;
+        public static final int msgClipboardCleared=0x7f040054;
+        public static final int msgConnectionRejected=0x7f040053;
         /**  Dialog Messages 
  Dialog Messages 
          */
-        public static final int msgClearClipboardQuestion=0x7f04004f;
-        public static final int msgClipboardCleared=0x7f040055;
-        public static final int msgConnectionRejected=0x7f040054;
-        public static final int msgDelete=0x7f04005c;
-        public static final int msgExportSuccess=0x7f04005f;
-        public static final int msgFileImported=0x7f040059;
-        public static final int msgImport=0x7f040062;
-        public static final int msgNotMounted=0x7f04005d;
-        public static final int msgOnlyInPro=0x7f040058;
-        public static final int msgPasswordCreated=0x7f04005b;
-        public static final int msgSaveSettings=0x7f040063;
-        public static final int msgSelectedFile=0x7f04005a;
-        public static final int msgSerialAccepted=0x7f040051;
-        public static final int msgSerialRejected=0x7f040050;
-        public static final int msgWaitingForSync=0x7f040057;
-        public static final int msgWifiNotEnabled=0x7f040053;
-        public static final int msgWrongSerial=0x7f040052;
-        public static final int msgXMLFailure=0x7f040065;
-        public static final int msgXMLNotFound=0x7f040064;
-        public static final int myHomepage=0x7f040005;
-        public static final int myMailAddress=0x7f040006;
+        public static final int msgCopiedToClipboard=0x7f04004d;
+        public static final int msgDelete=0x7f04005b;
+        public static final int msgExportSuccess=0x7f04005e;
+        public static final int msgFileImported=0x7f040058;
+        public static final int msgImport=0x7f040061;
+        public static final int msgNotMounted=0x7f04005c;
+        public static final int msgOnlyInPro=0x7f040057;
+        public static final int msgPasswordCreated=0x7f04005a;
+        public static final int msgSaveSettings=0x7f040062;
+        public static final int msgSelectedFile=0x7f040059;
+        public static final int msgSerialAccepted=0x7f040050;
+        public static final int msgSerialRejected=0x7f04004f;
+        public static final int msgWaitingForSync=0x7f040056;
+        public static final int msgWifiNotEnabled=0x7f040052;
+        public static final int msgWrongSerial=0x7f040051;
+        public static final int msgXMLFailure=0x7f040064;
+        public static final int msgXMLNotFound=0x7f040063;
+        public static final int myHomepage=0x7f040003;
+        public static final int myMailAddress=0x7f040004;
         /**  Notifications 
  Notifications 
          */
-        public static final int notificationClipboard=0x7f040013;
-        public static final int optmen_Aboutjhp=0x7f040043;
-        public static final int optmen_Help=0x7f040044;
+        public static final int notificationClipboard=0x7f040011;
+        public static final int optmen_Aboutjhp=0x7f040041;
+        public static final int optmen_Help=0x7f040042;
         /**  HPHome Options-Menu 
  HPHome Options-Menu 
          */
-        public static final int optmen_Settings=0x7f04003f;
-        public static final int optmen_SettingsIE=0x7f040041;
-        public static final int optmen_SettingsSync=0x7f040042;
-        public static final int optmen_SettingsXML=0x7f040040;
-        public static final int selectedFile=0x7f04000b;
+        public static final int optmen_Settings=0x7f04003d;
+        public static final int optmen_SettingsIE=0x7f04003f;
+        public static final int optmen_SettingsIEDesc=0x7f04006b;
+        public static final int optmen_SettingsSync=0x7f040040;
+        public static final int optmen_SettingsSyncDesc=0x7f04006c;
+        public static final int optmen_SettingsXML=0x7f04003e;
+        public static final int optmen_SettingsXMLDesc=0x7f04006a;
+        public static final int optmen_Timeout=0x7f04006d;
+        public static final int optmen_TimeoutDesc=0x7f04006e;
+        public static final int programmSettings=0x7f04006f;
+        public static final int selectedFile=0x7f040009;
+        public static final int settingsSaved=0x7f040066;
+        public static final int settingsSavingDiscarded=0x7f040067;
         /**  Dialog Titles 
  Dialog Titles 
          */
-        public static final int titleAcceptConnection=0x7f040047;
-        public static final int titleAddHost=0x7f04004a;
-        public static final int titleAddLogin=0x7f04004c;
-        public static final int titleClipboard=0x7f040048;
-        public static final int titleExport=0x7f04004b;
-        public static final int titleImport=0x7f04004d;
-        public static final int titleSaveSettings=0x7f04004e;
-        public static final int titleXMLFile=0x7f040049;
-        public static final int txtActivationCode=0x7f04001e;
-        public static final int txtCharset=0x7f040028;
-        public static final int txtChooseFile=0x7f040020;
+        public static final int titleAcceptConnection=0x7f040045;
+        public static final int titleAddHost=0x7f040048;
+        public static final int titleAddLogin=0x7f04004a;
+        public static final int titleClipboard=0x7f040046;
+        public static final int titleExport=0x7f040049;
+        public static final int titleImport=0x7f04004b;
+        public static final int titleSaveSettings=0x7f04004c;
+        public static final int titleXMLFile=0x7f040047;
+        public static final int txtActivationCode=0x7f04001c;
+        public static final int txtCharset=0x7f040026;
+        public static final int txtChooseFile=0x7f04001e;
         /**  GUI Elements 
  GUI Elements 
          */
-        public static final int txtConnectionEstablished=0x7f04001b;
-        public static final int txtExport=0x7f040022;
-        public static final int txtGoProDesc=0x7f040068;
-        public static final int txtHashtype=0x7f040027;
-        public static final int txtHostname=0x7f040023;
-        public static final int txtImport=0x7f040021;
-        public static final int txtLoginname=0x7f040024;
-        public static final int txtNoConnection=0x7f04001c;
-        public static final int txtPassphraseOne=0x7f040025;
-        public static final int txtPassphraseTwo=0x7f040026;
-        public static final int txtPasswordLength=0x7f040029;
-        public static final int txtSerialNo=0x7f04001d;
-        public static final int txtSync=0x7f04001f;
-        public static final int version=0x7f040003;
+        public static final int txtConnectionEstablished=0x7f040019;
+        public static final int txtExport=0x7f040020;
+        public static final int txtGoProDesc=0x7f040069;
+        public static final int txtHashtype=0x7f040025;
+        public static final int txtHostname=0x7f040021;
+        public static final int txtImport=0x7f04001f;
+        public static final int txtLoginname=0x7f040022;
+        public static final int txtNoConnection=0x7f04001a;
+        public static final int txtPassphraseOne=0x7f040023;
+        public static final int txtPassphraseTwo=0x7f040024;
+        public static final int txtPasswordLength=0x7f040027;
+        public static final int txtSerialNo=0x7f04001b;
+        public static final int txtSync=0x7f04001d;
+        public static final int version=0x7f040001;
+        public static final int xmlSettings=0x7f040070;
     }
 }

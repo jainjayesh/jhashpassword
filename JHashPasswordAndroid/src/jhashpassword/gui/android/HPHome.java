@@ -34,8 +34,7 @@ import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.hashpassword.core.EHashType;
 import de.janbusch.hashpassword.core.HashUtil;
 import de.janbusch.jhashpassword.impexp.HPImpExp;
-import de.janbusch.jhashpassword.settings.HPSettings;
-import de.janbusch.jhashpassword.sync.HPSync;
+import de.janbusch.jhashpassword.settings.Settings;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 import de.janbusch.jhashpassword.xml.simple.Host;
@@ -43,12 +42,12 @@ import de.janbusch.jhashpassword.xml.simple.LoginName;
 
 public class HPHome extends Activity {
 
-	private static final int TIMER_DELAY = 180000;
-	private static final int REQUESTCODE_GOPRO = 2;
-	private static final int REQUESTCODE_IMPEXP = 1;
 	private static final int REQUESTCODE_SETTINGSXML = 0;
+	private static final int REQUESTCODE_IMPEXP = 1;
+	private static final int REQUESTCODE_CLEAR_CLIPBOARD = 2;
+
+	private static final int TIMER_DELAY = 180000;
 	private static final int NOTIFICATION_ID = 1337;
-	private static boolean isPro = false;
 
 	private HashPassword hashPassword;
 	private Timer hpTimer;
@@ -56,7 +55,7 @@ public class HPHome extends Activity {
 	private Spinner sprLoginname;
 	private ArrayAdapter<CharSequence> sprHostnameAdapter;
 	private ClipboardManager clipboard;
-	private NotificationManager nm;
+	private NotificationManager notifitcationManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -80,43 +79,63 @@ public class HPHome extends Activity {
 			}
 
 		});
+		sprHostname.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						clipboard.setText((CharSequence) sprHostname
+								.getSelectedItem());
+						Toast.makeText(getBaseContext(),
+								getString(R.string.msgCopiedToClipboard),
+								Toast.LENGTH_SHORT).show();
+					}
+				});
+				return true;
+			}
+		});
+		sprLoginname.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						clipboard.setText((CharSequence) sprLoginname
+								.getSelectedItem());
+						Toast.makeText(getBaseContext(),
+								getString(R.string.msgCopiedToClipboard),
+								Toast.LENGTH_SHORT).show();
+					}
+				});
+				return true;
+			}
+		});
 
 		clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-		nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		notifitcationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		hpTimer = new Timer();
 	}
 
 	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		super.onPostCreate(savedInstanceState);
+	protected void onStart() {
+		super.onStart();
 		loadXML();
 		loadHostNames();
 		loadLoginNames();
+	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
 		if (hashPassword != null) {
-			// TelephonyManager myTManager = (TelephonyManager)
-			// getSystemService(TELEPHONY_SERVICE);
-			// String imei = myTManager.getDeviceId();
-			// String serialNo = hashPassword.getSerialNo();
-			String appName = getString(R.string.app_name);
-			// if (serialNo != null) {
-			// if (DRMUtil.validateSerialNo(appName, imei, serialNo)) {
-			// isPro = true;
-			// appName += " " + getString(R.string.app_pro);
-			// } else {
-			// isPro = false;
-			// appName += " " + getString(R.string.app_free);
-			// // Pop up an info dialog.
-			// Toast.makeText(getBaseContext(),
-			// getString(R.string.msgWrongSerial),
-			// Toast.LENGTH_LONG).show();
-			// }
-			// } else {
-			isPro = false;
-			appName += " " + getString(R.string.app_free);
-			// }
-			setTitle(appName);
+			saveXML();
 		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		loadHostNames();
+		loadLoginNames();
 	}
 
 	/**
@@ -125,7 +144,7 @@ public class HPHome extends Activity {
 	private void loadXML() {
 		try {
 			hashPassword = SimpleXMLUtil.getXML(getBaseContext());
-			// Log.d(this.toString(), "HashPassword.xml was read!");
+			Log.d(this.toString(), "HashPassword.xml was read!");
 		} catch (Exception e) {
 			if (e instanceof FileNotFoundException) { // No HashPassword.xml
 				// found
@@ -150,8 +169,7 @@ public class HPHome extends Activity {
 						.setDefaultPasswordLength(CoreInformation.DEFAULT_PASSWORD_LENGTH);
 			} else {
 				// Something went terribly wrong while reading the XML-File.
-				// Log.d(this.toString(),
-				// "Error while reading HashPassword.xml!");
+				Log.d(this.toString(), "Error while reading HashPassword.xml!");
 
 				// Show error message and close the app without changing the
 				// XML-File.
@@ -326,10 +344,33 @@ public class HPHome extends Activity {
 		txtPassphraseOne.addTextChangedListener(pwWatcher);
 		txtPassphraseTwo.addTextChangedListener(pwWatcher);
 	}
-	
-	@Override
-	public void onBackPressed() {
-		closeJHP();
+
+	private void closeJHP() {
+		Builder inputDialog = new AlertDialog.Builder(this);
+		inputDialog.setTitle(R.string.btnClearClipboard);
+		inputDialog.setMessage(R.string.msgClearClipboardQuestion);
+		inputDialog.setPositiveButton(getString(R.string.Yes),
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						clipboard.setText("");
+						hpTimer.cancel();
+						notifitcationManager.cancel(NOTIFICATION_ID);
+
+						Toast.makeText(getBaseContext(),
+								getString(R.string.msgClipboardCleared),
+								Toast.LENGTH_SHORT).show();
+						finish();
+					}
+				});
+		inputDialog.setNegativeButton(getString(R.string.No),
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				});
+		inputDialog.show();
 	}
 
 	/**
@@ -342,8 +383,6 @@ public class HPHome extends Activity {
 	public boolean onButtonClicked(View btn) {
 		switch (btn.getId()) {
 		case R.id.btnGenPW:
-			Spinner sprHostname = (Spinner) findViewById(R.id.sprHostname);
-			Spinner sprLoginname = (Spinner) findViewById(R.id.sprLoginname);
 			EditText txtPassphraseOne = (EditText) findViewById(R.id.etPasswordOne);
 			EditText txtPassphraseTwo = (EditText) findViewById(R.id.etPasswordTwo);
 
@@ -382,7 +421,7 @@ public class HPHome extends Activity {
 							Integer.parseInt(currentLogin.getPasswordLength()
 									.replaceAll("[^0-9]", "")));
 				} catch (Exception e) {
-					// No logininfos
+					Log.d(this.toString(), e.getMessage());
 				}
 			}
 
@@ -391,33 +430,42 @@ public class HPHome extends Activity {
 			txtPassphraseOne.setText(new String());
 			txtPassphraseTwo.setText(new String());
 
+			Notification n = new Notification(R.drawable.icon,
+					getString(R.string.notificationClipboard),
+					System.currentTimeMillis());
+			n.setLatestEventInfo(getApplicationContext(),
+					getString(R.string.app_name),
+					getString(R.string.notificationClipboard),
+					PendingIntent.getActivity(HPHome.this,
+							REQUESTCODE_CLEAR_CLIPBOARD, getIntent(), 0));
+			notifitcationManager.notify(NOTIFICATION_ID, n);
+
 			hpTimer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					clipboard.setText("");
-					Notification n = new Notification(R.drawable.icon,
-							getString(R.string.notificationClipboard), System
-									.currentTimeMillis());
-					n.setLatestEventInfo(getApplicationContext(),
-							getString(R.string.app_name),
-							getString(R.string.notificationClipboard),
-							PendingIntent.getActivity(HPHome.this, 0,
-									getIntent(), 0));
-					nm.notify(NOTIFICATION_ID, n);
-					// Log.d(this.toString(),
-					// "Removed password from clipboard!");
+
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(getBaseContext(),
+									getString(R.string.msgClipboardCleared),
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+
+					notifitcationManager.cancel(NOTIFICATION_ID);
+					Log.d(this.toString(), "Removed password from clipboard!");
 				}
 			}, TIMER_DELAY);
 
-			// Pop up an info dialog.
 			Toast.makeText(getBaseContext(),
 					getString(R.string.msgPasswordCreated), Toast.LENGTH_LONG)
 					.show();
 
-			// Log.d(this.toString(), "Password generated, timer started.");
+			Log.d(this.toString(), "Password generated, timer started.");
 			return true;
 		case R.id.btnShowClipboard:
-			// Pop up an dialog showing the clipboard content.
 			AlertDialog.Builder infoDialog = new AlertDialog.Builder(this);
 			infoDialog.setTitle(R.string.titleClipboard);
 			infoDialog.setMessage(clipboard.getText());
@@ -425,7 +473,7 @@ public class HPHome extends Activity {
 			infoDialog.show();
 			return true;
 		default:
-			// Log.d(this.toString(), "Clicked button has no case.");
+			Log.d(this.toString(), "Clicked button has no case.");
 			return false;
 		}
 	}
@@ -434,42 +482,16 @@ public class HPHome extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.options_menu, menu);
-		MenuItem mnuItemGoPro = menu.findItem(R.id.goPro);
-		// if (isPro) {
-		mnuItemGoPro.setTitle(getString(R.string.btnDonate));
-		// } else {
-		// mnuItemGoPro.setTitle(getString(R.string.btnGoPro));
-		// }
 		return true;
 	}
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.settingsXML:
-			if (sprHostname.getSelectedItem() != null) {
-				hashPassword.setLastHost(sprHostname.getSelectedItem()
-						.toString());
-			}
-			Intent settingsIntent = new Intent(getBaseContext(),
-					HPSettings.class);
+		case R.id.settings:
+			Intent settingsIntent = new Intent(getBaseContext(), Settings.class);
 			settingsIntent.putExtra(getString(R.string.hp), hashPassword);
 			startActivityForResult(settingsIntent, REQUESTCODE_SETTINGSXML);
-			return true;
-		case R.id.settingsIE:
-			Intent impexpIntent = new Intent(getBaseContext(), HPImpExp.class);
-			startActivityForResult(impexpIntent, REQUESTCODE_IMPEXP);
-			return true;
-		case R.id.settingsSync:
-			if (!isPro) {
-				// Pop up an info dialog.
-				Toast.makeText(getBaseContext(),
-						getString(R.string.msgOnlyInPro), Toast.LENGTH_LONG)
-						.show();
-			} else {
-				Intent syncIntent = new Intent(getBaseContext(), HPSync.class);
-				startActivity(syncIntent);
-			}
 			return true;
 		case R.id.help:
 			Intent helpIntent = new Intent(Intent.ACTION_VIEW,
@@ -478,19 +500,11 @@ public class HPHome extends Activity {
 			startActivity(helpIntent);
 			return true;
 		case R.id.goPro:
-			// if (isPro) {
 			Intent donateIntent = new Intent(Intent.ACTION_VIEW,
 					Uri.parse(getString(R.string.donateLink)));
 			startActivity(donateIntent);
-			// } else {
-			// Intent goProIntent = new Intent(getBaseContext(),
-			// HPSettingsGoPro.class);
-			// goProIntent.putExtra(getString(R.string.hp), hashPassword);
-			// startActivityForResult(goProIntent, REQUESTCODE_GOPRO);
-			// }
 			return true;
 		case R.id.aboutjhp:
-			// Pop up an info dialog.
 			AlertDialog.Builder infoDialog = new AlertDialog.Builder(this);
 			infoDialog.setTitle(getString(R.string.app_name) + " v"
 					+ getString(R.string.version));
@@ -503,7 +517,7 @@ public class HPHome extends Activity {
 			return true;
 		case R.id.clearclipb:
 			clipboard.setText("");
-			// Pop up an info dialog.
+
 			Toast.makeText(getBaseContext(),
 					getString(R.string.msgClipboardCleared), Toast.LENGTH_SHORT)
 					.show();
@@ -512,37 +526,14 @@ public class HPHome extends Activity {
 			closeJHP();
 			return true;
 		default:
-			// Log.d(this.toString(), "Clicked menu button has no case.");
+			Log.d(this.toString(), "Clicked menu button has no case: " + item.getItemId());
 			return super.onMenuItemSelected(featureId, item);
 		}
 	}
 
-	private void closeJHP() {
-		// Pop up an input dialog.
-		Builder inputDialog = new AlertDialog.Builder(this);
-		inputDialog.setTitle(R.string.btnClearClipboard);
-		inputDialog.setMessage(R.string.msgClearClipboardQuestion);
-		inputDialog.setPositiveButton(getString(R.string.Yes),
-				new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						clipboard.setText("");
-						hpTimer.cancel();
-						// Pop up an info dialog.
-						Toast.makeText(getBaseContext(),
-								getString(R.string.msgClipboardCleared),
-								Toast.LENGTH_SHORT).show();
-						finish();
-					}
-				});
-		inputDialog.setNegativeButton(getString(R.string.No),
-				new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						finish();
-					}
-				});
-		inputDialog.show();
+	@Override
+	public void onBackPressed() {
+		closeJHP();
 	}
 
 	@Override
@@ -550,44 +541,19 @@ public class HPHome extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		switch (requestCode) {
-		case REQUESTCODE_GOPRO:
-			switch (resultCode) {
-			case Activity.RESULT_OK:
-				// Log.d(this.toString(), "RESULT_OK, reloading!");
-				hashPassword = (HashPassword) data
-						.getSerializableExtra(getString(R.string.hp));
-				saveXML();
-				loadHostNames();
-				loadLoginNames();
-				// Pop up an info dialog.
-				Toast.makeText(getBaseContext(),
-						getString(R.string.msgSerialAccepted),
-						Toast.LENGTH_LONG).show();
-				Intent jhpIntent = new Intent(getBaseContext(), HPHome.class);
-				startActivity(jhpIntent);
-				finish();
-				break;
-			case Activity.RESULT_CANCELED:
-				// Log.d(this.toString(), "RESULT_CANCELED!");
-				break;
-			default:
-				// Log.d(this.toString(), "Unknown resultcode: " + resultCode);
-				break;
-			}
-			break;
 		case REQUESTCODE_SETTINGSXML:
 			switch (resultCode) {
 			case Activity.RESULT_OK:
-				// Log.d(this.toString(), "RESULT_OK, reloading!");
-				hashPassword = (HashPassword) data
-						.getSerializableExtra(getString(R.string.hp));
-				saveXML();
+				Log.d(this.toString(), "RESULT_OK, reloading!");
+				loadXML();
+				loadLoginNames();
+				loadHostNames();
 				break;
 			case Activity.RESULT_CANCELED:
-				// Log.d(this.toString(), "RESULT_CANCELED!");
+				Log.d(this.toString(), "RESULT_CANCELED!");
 				break;
 			default:
-				// Log.d(this.toString(), "Unknown resultcode: " + resultCode);
+				Log.d(this.toString(), "Unknown resultcode: " + resultCode);
 				break;
 			}
 			break;
@@ -601,28 +567,12 @@ public class HPHome extends Activity {
 			case Activity.RESULT_CANCELED:
 				break;
 			default:
-				// Log.d(this.toString(), "Unknown resultcode: " + resultCode);
+				Log.d(this.toString(), "Unknown resultcode: " + resultCode);
 				break;
 			}
 			break;
 		default:
-			// Log.d(this.toString(), "Unknown requestcode: " + requestCode);
-		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		loadHostNames();
-		loadLoginNames();
-		nm.cancel(NOTIFICATION_ID);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if (hashPassword != null) {
-			saveXML();
+			Log.d(this.toString(), "Unknown requestcode: " + requestCode);
 		}
 	}
 }
