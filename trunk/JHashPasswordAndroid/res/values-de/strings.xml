@@ -87,7 +87,7 @@
 	<string name="titleAddLogin">Login hinzufügen</string>
 	<string name="titleImport">Import XML-Datei</string>
 	<string name="titleSaveSettings">Änderungen speichern</string>
-
+	<string name="titleSetTimeout">Timeout setzen</string>
 	<!-- Dialog Messages -->
 	<string name="msgCopiedToClipboard">
 		Auswahl in die Zwischenablage kopiert.
