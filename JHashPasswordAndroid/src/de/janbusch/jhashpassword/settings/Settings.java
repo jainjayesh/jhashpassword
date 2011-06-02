@@ -14,11 +14,15 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.jhashpassword.impexp.HPImpExp;
@@ -95,27 +99,67 @@ public class Settings extends Activity {
 				Intent intent;
 				switch (position) {
 				case 1:
-					Toast.makeText(getBaseContext(),
-							"Coming soon...",
-							Toast.LENGTH_SHORT).show();
+					LayoutInflater factory = LayoutInflater.from(Settings.this);
+					final View timeoutView = factory.inflate(
+							R.layout.seeker_layout, null);
+					SeekBar mSeekBar1 = (SeekBar) timeoutView
+							.findViewById(R.id.seekBar);
+					TextView txtView = (TextView) timeoutView
+							.findViewById(R.id.txtValue);
+					mSeekBar1.setProgress(hashPassword.getTimeOut() / 1000 / 60);
+					txtView.setText(mSeekBar1.getProgress() + " min.");
+					mSeekBar1
+							.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+								@Override
+								public void onStopTrackingTouch(SeekBar seekBar) {
+								}
+
+								@Override
+								public void onStartTrackingTouch(SeekBar seekBar) {
+								}
+
+								@Override
+								public void onProgressChanged(SeekBar seekBar,
+										int progress, boolean fromUser) {
+									TextView txtView = (TextView) timeoutView
+											.findViewById(R.id.txtValue);
+									txtView.setText(seekBar.getProgress()
+											+ " min.");
+								}
+							});
+					new AlertDialog.Builder(Settings.this)
+							.setTitle(R.string.titleSetTimeout)
+							.setView(timeoutView)
+							.setPositiveButton(R.string.OK,
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int whichButton) {
+											SeekBar mSeekBar1 = (SeekBar) timeoutView
+													.findViewById(R.id.seekBar);
+											hashPassword.setTimeout(mSeekBar1
+													.getProgress() * 1000 * 60);
+										}
+									})
+							.setNegativeButton(R.string.Abort,
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog,
+												int whichButton) {
+										}
+									}).create().show();
 					break;
 				case 3:
-					intent = new Intent(getBaseContext(),
-							HPSettings.class);
-					intent.putExtra(getString(R.string.hp),
-							hashPassword);
-					startActivityForResult(intent,
-							REQUESTCODE_SETTINGSXML);
+					intent = new Intent(getBaseContext(), HPSettings.class);
+					intent.putExtra(getString(R.string.hp), hashPassword);
+					startActivityForResult(intent, REQUESTCODE_SETTINGSXML);
 					break;
 				case 4:
-					intent = new Intent(getBaseContext(),
-							HPImpExp.class);
-					startActivityForResult(intent,
-							REQUESTCODE_IMPEXP);
+					intent = new Intent(getBaseContext(), HPImpExp.class);
+					startActivityForResult(intent, REQUESTCODE_IMPEXP);
 					break;
 				case 5:
-					Toast.makeText(getBaseContext(),
-							"Sync is not finished...",
+					Toast.makeText(getBaseContext(), "Sync is not finished...",
 							Toast.LENGTH_SHORT).show();
 					break;
 				}
@@ -137,8 +181,7 @@ public class Settings extends Activity {
 						Toast.makeText(getBaseContext(),
 								getString(R.string.settingsSaved),
 								Toast.LENGTH_SHORT).show();
-						setResult(Activity.RESULT_OK,
-								new Intent());
+						setResult(Activity.RESULT_OK, new Intent());
 						finish();
 					}
 				});
@@ -150,8 +193,7 @@ public class Settings extends Activity {
 						Toast.makeText(getBaseContext(),
 								getString(R.string.settingsSavingDiscarded),
 								Toast.LENGTH_SHORT).show();
-						setResult(Activity.RESULT_CANCELED,
-								new Intent());
+						setResult(Activity.RESULT_CANCELED, new Intent());
 						finish();
 					}
 				});

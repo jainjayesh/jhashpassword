@@ -449,7 +449,8 @@ public class HPHome extends Activity {
 			Intent notificationIntent = new Intent(this, HPHome.class);
 			notificationIntent.putExtra("REQUESTCODE_CLEAR_CLIPBOARD",
 					REQUESTCODE_CLEAR_CLIPBOARD);
-			PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, notificationIntent, 0);
+			PendingIntent contentIntent = PendingIntent.getActivity(
+					getBaseContext(), 0, notificationIntent, 0);
 			n.setLatestEventInfo(getApplicationContext(),
 					getString(R.string.app_name),
 					getString(R.string.notificationClipboard), contentIntent);
@@ -457,28 +458,33 @@ public class HPHome extends Activity {
 			n.flags |= Notification.FLAG_AUTO_CANCEL;
 			notifitcationManager.notify(NOTIFICATION_ID, n);
 
-			hpTimer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					clipboard.setText("");
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							Toast.makeText(getBaseContext(),
-									getString(R.string.msgClipboardCleared),
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-					notifitcationManager.cancel(NOTIFICATION_ID);
-					Log.d(this.toString(), "Removed password from clipboard!");
-				}
-			}, hashPassword.getTimeOut());
+			Integer timeout = hashPassword.getTimeOut();
+			if (timeout > 0) {
+				hpTimer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						clipboard.setText("");
+						runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								Toast.makeText(
+										getBaseContext(),
+										getString(R.string.msgClipboardCleared),
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+						notifitcationManager.cancel(NOTIFICATION_ID);
+						Log.d(this.toString(),
+								"Removed password from clipboard!");
+					}
+				}, timeout);
+			}
 
 			Toast.makeText(getBaseContext(),
 					getString(R.string.msgPasswordCreated), Toast.LENGTH_LONG)
 					.show();
 
-			Log.d(this.toString(), "Password generated, timer started.");
+			Log.d(this.toString(), "Password generated, timer started: " + timeout);
 			finish();
 			return true;
 		case R.id.btnShowClipboard:
