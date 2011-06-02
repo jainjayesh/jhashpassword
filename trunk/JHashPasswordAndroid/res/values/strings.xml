@@ -102,7 +102,7 @@
  <string name="msgOnlyInPro"> Sorry, but this feature is only available in the pro version of JHashPassword.</string>
  <string name="msgFileImported"> File imported!</string>
  <string name="msgSelectedFile"> Selected file:</string>
- <string name="msgPasswordCreated"> Password created and stored in clipboard! The password will be removed from clipboard after 3 minutes.</string>
+ <string name="msgPasswordCreated"> Password created and stored in clipboard! The password will be removed from clipboard after the time you\'ve set.</string>
  <string name="msgDelete"> Attention! You are going to delete the HashPassword.xml.\nIt is possible, that you are no longer able to recover your passwords! \n\nAre you really sure that you want to delete it?</string>
  <string name="msgNotMounted"> There is no sdcard mounted or there is no write permission. Due to this situation, you can\'t make an import or backup.</string>
  <string name="msgCantWrite"> Could not write on sdcard. Please check your permissions.</string>

@@ -135,7 +135,7 @@
 	</string>
 	<string name="msgPasswordCreated">
 		Passwort erzeugt und in Zwischenablage abgelegt!
-		Das Passwort wird nach 3 Min. aus der Zwischenablage entfernt.
+		Das Passwort wird nach der von Ihnen gewählten Zeit aus der Zwischenablage entfernt.
 	</string>
 	<string name="msgDelete">
 		Achtung! Sie sind dabei die

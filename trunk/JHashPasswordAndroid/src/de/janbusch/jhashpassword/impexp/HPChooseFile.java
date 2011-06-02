@@ -2,10 +2,10 @@ package de.janbusch.jhashpassword.impexp;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import jhashpassword.gui.android.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -84,17 +84,15 @@ public class HPChooseFile extends Activity {
 				setResult(Activity.RESULT_OK, new Intent().putExtra(
 						getString(R.string.selectedFile), f.getPath()));
 
-				// Pop up an info dialog.
-				Toast
-						.makeText(
-								getBaseContext(),
-								getString(R.string.msgSelectedFile) + " "
-										+ f.getName(), Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(
+						getBaseContext(),
+						getString(R.string.msgSelectedFile) + " " + f.getName(),
+						Toast.LENGTH_SHORT).show();
 
 				finish();
 			}
 		}
+		Collections.sort(dirEntries, String.CASE_INSENSITIVE_ORDER);
 	}
 
 	private void showFiles() {
