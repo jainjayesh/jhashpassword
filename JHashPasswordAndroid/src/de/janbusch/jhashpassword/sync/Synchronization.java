@@ -7,8 +7,6 @@ import java.net.SocketTimeoutException;
 import java.util.Observable;
 import java.util.Observer;
 
-import jhashpassword.gui.android.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -23,6 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
+import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.sync.SyncMessage.MsgType;
 import de.janbusch.jhashpassword.sync.SyncMessage.ObserverData;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;

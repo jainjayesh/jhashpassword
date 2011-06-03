@@ -3,13 +3,13 @@ package de.janbusch.jhashpassword.settings;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import jhashpassword.gui.android.R;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import de.janbusch.jhashpassword.R;
 
 public class SeparatedListAdapter extends BaseAdapter {
 

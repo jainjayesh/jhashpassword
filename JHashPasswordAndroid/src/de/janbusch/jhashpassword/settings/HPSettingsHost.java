@@ -1,6 +1,5 @@
 package de.janbusch.jhashpassword.settings;
 
-import jhashpassword.gui.android.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 import de.janbusch.jhashpassword.xml.simple.Host;
 import de.janbusch.jhashpassword.xml.simple.LoginName;
