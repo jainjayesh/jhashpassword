@@ -195,6 +195,7 @@
 	</string>
 	<string name="settingsSaved">Einstellungen gespeichert!</string>
  	<string name="settingsSavingDiscarded">Einstellungen verworfen!</string>
+ 	<string name="pressbacktwice">Bitte 2x drücken um zurück zu kehren.</string>
 
 	<!-- Help -->
 	<string name="helpFile">

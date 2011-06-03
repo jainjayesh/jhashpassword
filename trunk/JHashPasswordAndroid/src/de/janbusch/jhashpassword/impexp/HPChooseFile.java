@@ -27,6 +27,9 @@ public class HPChooseFile extends Activity {
 	private List<String> dirEntries;
 	private File currentDir;
 
+	private Toast toast;
+	private long lastBackPressTime = 0;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -56,6 +59,27 @@ public class HPChooseFile extends Activity {
 
 		setDir(PATH_SDCARD);
 		showFiles();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (this.lastBackPressTime < System.currentTimeMillis() - 1000) {
+			toast = Toast.makeText(this, R.string.pressbacktwice,
+					4000);
+			toast.show();
+			this.lastBackPressTime = System.currentTimeMillis();
+
+			if (currentDir.getParent() != null
+					&& !currentDir.getPath().matches(PATH_SDCARD)) {
+				setDir(currentDir.getParent());
+				showFiles();
+			}
+		} else {
+			if (toast != null) {
+				toast.cancel();
+			}
+			super.onBackPressed();
+		}
 	}
 
 	private void setDir(String path) {
