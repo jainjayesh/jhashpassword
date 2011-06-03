@@ -117,7 +117,8 @@
  <string name="msgAboutJHP">testitest</string>
  <string name="settingsSaved">Saved settings!</string>
  <string name="settingsSavingDiscarded">Saving settings has been rejected!</string>
-
+ <string name="pressbacktwice">Bitte 2x drücken um zurück zu kehren.</string>
+ 
  <!-- Help -->
  <string name="helpFile"> jhphelp/help.html</string>
 </resources>
