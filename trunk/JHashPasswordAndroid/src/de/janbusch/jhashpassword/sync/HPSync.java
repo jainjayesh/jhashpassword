@@ -3,8 +3,6 @@ package de.janbusch.jhashpassword.sync;
 import java.util.Observable;
 import java.util.Observer;
 
-import jhashpassword.gui.android.R;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.net.wifi.WifiManager;
@@ -14,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.sync.SyncMessage.ObserverData;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 

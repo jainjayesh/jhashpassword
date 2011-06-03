@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import jhashpassword.gui.android.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -24,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import de.janbusch.hashpassword.core.CoreInformation;
+import de.janbusch.jhashpassword.R;
 
 public class HPImpExp extends Activity {
 

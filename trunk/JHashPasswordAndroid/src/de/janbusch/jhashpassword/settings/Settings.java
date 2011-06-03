@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import jhashpassword.gui.android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -25,6 +24,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.janbusch.hashpassword.core.CoreInformation;
+import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.impexp.HPImpExp;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
