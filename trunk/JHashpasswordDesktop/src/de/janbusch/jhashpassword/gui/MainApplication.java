@@ -45,6 +45,8 @@ import de.janbusch.jhashpassword.xml.simple.HashPassword;
 import de.janbusch.jhashpassword.xml.simple.Host;
 import de.janbusch.jhashpassword.xml.simple.Hosts;
 import de.janbusch.jhashpassword.xml.simple.LoginName;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 /**
  * An object of this class represents the main application window.
@@ -272,6 +274,7 @@ public class MainApplication {
 										public void widgetSelected(
 												SelectionEvent e) {
 											loadHostSettingsAndLogins();
+											ClipBoardUtil.addToClipboard(hostCombo.getText());
 										}
 									});
 							hostCombo.setLayoutData(new GridData(SWT.FILL,
@@ -423,6 +426,8 @@ public class MainApplication {
 													// No settings found
 												}
 											}
+											
+											ClipBoardUtil.addToClipboard(loginCombo.getText());
 										}
 									});
 						}
