@@ -68,8 +68,15 @@
  <string name="optmen_SettingsXML">Hosts and logins</string>
  <string name="optmen_SettingsIE">Import and backup</string>
  <string name="optmen_SettingsSync">Synchronization</string>
+ <string name="optmen_SettingsXMLDesc">Add hosts and logins and change their settings</string>
+ <string name="optmen_SettingsIEDesc">Import and export the settings</string>
+ <string name="optmen_SettingsSyncDesc">Synchronize with your PC</string>
  <string name="optmen_Aboutjhp">About</string>
  <string name="optmen_Help">Help</string>
+ <string name="optmen_Timeout">Clipboard-Timeout</string>
+ <string name="optmen_TimeoutDesc">Timeout after which the password will be removed from the clipboard.</string>
+ <string name="programmSettings">Application settings</string>
+ <string name="xmlSettings">XML-specific settings</string>
 
 
  <!-- Spinner prompts -->

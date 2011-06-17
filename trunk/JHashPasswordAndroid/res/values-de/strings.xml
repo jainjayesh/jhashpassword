@@ -64,7 +64,7 @@
 	<!-- HPHome Options-Menu -->
 	<string name="optmen_Settings">Einstellungen</string><string name="optmen_Aboutjhp">Über</string>
 	<string name="optmen_SettingsXML">Hosts und Logins</string>
-	<string name="optmen_SettingsXMLDesc">Hosts und Logins hinzufügen und deren Einstellungen verändern.</string>
+	<string name="optmen_SettingsXMLDesc">Hosts und Logins hinzufügen und deren Einstellungen verändern</string>
 	<string name="optmen_SettingsIE">Import und Backup</string>
 	<string name="optmen_SettingsIEDesc">Importieren und Sichern der Einstellungen</string>
 	<string name="optmen_SettingsSync">Synchronisation</string>
