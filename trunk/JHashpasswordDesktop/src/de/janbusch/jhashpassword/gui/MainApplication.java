@@ -45,8 +45,6 @@ import de.janbusch.jhashpassword.xml.simple.HashPassword;
 import de.janbusch.jhashpassword.xml.simple.Host;
 import de.janbusch.jhashpassword.xml.simple.Hosts;
 import de.janbusch.jhashpassword.xml.simple.LoginName;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 
 /**
  * An object of this class represents the main application window.
@@ -155,8 +153,7 @@ public class MainApplication {
 				MessageBox messageBox = new MessageBox(shlJhashpassword,
 						SWT.ICON_ERROR | SWT.OK);
 				messageBox.setText("JHashPassword");
-				messageBox
-						.setMessage("Fehler beim Einlesen der XML-Datei. Die Datei wurde wahrscheinlich beschädigt oder verändert. Prüfen Sie den Inhalt der Datei oder tauschen Sie sie gegebenenfalls gegen ein Backup aus. JHashpassword wird nun beendet.");
+				messageBox.setMessage(Messages.MainApplication_25);
 				messageBox.open();
 				System.exit(1);
 			}
@@ -274,7 +271,9 @@ public class MainApplication {
 										public void widgetSelected(
 												SelectionEvent e) {
 											loadHostSettingsAndLogins();
-											ClipBoardUtil.addToClipboard(hostCombo.getText());
+											ClipBoardUtil
+													.addToClipboard(hostCombo
+															.getText());
 										}
 									});
 							hostCombo.setLayoutData(new GridData(SWT.FILL,
@@ -426,8 +425,10 @@ public class MainApplication {
 													// No settings found
 												}
 											}
-											
-											ClipBoardUtil.addToClipboard(loginCombo.getText());
+
+											ClipBoardUtil
+													.addToClipboard(loginCombo
+															.getText());
 										}
 									});
 						}
@@ -710,7 +711,7 @@ public class MainApplication {
 
 											MessageBox mB = new MessageBox(
 													shlJhashpassword);
-											mB.setText("Inhalt der Zwischenablage");
+											mB.setText(Messages.MainApplication_48);
 											mB.setMessage(clipboardString);
 											mB.open();
 										}
@@ -926,41 +927,47 @@ public class MainApplication {
 						MessageBox messageBox = new MessageBox(
 								shlJhashpassword, SWT.ICON_WARNING | SWT.YES
 										| SWT.NO);
-						messageBox.setText("Änderung der Einstellungen");
-						messageBox
-								.setMessage("ACHTUNG!\n\nWenn Sie fortfahren sind Sie nicht mehr in der Lage die Passwörter für diesen Host/Login wiederherzustellen, sofern Sie keine Kopie der HashPassword.xml haben bzw. sich den ursprünglichen Einstellungen nicht gemerkt haben!\n\nSind Sie 100%ig sicher, dass Sie die Änderungen speichern möchten?");
+						messageBox.setText(Messages.MainApplication_57);
+						messageBox.setMessage(Messages.MainApplication_58);
 						int buttonID = messageBox.open();
 
 						switch (buttonID) {
 						case SWT.YES:
-							Hosts hosts = hashPassword.getHosts();
-							Host currentHost = hosts.getHostByName(hostCombo
-									.getText());
-							LoginName currentLogin = currentHost
-									.getLoginNames().getLoginNameByName(
-											loginCombo.getText());
-							if (currentHost.getLoginNames().getLoginName()
-									.size() > 1) {
-								currentLogin.setCharset(characterSetText
-										.getText());
-								currentLogin.setHashType(hashCombo.getText());
-								currentLogin
-										.setPasswordLength(passwordLengthText
-												.getText());
-							} else {
-								currentHost.setCharset(characterSetText
-										.getText());
-								currentHost.setHashType(hashCombo.getText());
-								currentHost
-										.setPasswordLength(passwordLengthText
-												.getText());
-							}
+							try {
+								Hosts hosts = hashPassword.getHosts();
+								Host currentHost = hosts
+										.getHostByName(hostCombo.getText());
+								LoginName currentLogin = currentHost
+										.getLoginNames().getLoginNameByName(
+												loginCombo.getText());
+								if (currentHost.getLoginNames().getLoginName()
+										.size() > 1) {
+									currentLogin.setCharset(characterSetText
+											.getText());
+									currentLogin.setHashType(hashCombo
+											.getText());
+									currentLogin
+											.setPasswordLength(passwordLengthText
+													.getText());
+								} else {
+									currentHost.setCharset(characterSetText
+											.getText());
+									currentHost.setHashType(hashCombo.getText());
+									currentHost
+											.setPasswordLength(passwordLengthText
+													.getText());
+								}
 
-							saveXMLFile();
-							MessageBox mB = new MessageBox(shlJhashpassword);
-							mB.setText(Messages.MainApplication_32);
-							mB.setMessage(Messages.MainApplication_33);
-							mB.open();
+								saveXMLFile();
+								MessageBox mB = new MessageBox(shlJhashpassword);
+								mB.setText(Messages.MainApplication_32);
+								mB.setMessage(Messages.MainApplication_33);
+								mB.open();
+							} catch (Exception exc) {
+								ErrorDialog.openError(shlJhashpassword,
+										Messages.MainApplication_34, Messages.MainApplication_35,
+										Status.OK_STATUS);
+							}
 							break;
 						case SWT.NO:
 							loadXMLFile();

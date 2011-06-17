@@ -26,7 +26,7 @@ public class AboutDialog extends Dialog {
 	 */
 	public AboutDialog(Shell parent) {
 		super(parent, SWT.DIALOG_TRIM);
-		setText("Über JHashPassword");
+		setText(Messages.AboutDialog_0);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class AboutDialog extends Dialog {
 				.setImage(SWTResourceManager
 						.getImage(AboutDialog.class,
 								"/de/janbusch/jhashpassword/images/32px-Crystal_Clear_action_lock-silver.png"));
-		shlberJhashpassword.setText("Über JHashPassword");
+		shlberJhashpassword.setText(Messages.AboutDialog_1);
 		shlberJhashpassword.setLayout(new GridLayout(1, false));
 		{
 			Composite group = new Composite(shlberJhashpassword, SWT.BORDER);
