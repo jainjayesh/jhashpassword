@@ -5,6 +5,10 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "de.janbusch.jhashpassword.gui.messages"; //$NON-NLS-1$
 
+	public static String AboutDialog_0;
+
+	public static String AboutDialog_1;
+
 	public static String MainApplication_0;
 	public static String MainApplication_1;
 	public static String MainApplication_10;
@@ -20,6 +24,8 @@ public class Messages extends NLS {
 	public static String MainApplication_21;
 	public static String MainApplication_22;
 	public static String MainApplication_23;
+
+	public static String MainApplication_25;
 	public static String MainApplication_26;
 	public static String MainApplication_29;
 	public static String MainApplication_3;
@@ -35,7 +41,13 @@ public class Messages extends NLS {
 	public static String MainApplication_39;
 	public static String MainApplication_4;
 	public static String MainApplication_40;
+
+	public static String MainApplication_48;
 	public static String MainApplication_5;
+
+	public static String MainApplication_57;
+
+	public static String MainApplication_58;
 	public static String MainApplication_6;
 	public static String MainApplication_7;
 	public static String MainApplication_8;
