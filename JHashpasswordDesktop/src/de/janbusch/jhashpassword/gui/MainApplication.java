@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -622,13 +621,9 @@ public class MainApplication {
 											@Override
 											public void keyReleased(
 													KeyEvent arg0) {
-												if (arg0.keyCode == 13) {
-													for (Listener l : btnGeneratePassword
-															.getListeners(SWT.Selection)) {
-														l.handleEvent(new Event());
-													}
+												if (arg0.keyCode == 13 || arg0.keyCode == 16777296) {
+													btnGeneratePassword.notifyListeners(SWT.Selection, new Event());
 												}
-
 											}
 
 											@Override
