@@ -54,7 +54,7 @@ import de.janbusch.jhashpassword.xml.simple.LoginName;
 public class MainApplication {
 
 	public static final String APPLICATION_TITLE = "JHashPassword";
-	public static final String APPLICATION_VERSION = "1.6.4";
+	public static final String APPLICATION_VERSION = "1.6.41";
 	private static final String XML_PATH = CoreInformation.HASH_PASSWORD_XML;
 	protected Shell shlJhashpassword;
 	private HashPassword hashPassword;
