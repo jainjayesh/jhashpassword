@@ -127,5 +127,5 @@
  <string name="pressbacktwice">Bitte 2x drücken um zurück zu kehren.</string>
  
  <!-- Help -->
- <string name="helpFile">/software/jhashpassword/android™/jhashpassword-for-android-help/</string>
+ <string name="helpFile">software/jhashpassword/android™/jhashpassword-for-android-help/</string>
 </resources>
