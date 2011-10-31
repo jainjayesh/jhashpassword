@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="bin/build/" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JHPSimpleXML"/>
 	<classpathentry kind="lib" path="/JHPSimpleXML/lib/simple-xml-2.4.1.jar"/>
@@ -16,6 +16,6 @@
 	<classpathentry kind="lib" path="libs/org.eclipse.ui.forms_3.4.1.v20090714_35x.jar"/>
 	<classpathentry kind="lib" path="libs/org.eclipse.ui.workbench_3.5.1.M20090826-0800a.jar"/>
 	<classpathentry kind="lib" path="libs/com.ibm.icu_4.2.1.v20100412.jar"/>
-	<classpathentry kind="lib" path="libs/org.eclipse.swt.win32.win32.x86_3.5.1.v3555a.jar"/>
+	<classpathentry kind="lib" path="libs/org.eclipse.swt.gtk.linux.x86_3.5.1.v3555a.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
