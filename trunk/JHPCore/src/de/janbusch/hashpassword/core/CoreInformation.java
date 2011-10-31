@@ -7,7 +7,7 @@ public class CoreInformation {
 	public static final String JHASHPASSWORD_COPYRIGHT = "JHashPassword\nCopyright 2009-2011 by Jan Busch\nhttp://iss0splace.wordpress.com/";
 	public static final String ICONSET_COPYRIGHT = "Icons from the Crystal Clear icon set by Everaldo Coelho\n(http://www.everaldo.com/). The icons are licensed under the\nGNU Lesser General Public License (LGPL).";
 
-	public static final String DEFAULT_CHARACTERSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_0123456789!\"§$%&/()=?+#-.,:;";
+	public static final String DEFAULT_CHARACTERSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_0123456789!\"$%&/()=?+#-.,:;";
 	public static final String DEFAULT_PASSWORD_LENGTH = "32";
 	public static final String HASH_PASSWORD_XML = "HashPassword.xml";
 	public static final int SYNC_PORT = 1337;

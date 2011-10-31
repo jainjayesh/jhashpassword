@@ -1,52 +1,90 @@
-<?xml version="1.0" ?>
-<project name="JHashPassword" default="main" basedir=".">
-	<property name="src.dir" location="src" />
-	<property name="build.dir" location="build" />
-	<property name="win86.dir" location="dist/Win-x86" />
-	<property name="lin86.dir" location="dist/Lin-x86" />
-	<property name="win86.cp" value="lib/org.eclipse.swt.win32.win32.x86_3.5.1.v3555a.jar ." />
-	<property name="lin86.cp" value="lib/org.eclipse.swt.gtk.linux.x86_3.5.1.v3555a.jar ." />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="all" basedir="." name="JHaspassword">
+	<import file="../JHPCore/build.xml" />
+	<import file="../JHPSimpleXML/build.xml" />
+	
+	<property name="windows" location="build/windows" />
+	<property name="linux" location="build/linux" />
+	<property name="bin" location="bin" />
 
-	<!-- Deletes the existing build, docs and dist directory-->
-	<target name="clean">
-		<delete dir="${win86.dir}" />
-		<delete dir="${lin86.dir}" />
-		<delete dir="${build.dir}" />
+	<path id="classpath">
+		<fileset dir="${basedir}" includes="**/*.jar" />
+	</path>
+
+	<target name="compile">
+		<echo>Compiling JHashPassword...</echo>
+		<javac srcdir="${basedir}" destdir="${bin}" debug="true" deprecation="on" classpathref="classpath" includeantruntime="false" />
 	</target>
 
-	<!-- Creates the  build, docs and dist directory-->
-	<target name="makedir">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${lin86.dir}" />
-		<mkdir dir="${win86.dir}" />
-	</target>
+	<target name="win_x86">
+		<echo>Building JHP for Windows x86</echo>
 
-	<!-- Compiles the java code (including the usage of library for JUnit -->
-	<target name="compile" depends="clean, makedir">
-		<javac compiler="modern" srcdir="${src.dir}" destdir="${build.dir}" />
-	</target>
-
-	<!--Creates the deployable jar file  -->
-	<target name="jarWin86" depends="compile">
-		<jar destfile="${win86.dir}\JHashPassword.jar" basedir="${build.dir}">
+		<jar destfile="${windows}/JHashPassword.jar" basedir="${bin}">
 			<manifest>
 				<attribute name="Main-Class" value="de.janbusch.jhashpassword.gui.MainApplication" />
-				<attribute name="Class-Path" value="${win86.cp}" />
+				<attribute name="Class-Path" value=". JHashPassword_lib/simple-xml-2.4.1.jar JHashPassword_lib/org.eclipse.core.commands_3.5.0.I20090525-2000.jar JHashPassword_lib/org.eclipse.core.runtime_3.5.0.v20090525.jar JHashPassword_lib/org.eclipse.equinox.common_3.5.1.R35x_v20090807-1100.jar JHashPassword_lib/org.eclipse.equinox.registry_3.4.100.v20090520-1800.jar JHashPassword_lib/org.eclipse.jface_3.5.1.M20090826-0800.jar JHashPassword_lib/org.eclipse.jface.text_3.5.1.r351_v20090708-0800.jar JHashPassword_lib/org.eclipse.osgi_3.5.1.R35x_v20090827.jar JHashPassword_lib/org.eclipse.text_3.5.0.v20090513-2000.jar JHashPassword_lib/org.eclipse.ui.forms_3.4.1.v20090714_35x.jar JHashPassword_lib/org.eclipse.ui.workbench_3.5.1.M20090826-0800a.jar JHashPassword_lib/com.ibm.icu_4.2.1.v20100412.jar JHashPassword_lib/org.eclipse.swt.win32.win32.x86_3.5.1.v3555a.jar" />
+				<!-- Who is building this jar? -->
+				<attribute name="Built-By" value="Jan Busch" />
+				<!-- Information about the program itself -->
+				<attribute name="Implementation-Vendor" value="Jan Busch" />
+				<attribute name="Implementation-Title" value="JHashPassword for Windows" />
 			</manifest>
 		</jar>
+		<delete dir="${windows}/JHashPassword_lib" />
+		<mkdir dir="${windows}/JHashPassword_lib" />
+
+		<copy file="${xml.dir}/lib/simple-xml-2.4.1.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.core.commands_3.5.0.I20090525-2000.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.core.runtime_3.5.0.v20090525.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.equinox.common_3.5.1.R35x_v20090807-1100.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.equinox.registry_3.4.100.v20090520-1800.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.jface_3.5.1.M20090826-0800.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.jface.text_3.5.1.r351_v20090708-0800.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.osgi_3.5.1.R35x_v20090827.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.text_3.5.0.v20090513-2000.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.ui.forms_3.4.1.v20090714_35x.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.ui.workbench_3.5.1.M20090826-0800a.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/com.ibm.icu_4.2.1.v20100412.jar" todir="${windows}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.swt.win32.win32.x86_3.5.1.v3555a.jar" todir="${windows}/JHashPassword_lib" />
+
+		<copy file="Crystal_Clear_action_lock-silver.ico" todir="${windows}" />
 	</target>
 
-	<target name="jarLin86" depends="compile">
-		<jar destfile="${lin86.dir}\JHashPassword.jar" basedir="${build.dir}">
+	<target name="lin_x86">
+		<echo>Building JHP for Linux x86</echo>
+
+		<jar destfile="${linux}/JHashPassword.jar" basedir="${bin}">
 			<manifest>
 				<attribute name="Main-Class" value="de.janbusch.jhashpassword.gui.MainApplication" />
-				<attribute name="Class-Path" value="${lin86.cp}" />
+				<attribute name="Class-Path" value=". JHashPassword_lib/simple-xml-2.4.1.jar JHashPassword_lib/org.eclipse.core.commands_3.5.0.I20090525-2000.jar JHashPassword_lib/org.eclipse.core.runtime_3.5.0.v20090525.jar JHashPassword_lib/org.eclipse.equinox.common_3.5.1.R35x_v20090807-1100.jar JHashPassword_lib/org.eclipse.equinox.registry_3.4.100.v20090520-1800.jar JHashPassword_lib/org.eclipse.jface_3.5.1.M20090826-0800.jar JHashPassword_lib/org.eclipse.jface.text_3.5.1.r351_v20090708-0800.jar JHashPassword_lib/org.eclipse.osgi_3.5.1.R35x_v20090827.jar JHashPassword_lib/org.eclipse.text_3.5.0.v20090513-2000.jar JHashPassword_lib/org.eclipse.ui.forms_3.4.1.v20090714_35x.jar JHashPassword_lib/org.eclipse.ui.workbench_3.5.1.M20090826-0800a.jar JHashPassword_lib/com.ibm.icu_4.2.1.v20100412.jar JHashPassword_lib/org.eclipse.swt.gtk.linux.x86_3.5.1.v3555a.jar" />
+				<!-- Who is building this jar? -->
+				<attribute name="Built-By" value="Jan Busch" />
+				<!-- Information about the program itself -->
+				<attribute name="Implementation-Vendor" value="Jan Busch" />
+				<attribute name="Implementation-Title" value="JHashPassword for Linux" />
 			</manifest>
 		</jar>
+		<delete dir="${linux}/JHashPassword_lib" />
+		<mkdir dir="${linux}/JHashPassword_lib" />
+
+		<copy file="${xml.dir}/lib/simple-xml-2.4.1.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.core.commands_3.5.0.I20090525-2000.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.core.runtime_3.5.0.v20090525.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.equinox.common_3.5.1.R35x_v20090807-1100.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.equinox.registry_3.4.100.v20090520-1800.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.jface_3.5.1.M20090826-0800.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.jface.text_3.5.1.r351_v20090708-0800.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.osgi_3.5.1.R35x_v20090827.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.text_3.5.0.v20090513-2000.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.ui.forms_3.4.1.v20090714_35x.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.ui.workbench_3.5.1.M20090826-0800a.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/com.ibm.icu_4.2.1.v20100412.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="libs/org.eclipse.swt.gtk.linux.x86_3.5.1.v3555a.jar" todir="${linux}/JHashPassword_lib" />
+
+		<copy file="Crystal_Clear_action_lock-silver.ico" todir="${linux}" />
 	</target>
 
-	<target name="main" depends="compile, jarWin86, jarLin86">
-		<description>Main target</description>
+	<target name="all" depends="compile_jhpcore, compile_jhpxml, compile">
+		<echo>Building all...</echo>
 	</target>
-
 </project>
