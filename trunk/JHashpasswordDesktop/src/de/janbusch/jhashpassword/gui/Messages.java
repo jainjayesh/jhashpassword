@@ -53,6 +53,9 @@ public class Messages extends NLS {
 	public static String MainApplication_8;
 	public static String MainApplication_9;
 	public static String MainApplication_cacheCombo_toolTipText;
+	public static String MainApplication_tbtmProgram_text;
+	public static String MainApplication_tbtmSynchronisation_text;
+	public static String MainApplication_btnSync_text;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

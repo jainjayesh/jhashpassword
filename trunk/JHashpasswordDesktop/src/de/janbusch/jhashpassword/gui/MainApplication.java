@@ -1,6 +1,8 @@
 package de.janbusch.jhashpassword.gui;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,9 @@ import com.swtdesigner.SWTResourceManager;
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.hashpassword.core.EHashType;
 import de.janbusch.hashpassword.core.HashUtil;
+import de.janbusch.jhashpassword.net.ENetCommand;
+import de.janbusch.jhashpassword.net.IJHPMsgHandler;
+import de.janbusch.jhashpassword.net.JHPServer;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 import de.janbusch.jhashpassword.xml.simple.Host;
@@ -51,7 +56,7 @@ import de.janbusch.jhashpassword.xml.simple.LoginName;
  * @author Jan Busch
  * 
  */
-public class MainApplication {
+public class MainApplication implements IJHPMsgHandler {
 
 	public static final String APPLICATION_TITLE = "JHashPassword";
 	public static final String APPLICATION_VERSION = "1.6.41";
@@ -72,6 +77,7 @@ public class MainApplication {
 	private Button btnCharacterset;
 	private Combo cacheCombo;
 	private Button btnSave;
+	protected JHPServer myServer;
 
 	/**
 	 * Launch the application.
@@ -228,7 +234,7 @@ public class MainApplication {
 				.setImage(SWTResourceManager
 						.getImage(MainApplication.class,
 								"/de/janbusch/jhashpassword/images/32px-Crystal_Clear_action_lock-silver.png"));
-		shlJhashpassword.setSize(340, 480);
+		shlJhashpassword.setSize(300, 480);
 		shlJhashpassword.setText(APPLICATION_TITLE); //$NON-NLS-1$
 		shlJhashpassword.setLayout(new GridLayout(1, false));
 		{
@@ -276,7 +282,7 @@ public class MainApplication {
 										}
 									});
 							hostCombo.setLayoutData(new GridData(SWT.FILL,
-									SWT.CENTER, false, false, 1, 1));
+									SWT.CENTER, true, false, 1, 1));
 						}
 						{
 							btnDelHost = new Button(composite, SWT.NONE);
@@ -381,7 +387,7 @@ public class MainApplication {
 							loginCombo = new Combo(composite, SWT.READ_ONLY);
 							{
 								GridData gridData = new GridData(SWT.FILL,
-										SWT.CENTER, false, false, 1, 1);
+										SWT.CENTER, true, false, 1, 1);
 								gridData.widthHint = 163;
 								loginCombo.setLayoutData(gridData);
 							}
@@ -589,8 +595,8 @@ public class MainApplication {
 										}
 									});
 							{
-								GridData gridData = new GridData(SWT.LEFT,
-										SWT.CENTER, false, false, 2, 1);
+								GridData gridData = new GridData(SWT.FILL,
+										SWT.CENTER, true, false, 2, 1);
 								gridData.widthHint = 250;
 								txtPassphrase.setLayoutData(gridData);
 							}
@@ -611,8 +617,8 @@ public class MainApplication {
 							txtPassphraseR = new Text(composite, SWT.BORDER
 									| SWT.PASSWORD);
 							{
-								GridData gridData = new GridData(SWT.LEFT,
-										SWT.CENTER, false, false, 2, 1);
+								GridData gridData = new GridData(SWT.FILL,
+										SWT.CENTER, true, false, 2, 1);
 								gridData.widthHint = 250;
 								txtPassphraseR.setLayoutData(gridData);
 								txtPassphraseR
@@ -735,7 +741,7 @@ public class MainApplication {
 						Composite composite = new Composite(expandBar,
 								SWT.BORDER);
 						xpndtmSettings.setControl(composite);
-						composite.setLayout(new GridLayout(5, false));
+						composite.setLayout(new GridLayout(4, false));
 						{
 							Label lblHashTypWhlen = new Label(composite,
 									SWT.NONE);
@@ -754,8 +760,8 @@ public class MainApplication {
 											btnSave.setEnabled(true);
 										}
 									});
-							hashCombo.setLayoutData(new GridData(SWT.LEFT,
-									SWT.CENTER, false, false, 3, 1));
+							hashCombo.setLayoutData(new GridData(SWT.FILL,
+									SWT.CENTER, false, false, 2, 1));
 							for (EHashType hashType : EHashType.values()) {
 								hashCombo.add(hashType.toString());
 							}
@@ -771,6 +777,7 @@ public class MainApplication {
 						}
 						{
 							passwordLengthText = new Text(composite, SWT.BORDER);
+							passwordLengthText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 							passwordLengthText
 									.addFocusListener(new FocusAdapter() {
 										@Override
@@ -793,15 +800,12 @@ public class MainApplication {
 							passwordLengthText
 									.setText(CoreInformation.DEFAULT_PASSWORD_LENGTH);
 						}
-						new Label(composite, SWT.NONE);
-						new Label(composite, SWT.NONE);
 						{
 							Label lblCharacterSetDefinieren = new Label(
 									composite, SWT.NONE);
 							lblCharacterSetDefinieren
 									.setText(Messages.MainApplication_18);
 						}
-						new Label(composite, SWT.NONE);
 						new Label(composite, SWT.NONE);
 						new Label(composite, SWT.NONE);
 						new Label(composite, SWT.NONE);
@@ -829,7 +833,7 @@ public class MainApplication {
 									});
 							{
 								GridData gridData = new GridData(SWT.FILL,
-										SWT.CENTER, false, false, 3, 1);
+										SWT.CENTER, true, false, 3, 1);
 								gridData.widthHint = 158;
 								characterSetText.setLayoutData(gridData);
 							}
@@ -873,7 +877,6 @@ public class MainApplication {
 											.getImage(MainApplication.class,
 													"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_edit.png"));
 						}
-						new Label(composite, SWT.NONE);
 						{
 							Label lblZwischenablageLeer = new Label(composite,
 									SWT.NONE);
@@ -881,7 +884,6 @@ public class MainApplication {
 							lblZwischenablageLeer
 									.setText(Messages.MainApplication_20);
 						}
-						new Label(composite, SWT.NONE);
 						new Label(composite, SWT.NONE);
 						new Label(composite, SWT.NONE);
 						new Label(composite, SWT.NONE);
@@ -899,10 +901,6 @@ public class MainApplication {
 							cacheCombo.select(1);
 						}
 						new Label(composite, SWT.NONE);
-						new Label(composite, SWT.NONE);
-						composite.setTabList(new Control[] { hashCombo,
-								passwordLengthText, characterSetText,
-								btnCharacterset, cacheCombo });
 					}
 					xpndtmSettings.setHeight(200);
 				}
@@ -910,7 +908,7 @@ public class MainApplication {
 		}
 		{
 			Group grpButtons = new Group(shlJhashpassword, SWT.NONE);
-			grpButtons.setLayout(new GridLayout(4, false));
+			grpButtons.setLayout(new GridLayout(5, false));
 			grpButtons.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
 					false, 1, 1));
 			{
@@ -980,6 +978,21 @@ public class MainApplication {
 				btnSave.setText(Messages.MainApplication_36);
 			}
 			{
+				Button btnSync = new Button(grpButtons, SWT.NONE);
+				btnSync.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						try {
+							myServer = new JHPServer(false, MainApplication.this);
+							myServer.start();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+				});
+				btnSync.setText(Messages.MainApplication_btnSync_text);
+			}
+			{
 				Button btnHilfef = new Button(grpButtons, SWT.NONE);
 				btnHilfef.addSelectionListener(new SelectionAdapter() {
 					@Override
@@ -1017,6 +1030,26 @@ public class MainApplication {
 						true, false, 1, 1));
 				btnbeenden.setText(Messages.MainApplication_37);
 			}
+		}
+	}
+
+	@Override
+	public void handleMessage(String msg, InetSocketAddress from) {
+		ENetCommand command = ENetCommand.parse(msg);
+
+		System.out.println("Received msg from " + from.getAddress()
+				+ " with content: " + msg);
+
+		switch (command) {
+		case REQ:
+			System.out.println("Request received! User " + command.getParam());
+			break;
+		case ADVERTISEMENT:
+			System.out.println("Advertisement received from "
+					+ from.getAddress());
+			break;
+		default:
+			System.out.println("Unknown command received.");
 		}
 	}
 }
