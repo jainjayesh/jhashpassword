@@ -20,7 +20,7 @@ public class JHPServer extends Thread {
 			throws IOException {
 		this.isServer = isServer;
 		this.msgHandler = msgHandler;
-		this.setName("DroidtifyServer");
+		this.setName("JHPServer");
 
 		if (this.isServer) {
 			serverSocket = new DatagramSocket(serverPort);
@@ -49,7 +49,11 @@ public class JHPServer extends Thread {
 				if (msg != null && msg.length() > 0)
 					msgHandler.handleMessage(msg, receivedFrom);
 			} catch (SocketTimeoutException e) {
-				continue;
+				if(!this.isInterrupted()) {
+					continue;	
+				} else {
+					break;
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

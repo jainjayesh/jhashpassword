@@ -309,8 +309,8 @@ public class MainApplication implements IJHPMsgHandler {
 																		.getText());
 												if (host != null) {
 													hashPassword.getHosts()
-															.getHost()
-															.remove(host);
+															.getHost().remove(
+																	host);
 													saveXMLFile();
 													loadXMLFile();
 												}
@@ -358,9 +358,12 @@ public class MainApplication implements IJHPMsgHandler {
 
 											Host newHost = new Host();
 											newHost.setName(hostName);
-											newHost.setCharset(CoreInformation.DEFAULT_CHARACTERSET);
-											newHost.setHashType(CoreInformation.DEFAULT_HASHTYPE);
-											newHost.setPasswordLength(CoreInformation.DEFAULT_PASSWORD_LENGTH);
+											newHost
+													.setCharset(CoreInformation.DEFAULT_CHARACTERSET);
+											newHost
+													.setHashType(CoreInformation.DEFAULT_HASHTYPE);
+											newHost
+													.setPasswordLength(CoreInformation.DEFAULT_PASSWORD_LENGTH);
 											Hosts hostList = hashPassword
 													.getHosts();
 											hostList.getHost().add(newHost);
@@ -469,9 +472,11 @@ public class MainApplication implements IJHPMsgHandler {
 																	loginCombo
 																			.getText());
 													if (loginName != null) {
-														host.getLoginNames()
+														host
+																.getLoginNames()
 																.getLoginName()
-																.remove(loginName);
+																.remove(
+																		loginName);
 														saveXMLFile();
 														loadXMLFile();
 													}
@@ -526,8 +531,8 @@ public class MainApplication implements IJHPMsgHandler {
 												LoginName newLoginName = new LoginName();
 												newLoginName.setName(loginName);
 												host.getLoginNames()
-														.getLoginName()
-														.add(newLoginName);
+														.getLoginName().add(
+																newLoginName);
 
 												saveXMLFile();
 												loadXMLFile();
@@ -584,8 +589,9 @@ public class MainApplication implements IJHPMsgHandler {
 													.isEmpty()
 													&& txtPassphrase
 															.getText()
-															.equals(txtPassphraseR
-																	.getText())) {
+															.equals(
+																	txtPassphraseR
+																			.getText())) {
 												btnGeneratePassword
 														.setEnabled(true);
 											} else {
@@ -627,8 +633,12 @@ public class MainApplication implements IJHPMsgHandler {
 											@Override
 											public void keyReleased(
 													KeyEvent arg0) {
-												if (arg0.keyCode == 13 || arg0.keyCode == 16777296) {
-													btnGeneratePassword.notifyListeners(SWT.Selection, new Event());
+												if (arg0.keyCode == 13
+														|| arg0.keyCode == 16777296) {
+													btnGeneratePassword
+															.notifyListeners(
+																	SWT.Selection,
+																	new Event());
 												}
 											}
 
@@ -645,8 +655,9 @@ public class MainApplication implements IJHPMsgHandler {
 													.isEmpty()
 													&& txtPassphraseR
 															.getText()
-															.equals(txtPassphrase
-																	.getText())) {
+															.equals(
+																	txtPassphrase
+																			.getText())) {
 												btnGeneratePassword
 														.setEnabled(true);
 											} else {
@@ -712,7 +723,8 @@ public class MainApplication implements IJHPMsgHandler {
 
 											MessageBox mB = new MessageBox(
 													shlJhashpassword);
-											mB.setText(Messages.MainApplication_48);
+											mB
+													.setText(Messages.MainApplication_48);
 											mB.setMessage(clipboardString);
 											mB.open();
 										}
@@ -777,7 +789,8 @@ public class MainApplication implements IJHPMsgHandler {
 						}
 						{
 							passwordLengthText = new Text(composite, SWT.BORDER);
-							passwordLengthText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+							passwordLengthText.setLayoutData(new GridData(
+									SWT.FILL, SWT.CENTER, true, false, 2, 1));
 							passwordLengthText
 									.addFocusListener(new FocusAdapter() {
 										@Override
@@ -837,8 +850,8 @@ public class MainApplication implements IJHPMsgHandler {
 								gridData.widthHint = 158;
 								characterSetText.setLayoutData(gridData);
 							}
-							characterSetText.setSize(140,
-									characterSetText.getSize().y);
+							characterSetText.setSize(140, characterSetText
+									.getSize().y);
 							characterSetText
 									.setText(CoreInformation.DEFAULT_CHARACTERSET);
 						}
@@ -851,23 +864,22 @@ public class MainApplication implements IJHPMsgHandler {
 												SelectionEvent e) {
 											char[] currentCharacterSet = characterSetText
 													.getText().toCharArray();
-											char[] newCharacterSet = new char[currentCharacterSet.length];
-											List<Character> charBlackList = new ArrayList<Character>();
+											List<Character> charList = new ArrayList<Character>();
+											StringBuilder sB = new StringBuilder();
 
-											for (int i = 0; i < currentCharacterSet.length; i++) {
-												char newChar = currentCharacterSet[(int) (Math
-														.random() * currentCharacterSet.length)];
-												if (charBlackList
-														.contains(newChar)) {
-													--i;
-													continue;
-												}
-												newCharacterSet[i] = newChar;
-												charBlackList.add(newChar);
+											for (char c : currentCharacterSet) {
+												charList.add(c);
 											}
+
+											while (charList.size() > 0) {
+												sB
+														.append(charList
+																.remove((int) (Math
+																		.random() * charList.size())));
+											}
+											
 											characterSetText
-													.setText(new String(
-															newCharacterSet));
+													.setText(sB.toString());
 											characterSetText.notifyListeners(
 													SWT.FocusOut, new Event());
 										}
@@ -889,9 +901,9 @@ public class MainApplication implements IJHPMsgHandler {
 						new Label(composite, SWT.NONE);
 						{
 							cacheCombo = new Combo(composite, SWT.READ_ONLY);
+							cacheCombo.setVisibleItemCount(3);
 							cacheCombo
-									.setToolTipText(Messages.MainApplication_cacheCombo_toolTipText);
-							cacheCombo.setEnabled(false);
+									.setToolTipText("");
 							cacheCombo.setItems(new String[] {
 									Messages.MainApplication_21,
 									Messages.MainApplication_22,
@@ -899,6 +911,7 @@ public class MainApplication implements IJHPMsgHandler {
 							cacheCombo.setLayoutData(new GridData(SWT.LEFT,
 									SWT.CENTER, false, false, 3, 1));
 							cacheCombo.select(1);
+							cacheCombo.setEnabled(false);
 						}
 						new Label(composite, SWT.NONE);
 					}
@@ -945,7 +958,8 @@ public class MainApplication implements IJHPMsgHandler {
 								} else {
 									currentHost.setCharset(characterSetText
 											.getText());
-									currentHost.setHashType(hashCombo.getText());
+									currentHost
+											.setHashType(hashCombo.getText());
 									currentHost
 											.setPasswordLength(passwordLengthText
 													.getText());
@@ -958,7 +972,8 @@ public class MainApplication implements IJHPMsgHandler {
 								mB.open();
 							} catch (Exception exc) {
 								ErrorDialog.openError(shlJhashpassword,
-										Messages.MainApplication_34, Messages.MainApplication_35,
+										Messages.MainApplication_34,
+										Messages.MainApplication_35,
 										Status.OK_STATUS);
 							}
 							break;
@@ -983,7 +998,8 @@ public class MainApplication implements IJHPMsgHandler {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						try {
-							myServer = new JHPServer(false, MainApplication.this);
+							myServer = new JHPServer(false,
+									MainApplication.this);
 							myServer.start();
 						} catch (IOException e1) {
 							e1.printStackTrace();
