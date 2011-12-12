@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="libs/org.eclipse.ui.workbench_3.5.1.M20090826-0800a.jar"/>
 	<classpathentry kind="lib" path="libs/com.ibm.icu_4.2.1.v20100412.jar"/>
 	<classpathentry kind="lib" path="libs/org.eclipse.swt.gtk.linux.x86_3.5.1.v3555a.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JHPSync"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
