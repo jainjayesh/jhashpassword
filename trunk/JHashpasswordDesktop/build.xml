@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="all" basedir="." name="JHaspassword">
-	<import file="../JHPCore/build.xml" />
-	<import file="../JHPSimpleXML/build.xml" />
-	
 	<property name="windows" location="build/windows" />
 	<property name="linux" location="build/linux" />
 	<property name="bin" location="bin" />
 
 	<path id="classpath">
+		<pathelement path="${java.class.path}/" />
 		<fileset dir="${basedir}" includes="**/*.jar" />
+		<fileset dir="../JHPSimpleXML/lib" includes="**/*.jar" />
 	</path>
 
 	<target name="compile">
 		<echo>Compiling JHashPassword...</echo>
-		<javac srcdir="${basedir}" destdir="${bin}" debug="true" deprecation="on" classpathref="classpath" />
+		<ant dir="../JHPCore" />
+		<ant dir="../JHPSimpleXML" />
+		<ant dir="../JHPSync" />
+
+		<javac srcdir="${basedir}" destdir="${bin}" debug="true" deprecation="on" classpathref="classpath" includeantruntime="no" />
 	</target>
 
 	<target name="win_x86">
@@ -67,7 +70,7 @@
 		<delete dir="${linux}/JHashPassword_lib" />
 		<mkdir dir="${linux}/JHashPassword_lib" />
 
-		<copy file="${xml.dir}/lib/simple-xml-2.4.1.jar" todir="${linux}/JHashPassword_lib" />
+		<copy file="../JHPSimpleXML/lib/simple-xml-2.4.1.jar" todir="${linux}/JHashPassword_lib" />
 		<copy file="libs/org.eclipse.core.commands_3.5.0.I20090525-2000.jar" todir="${linux}/JHashPassword_lib" />
 		<copy file="libs/org.eclipse.core.runtime_3.5.0.v20090525.jar" todir="${linux}/JHashPassword_lib" />
 		<copy file="libs/org.eclipse.equinox.common_3.5.1.R35x_v20090807-1100.jar" todir="${linux}/JHashPassword_lib" />
@@ -84,7 +87,7 @@
 		<copy file="Crystal_Clear_action_lock-silver.ico" todir="${linux}" />
 	</target>
 
-	<target name="all" depends="compile_jhpcore, compile_jhpxml, compile">
+	<target name="all" depends="compile, lin_x86">
 		<echo>Building all...</echo>
 	</target>
 </project>

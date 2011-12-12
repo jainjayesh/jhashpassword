@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="JHPSync" default="compile_jhpsync" basedir=".">
+	<property name="project-name" value="${ant.project.name}" />
+
+	<target name="compile_jhpsync">
+		<echo>Compiling JHPSync...</echo>
+		<javac srcdir="${basedir}" destdir="${bin}" debug="true" deprecation="on" includeantruntime="no" />
+	</target>
+</project>
