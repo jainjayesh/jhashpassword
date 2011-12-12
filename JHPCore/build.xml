@@ -4,6 +4,6 @@
 
 	<target name="compile_jhpcore">
 		<echo>Compiling JHPCore...</echo>
-		<javac srcdir="${basedir}" destdir="bin" debug="true" deprecation="on" includeantruntime="false" />
+		<javac srcdir="${basedir}" destdir="${bin}" debug="true" deprecation="on" includeantruntime="no" />
 	</target>
 </project>
