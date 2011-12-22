@@ -21,12 +21,6 @@ import de.janbusch.jhashpassword.sync.SyncMessage.ObserverData;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 
 
-/**
- * This class implements a SlaveServer. A SlaveServer communicates with a single
- * or all clients.
- * 
- * @author Jan Busch
- */
 public class SyncServer extends Thread {
 	private static final int socketTimeout = 1000;
 

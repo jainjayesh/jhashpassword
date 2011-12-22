@@ -59,7 +59,7 @@ import de.janbusch.jhashpassword.xml.simple.LoginName;
 public class MainApplication implements IJHPMsgHandler {
 
 	public static final String APPLICATION_TITLE = "JHashPassword";
-	public static final String APPLICATION_VERSION = "1.6.41";
+	public static final String APPLICATION_VERSION = "1.7.0";
 	private static final String XML_PATH = CoreInformation.HASH_PASSWORD_XML;
 	protected Shell shlJhashpassword;
 	private HashPassword hashPassword;
@@ -998,8 +998,8 @@ public class MainApplication implements IJHPMsgHandler {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						try {
-							myServer = new JHPServer(false,
-									MainApplication.this);
+							myServer = new JHPServer(true,
+									MainApplication.this, null);
 							myServer.start();
 						} catch (IOException e1) {
 							e1.printStackTrace();
@@ -1060,9 +1060,9 @@ public class MainApplication implements IJHPMsgHandler {
 		case REQ:
 			System.out.println("Request received! User " + command.getParam());
 			break;
-		case ADVERTISEMENT:
-			System.out.println("Advertisement received from "
-					+ from.getAddress());
+		case SOLICITATION:
+			System.out.println("Solicitation received!");
+			myServer.sendMessage(from, ENetCommand.ADVERTISEMENT.toString());
 			break;
 		default:
 			System.out.println("Unknown command received.");
