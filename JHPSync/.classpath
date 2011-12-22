@@ -3,5 +3,13 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="src" path="/JHPSimpleXML"/>
+	<classpathentry kind="lib" path="D:/Users/Jan Busch/Entwicklung/SDK/android-sdk-windows/platforms/android-10/android.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/D:/Users/Jan Busch/Entwicklung/SDK/android-sdk/docs/reference"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
+		</accessrules>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

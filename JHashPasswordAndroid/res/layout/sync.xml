@@ -1,40 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/scrlView"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:fillViewport="true" android:layout_height="fill_parent"
-	android:layout_width="fill_parent">
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="fill_parent"
-		android:padding="10dip" android:gravity="center_vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-		<TableLayout android:id="@+id/tblSyncControl1"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:stretchColumns="*">
-			<TableRow android:id="@+id/tblSyncControlRow11">
-				<TextView android:text="@string/txtSync" android:id="@+id/txtSync"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-				<TextView android:text="@string/txtNoConnection" android:id="@+id/txtSyncState"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-			</TableRow>
-		</TableLayout>
-		
-		<View android:layout_height="10dip" android:layout_width="wrap_content" />
-		<View android:layout_height="2dip" android:background="#FF909090"
-			android:layout_width="fill_parent" />
-		<View android:layout_height="10dip" android:layout_width="wrap_content" />
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/top_control_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
-		<TableLayout android:id="@+id/tblSyncControl2"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:stretchColumns="*">
-			<TableRow android:id="@+id/tblSyncControlRow21">
-				<Button android:text="@string/btnStartSync" android:id="@+id/btnStartSync"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:onClick="onButtonClicked"></Button>
-				<Button android:text="@string/btnStopSync" android:id="@+id/btnStopSync"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:onClick="onButtonClicked" android:enabled="false"></Button>
-			</TableRow>
-		</TableLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/banner"
+            android:orientation="horizontal" >
 
-	</LinearLayout>
-</ScrollView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_50px" />
+
+            <TextView
+                android:id="@+id/txtApp_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|left"
+                android:gravity="center|center_horizontal"
+                android:paddingLeft="5dip"
+                android:shadowColor="#FF000000"
+                android:shadowDx="0"
+                android:shadowDy="-1"
+                android:shadowRadius="0.2"
+                android:text="@string/app_name"
+                android:textColor="#FFFFFFFF"
+                android:textSize="18dip"
+                android:textStyle="bold" >
+            </TextView>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_control_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/banner"
+        android:orientation="vertical"
+        android:paddingBottom="4dip"
+        android:paddingLeft="3dip"
+        android:paddingRight="3dip"
+        android:paddingTop="6dip" >
+
+        <Button
+            android:id="@+id/btnStartSync"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onButtonClicked"
+            android:text="@string/btnStartSync" >
+        </Button>
+
+        <Button
+            android:id="@+id/btnStopSync"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:onClick="onButtonClicked"
+            android:text="@string/btnStopSync" >
+        </Button>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/bottom_control_bar"
+        android:layout_below="@id/top_control_bar"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TableLayout
+                android:id="@+id/tblSyncControl1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*" >
+
+                <TableRow android:id="@+id/tblSyncControlRow11" >
+
+                    <TextView
+                        android:id="@+id/txtSync"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/txtSync" >
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/txtSyncState"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/txtNoConnection" >
+                    </TextView>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="10dip"
+                        android:layout_weight="1" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="10dip"
+                        android:layout_weight="1" />
+                </TableRow>
+            </TableLayout>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dip" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="#FF909090" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="10dip" />
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollViewLog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/linearLayout1"
+            android:layout_centerHorizontal="true" >
+
+            <TextView
+                android:id="@+id/txtViewLog"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="No connection.\n" />
+        </ScrollView>
+    </RelativeLayout>
+
+</RelativeLayout>

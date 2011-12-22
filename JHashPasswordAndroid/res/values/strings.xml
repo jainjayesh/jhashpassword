@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
  <!-- App Description -->
- <string name="app_desc">JHashPassword creates secure different passwords for each host (websites, banking, ...) using one passphrase!</string>
+ <string name="app_desc">JHashPassword creates secure different passwords for each host (websites, banking, ..) using one passphrase!</string>
 
  <!-- Activity names -->
  <string name="app_name_settings">Settings</string>
@@ -12,7 +12,7 @@
  <string name="app_name_gopro">Go pro!</string>
 
  <!-- Notifications -->
- <string name="notificationClipboard">Remove password from clipboard...</string>
+ <string name="notificationClipboard">Remove password from clipboard..</string>
 
  <!-- Activation-Mail -->
  <string name="mailSubject">Activate JHashPassword - Go Pro</string>
@@ -27,6 +27,7 @@
 
  <!-- GUI Elements -->
  <string name="txtConnectionEstablished">Connection established.</string>
+ <string name="txtConnectionPending">Waiting..</string>
  <string name="txtNoConnection">No connection.</string>
  <string name="txtSerialNo">Serial-No:</string>
  <string name="txtActivationCode">Activation-Code:</string>

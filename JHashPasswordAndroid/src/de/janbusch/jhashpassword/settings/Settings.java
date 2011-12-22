@@ -26,6 +26,7 @@ import android.widget.Toast;
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.impexp.HPImpExp;
+import de.janbusch.jhashpassword.sync.HPSync;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 
@@ -34,6 +35,7 @@ public class Settings extends Activity {
 	public final static String ITEM_CAPTION = "caption";
 	private final static int REQUESTCODE_SETTINGSXML = 0;
 	private static final int REQUESTCODE_IMPEXP = 1;
+	private static final int REQUESTCODE_SYNC = 2;
 	private HashPassword hashPassword;
 
 	public Map<String, ?> createItem(String title, String caption) {
@@ -161,6 +163,8 @@ public class Settings extends Activity {
 				case 5:
 					Toast.makeText(getBaseContext(), "Sync is not finished...",
 							Toast.LENGTH_SHORT).show();
+					intent = new Intent(getBaseContext(), HPSync.class);
+					startActivityForResult(intent, REQUESTCODE_SYNC);
 					break;
 				}
 			}

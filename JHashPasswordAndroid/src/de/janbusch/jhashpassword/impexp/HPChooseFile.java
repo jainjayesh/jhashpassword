@@ -63,7 +63,7 @@ public class HPChooseFile extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		if (this.lastBackPressTime < System.currentTimeMillis() - 1000) {
+		if (System.currentTimeMillis() - this.lastBackPressTime > 300) {
 			toast = Toast.makeText(this, R.string.pressbacktwice,
 					4000);
 			toast.show();
