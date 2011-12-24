@@ -1,8 +1,6 @@
 package de.janbusch.jhashpassword.gui;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +30,7 @@ import org.eclipse.swt.widgets.ExpandBar;
 import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -41,9 +40,6 @@ import com.swtdesigner.SWTResourceManager;
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.hashpassword.core.EHashType;
 import de.janbusch.hashpassword.core.HashUtil;
-import de.janbusch.jhashpassword.net.ENetCommand;
-import de.janbusch.jhashpassword.net.IJHPMsgHandler;
-import de.janbusch.jhashpassword.net.JHPServer;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 import de.janbusch.jhashpassword.xml.simple.Host;
@@ -56,10 +52,10 @@ import de.janbusch.jhashpassword.xml.simple.LoginName;
  * @author Jan Busch
  * 
  */
-public class MainApplication implements IJHPMsgHandler {
+public class MainApplication {
 
 	public static final String APPLICATION_TITLE = "JHashPassword";
-	public static final String APPLICATION_VERSION = "1.7.0";
+	public static final String APPLICATION_VERSION = "2.0.0";
 	private static final String XML_PATH = CoreInformation.HASH_PASSWORD_XML;
 	protected Shell shlJhashpassword;
 	private HashPassword hashPassword;
@@ -77,7 +73,6 @@ public class MainApplication implements IJHPMsgHandler {
 	private Button btnCharacterset;
 	private Combo cacheCombo;
 	private Button btnSave;
-	protected JHPServer myServer;
 
 	/**
 	 * Launch the application.
@@ -105,6 +100,14 @@ public class MainApplication implements IJHPMsgHandler {
 		loadXMLFile();
 		shlJhashpassword.open();
 		shlJhashpassword.layout();
+		shlJhashpassword.addListener(SWT.Close, new Listener() {
+			@Override
+			public void handleEvent(Event arg0) {
+				ClipBoardUtil.addToClipboard("");
+				saveXMLFile();
+			}
+		});
+		
 		while (!shlJhashpassword.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -309,8 +312,8 @@ public class MainApplication implements IJHPMsgHandler {
 																		.getText());
 												if (host != null) {
 													hashPassword.getHosts()
-															.getHost().remove(
-																	host);
+															.getHost()
+															.remove(host);
 													saveXMLFile();
 													loadXMLFile();
 												}
@@ -358,12 +361,9 @@ public class MainApplication implements IJHPMsgHandler {
 
 											Host newHost = new Host();
 											newHost.setName(hostName);
-											newHost
-													.setCharset(CoreInformation.DEFAULT_CHARACTERSET);
-											newHost
-													.setHashType(CoreInformation.DEFAULT_HASHTYPE);
-											newHost
-													.setPasswordLength(CoreInformation.DEFAULT_PASSWORD_LENGTH);
+											newHost.setCharset(CoreInformation.DEFAULT_CHARACTERSET);
+											newHost.setHashType(CoreInformation.DEFAULT_HASHTYPE);
+											newHost.setPasswordLength(CoreInformation.DEFAULT_PASSWORD_LENGTH);
 											Hosts hostList = hashPassword
 													.getHosts();
 											hostList.getHost().add(newHost);
@@ -472,11 +472,9 @@ public class MainApplication implements IJHPMsgHandler {
 																	loginCombo
 																			.getText());
 													if (loginName != null) {
-														host
-																.getLoginNames()
+														host.getLoginNames()
 																.getLoginName()
-																.remove(
-																		loginName);
+																.remove(loginName);
 														saveXMLFile();
 														loadXMLFile();
 													}
@@ -531,8 +529,8 @@ public class MainApplication implements IJHPMsgHandler {
 												LoginName newLoginName = new LoginName();
 												newLoginName.setName(loginName);
 												host.getLoginNames()
-														.getLoginName().add(
-																newLoginName);
+														.getLoginName()
+														.add(newLoginName);
 
 												saveXMLFile();
 												loadXMLFile();
@@ -589,9 +587,8 @@ public class MainApplication implements IJHPMsgHandler {
 													.isEmpty()
 													&& txtPassphrase
 															.getText()
-															.equals(
-																	txtPassphraseR
-																			.getText())) {
+															.equals(txtPassphraseR
+																	.getText())) {
 												btnGeneratePassword
 														.setEnabled(true);
 											} else {
@@ -655,9 +652,8 @@ public class MainApplication implements IJHPMsgHandler {
 													.isEmpty()
 													&& txtPassphraseR
 															.getText()
-															.equals(
-																	txtPassphrase
-																			.getText())) {
+															.equals(txtPassphrase
+																	.getText())) {
 												btnGeneratePassword
 														.setEnabled(true);
 											} else {
@@ -723,8 +719,7 @@ public class MainApplication implements IJHPMsgHandler {
 
 											MessageBox mB = new MessageBox(
 													shlJhashpassword);
-											mB
-													.setText(Messages.MainApplication_48);
+											mB.setText(Messages.MainApplication_48);
 											mB.setMessage(clipboardString);
 											mB.open();
 										}
@@ -850,8 +845,8 @@ public class MainApplication implements IJHPMsgHandler {
 								gridData.widthHint = 158;
 								characterSetText.setLayoutData(gridData);
 							}
-							characterSetText.setSize(140, characterSetText
-									.getSize().y);
+							characterSetText.setSize(140,
+									characterSetText.getSize().y);
 							characterSetText
 									.setText(CoreInformation.DEFAULT_CHARACTERSET);
 						}
@@ -872,14 +867,13 @@ public class MainApplication implements IJHPMsgHandler {
 											}
 
 											while (charList.size() > 0) {
-												sB
-														.append(charList
-																.remove((int) (Math
-																		.random() * charList.size())));
+												sB.append(charList.remove((int) (Math
+														.random() * charList
+														.size())));
 											}
-											
-											characterSetText
-													.setText(sB.toString());
+
+											characterSetText.setText(sB
+													.toString());
 											characterSetText.notifyListeners(
 													SWT.FocusOut, new Event());
 										}
@@ -902,8 +896,7 @@ public class MainApplication implements IJHPMsgHandler {
 						{
 							cacheCombo = new Combo(composite, SWT.READ_ONLY);
 							cacheCombo.setVisibleItemCount(3);
-							cacheCombo
-									.setToolTipText("");
+							cacheCombo.setToolTipText("");
 							cacheCombo.setItems(new String[] {
 									Messages.MainApplication_21,
 									Messages.MainApplication_22,
@@ -958,8 +951,7 @@ public class MainApplication implements IJHPMsgHandler {
 								} else {
 									currentHost.setCharset(characterSetText
 											.getText());
-									currentHost
-											.setHashType(hashCombo.getText());
+									currentHost.setHashType(hashCombo.getText());
 									currentHost
 											.setPasswordLength(passwordLengthText
 													.getText());
@@ -997,13 +989,8 @@ public class MainApplication implements IJHPMsgHandler {
 				btnSync.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						try {
-							myServer = new JHPServer(true,
-									MainApplication.this, null);
-							myServer.start();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
+						new SyncDialog(shlJhashpassword, SWT.DIALOG_TRIM)
+								.open();
 					}
 				});
 				btnSync.setText(Messages.MainApplication_btnSync_text);
@@ -1046,26 +1033,6 @@ public class MainApplication implements IJHPMsgHandler {
 						true, false, 1, 1));
 				btnbeenden.setText(Messages.MainApplication_37);
 			}
-		}
-	}
-
-	@Override
-	public void handleMessage(String msg, InetSocketAddress from) {
-		ENetCommand command = ENetCommand.parse(msg);
-
-		System.out.println("Received msg from " + from.getAddress()
-				+ " with content: " + msg);
-
-		switch (command) {
-		case REQ:
-			System.out.println("Request received! User " + command.getParam());
-			break;
-		case SOLICITATION:
-			System.out.println("Solicitation received!");
-			myServer.sendMessage(from, ENetCommand.ADVERTISEMENT.toString());
-			break;
-		default:
-			System.out.println("Unknown command received.");
 		}
 	}
 }
