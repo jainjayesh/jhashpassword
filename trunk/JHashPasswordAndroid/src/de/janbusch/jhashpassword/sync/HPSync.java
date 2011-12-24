@@ -1,9 +1,7 @@
 package de.janbusch.jhashpassword.sync;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -22,6 +20,7 @@ import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.net.ENetCommand;
 import de.janbusch.jhashpassword.net.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.JHPServer;
+import de.janbusch.jhashpassword.net.Util;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 
 public class HPSync extends Activity implements IJHPMsgHandler {
@@ -82,7 +81,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 			try {
 				myJHPServer = new JHPServer(false, this,
 						de.janbusch.jhashpassword.net.Util
-								.getBroadcastAddress(getApplicationContext()));
+								.getBroadcastAddress(getApplicationContext()), Util.getMacAddressAndroid(getApplicationContext()), Util.getOperatingSystemAndroid());
 				myJHPServer.start();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -122,7 +121,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 			break;
 		case ADVERTISEMENT:
 			log("Advertisement received from " + from.getAddress());
-			myJHPServer.stopSolicitation();
+//			myJHPServer.stopSolicitation();
 			break;
 		default:
 			log("Unknown command received: " + msg);
