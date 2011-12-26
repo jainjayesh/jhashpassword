@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.janbusch.jhashpassword"
-    android:versionCode="8"
+    android:versionCode="9"
     android:versionName="@string/version" >
 
     <application
         android:allowClearUserData="true"
-        android:debuggable="true"
+        android:debuggable="false"
         android:description="@string/app_desc"
         android:enabled="true"
         android:icon="@drawable/icon"
@@ -88,12 +88,11 @@
     </application>
 
     <!--
-         <uses-permission android:name="android.permission.INTERNET" />  <uses-permission android:name="android.permission.READ_PHONE_STATE" 
-		/>
+        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     -->
     <uses-sdk android:targetSdkVersion="10" android:minSdkVersion="7"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
 </manifest>
