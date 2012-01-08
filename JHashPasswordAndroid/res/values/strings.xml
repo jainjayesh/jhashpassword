@@ -94,20 +94,21 @@
  <string name="titleImport">Import XML-File</string>
  <string name="titleSaveSettings">Save changes</string>
  <string name="titleSetTimeout">Set timeout</string>
-
+ <string name="titleReqAckDialog">Incoming request</string>
+ 
  <!-- Dialog Messages -->
  <string name="msgCopiedToClipboard">
 	Selection copied to clipboard.
  </string>
  <string name="msgClearClipboardQuestion"> Do you want to clear the clipboard?</string>
  <string name="msgSerialRejected"> The entered serial-number is not valid. Please ensure that the entered serial-number is correct and contact me, if the one I send you is not working!</string>
- <string name="msgSerialAccepted"> The entered serial-number is valid. Restarting JHashPassword...</string>
+ <string name="msgSerialAccepted"> The entered serial-number is valid. Restarting JHashPassword..</string>
  <string name="msgWrongSerial"> The entered serial-number is not valid. Please check the entered serial-number and contact me, if the one I send you is not working.</string>
  <string name="msgWifiNotEnabled"> Wifi is not enabled. Please enable wifi for using the synchronization.</string>
  <string name="msgConnectionRejected"> Connection rejected. Synchronization aborted.</string>
  <string name="msgClipboardCleared"> Clipboard cleared!</string>
  <string name="msgAcceptConnection"> Do you accept the incoming connection request from</string>
- <string name="msgWaitingForSync"> Waiting for incoming synchronization-request...</string>
+ <string name="msgWaitingForSync"> Waiting for incoming synchronization-request..</string>
  <string name="msgOnlyInPro"> Sorry, but this feature is only available in the pro version of JHashPassword.</string>
  <string name="msgFileImported"> File imported!</string>
  <string name="msgSelectedFile"> Selected file:</string>
@@ -125,7 +126,8 @@
  <string name="msgAboutJHP">testitest</string>
  <string name="settingsSaved">Saved settings!</string>
  <string name="settingsSavingDiscarded">Saving settings has been rejected!</string>
- <string name="pressbacktwice">Bitte 2x drücken um zurück zu kehren.</string>
+ <string name="msgReqAckDialog">Do you want to accept the incoming request from %1$s?</string>
+ <string name="pressbacktwice">Please double-tap back to return.</string>
  
  <!-- Help -->
  <string name="helpFile">software/jhashpassword/android™/jhashpassword-for-android-help/</string>

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.impexp.HPImpExp;
+import de.janbusch.jhashpassword.sync.HPSync;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 
@@ -160,10 +161,8 @@ public class Settings extends Activity {
 					startActivityForResult(intent, REQUESTCODE_IMPEXP);
 					break;
 				case 5:
-					Toast.makeText(getBaseContext(), "Sync is not finished...",
-							Toast.LENGTH_SHORT).show();
-//					intent = new Intent(getBaseContext(), HPSync.class);
-//					startActivityForResult(intent, REQUESTCODE_SYNC);
+					intent = new Intent(getBaseContext(), HPSync.class);
+					startActivityForResult(intent, REQUESTCODE_SYNC);
 					break;
 				}
 			}

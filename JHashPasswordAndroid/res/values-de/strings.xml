@@ -25,6 +25,7 @@
 	<string name="No">Nein</string>
 
 	<!-- GUI Elements -->
+	<string name="toastReqAckDiscarded">Verbindungsanfrage abgelehnt!</string>
 	<string name="txtConnectionEstablished">Verbindung hergestellt.</string>
 	<string name="txtNoConnection">Keine Verbindung.</string>
 	<string name="txtGoProDesc">Und so geht\'s: Einfach per PayPal einen beliebigen Betrag spenden, den Activation-Code per Mail an mich schicken und nach Eingang der Spende schicke ich sofort die Serial-Number zurück. Die Serial-Number gilt nur für das Gerät auf dem der Activation-Code generiert wurde. Der Activation-Code wird auf Basis der IMEI Ihres Geräts generiert und wird nicht an mich übertragen. Ich kann keine Rückschlüsse auf Ihre IMEI aus dem Activation-Code ziehen, da ich einen Hashalgorithmus benutze um Ihre IMEI zu verschleiern.\nNach Eingabe der Serial-Number steht Ihnen sofort auch die Synchronisationsfunktion zur Verfügung mit der Sie die Einstellungen von JHashPassword zwischen Ihrem Android-Phone und dem PC abgeglichen werden können.</string>
@@ -88,6 +89,8 @@
 	<string name="titleImport">Import XML-Datei</string>
 	<string name="titleSaveSettings">Änderungen speichern</string>
 	<string name="titleSetTimeout">Timeout setzen</string>
+	<string name="titleReqAckDialog">Eingehende Verbindungsanfrage</string>
+	 
 	<!-- Dialog Messages -->
 	<string name="msgCopiedToClipboard">
 		Auswahl in die Zwischenablage kopiert.
@@ -193,6 +196,8 @@
 		\nMöchten Sie eine XML-Datei importieren? JHashpassword wird
 		andernfalls beendet.
 	</string>
+	<string name="msgReqAckDialog">Wollen Sie die eingehende Verbindung von %1$s akzeptieren?</string>
+	 
 	<string name="settingsSaved">Einstellungen gespeichert!</string>
  	<string name="settingsSavingDiscarded">Einstellungen verworfen!</string>
  	<string name="pressbacktwice">Bitte 2x drücken um zurück zu kehren.</string>
