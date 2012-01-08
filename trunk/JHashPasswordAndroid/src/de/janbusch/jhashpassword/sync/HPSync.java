@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -81,7 +85,9 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 			try {
 				myJHPServer = new JHPServer(false, this,
 						de.janbusch.jhashpassword.net.Util
-								.getBroadcastAddress(getApplicationContext()), Util.getMacAddressAndroid(getApplicationContext()), Util.getOperatingSystemAndroid());
+								.getBroadcastAddress(getApplicationContext()),
+						Util.getMacAddressAndroid(getApplicationContext()),
+						Util.getOperatingSystemAndroid());
 				myJHPServer.start();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -117,15 +123,54 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 
 		switch (command) {
 		case REQ:
-			log("Request received! User " + command.getParam());
+			log("Request received from " + from.getAddress() + ", "
+					+ command.getParam());
+			showReqAckDialog(from, command);
 			break;
 		case ADVERTISEMENT:
 			log("Advertisement received from " + from.getAddress());
-//			myJHPServer.stopSolicitation();
+			// myJHPServer.stopSolicitation();
 			break;
 		default:
 			log("Unknown command received: " + msg);
 		}
+	}
+
+	private void showReqAckDialog(final InetSocketAddress from,
+			final ENetCommand command) {
+		this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				String msgReqAckDialog = String.format(
+						getString(R.string.msgReqAckDialog), from.getAddress()
+								+ ", " + command.getParam());
+
+				Builder inputDialog = new AlertDialog.Builder(HPSync.this);
+				inputDialog.setTitle(R.string.titleReqAckDialog);
+				inputDialog.setMessage(msgReqAckDialog);
+				inputDialog.setPositiveButton(getString(R.string.Yes),
+						new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								myJHPServer.sendMessage(from,
+										ENetCommand.ACK.toString());
+							}
+						});
+				inputDialog.setNegativeButton(getString(R.string.No),
+						new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Toast.makeText(
+										getBaseContext(),
+										getString(R.string.toastReqAckDiscarded),
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+				inputDialog.show();
+			}
+		});
 	}
 
 	private void log(final String msg) {

@@ -3,6 +3,7 @@ package de.janbusch.jhashpassword.gui;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import de.janbusch.jhashpassword.net.ENetCommand;
 import de.janbusch.jhashpassword.net.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.JHPServer;
+import de.janbusch.jhashpassword.net.JHPServer.ServerState;
 import de.janbusch.jhashpassword.net.Partner;
 import de.janbusch.jhashpassword.net.Util;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,6 +48,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 	private TableColumn tblclmnOperatingSystem;
 	private Label imgMyOS;
 	private ProgressBar progressBar;
+	private Button btnAutorefresh;
 
 	/**
 	 * Create the dialog.
@@ -203,7 +206,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		grpControls_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
 				true, 1, 1));
 
-		Button btnAutorefresh = new Button(grpControls_1, SWT.TOGGLE);
+		btnAutorefresh = new Button(grpControls_1, SWT.TOGGLE);
 		btnAutorefresh.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
 				false, 1, 1));
 		btnAutorefresh.addSelectionListener(new SelectionAdapter() {
@@ -215,10 +218,10 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 					Button toggle = (Button) sender;
 
 					if (toggle.getSelection()) {
-						myServer.startListeningForSolicitations();
+						myServer.setState(ServerState.LISTEN_SOLICITATION);
 						progressBar.setState(SWT.NORMAL);
 					} else {
-						myServer.stopListeningForSolicitations();
+						myServer.setState(ServerState.IDLE);
 						progressBar.setState(SWT.PAUSED);
 					}
 				}
@@ -230,6 +233,24 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		btnAutorefresh.setText("Autorefresh");
 
 		Button btnconnect = new Button(grpControls_1, SWT.NONE);
+		btnconnect.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				myServer.setState(ServerState.LISTEN_CONNECTION);
+				progressBar.setState(SWT.PAUSED);
+				btnAutorefresh.setSelection(false);
+				
+				ENetCommand command = ENetCommand.REQ;
+				try {
+					command.setParameter(Util.getMacAddress(InetAddress.getLocalHost()));
+				} catch (UnknownHostException e) {
+					e.printStackTrace();
+				}
+				Partner[] p = availablePartners.values().toArray(new Partner[availablePartners.size()]);
+				
+				myServer.sendMessage(p[tblAvailableClients.getSelectionIndex()].getAddress(), command.toString());
+			}
+		});
 		btnconnect.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
 				1, 1));
 		btnconnect.setText("&Connect");
@@ -277,7 +298,10 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
 		switch (command) {
 		case REQ:
-			System.out.println("Request received! User " + command.getParam());
+			System.out.println("Request received from " + command.getParam());
+			break;
+		case ACK:
+			System.out.println("Ack received from " + from.getAddress());
 			break;
 		case SOLICITATION:
 			System.out.println("Solicitation received!");
@@ -315,7 +339,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				for (int i = 0; i < items.length; i++) {
 					items[i] = new TableItem(tblAvailableClients, SWT.NONE);
 					items[i].setText(new String[] {
-							addresses[i].getMyAddress().getHostName(),
+							addresses[i].getAddress().getHostName(),
 							addresses[i].getMacAddress(),
 							addresses[i].getOperatingSystem() });
 				}

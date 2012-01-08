@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class JHPServer extends Thread {
 	public enum ServerState {
-		LISTEN_SOLICITATION, IDLE, SENDING_SOLICITATION, SHUTTING_DOWN
+		LISTEN_SOLICITATION, IDLE, SENDING_SOLICITATION, SHUTTING_DOWN, LISTEN_CONNECTION
 	};
 
 	private ServerState myState;
@@ -80,6 +80,7 @@ public class JHPServer extends Thread {
 
 		while (!this.isInterrupted()) {
 			switch (myState) {
+			case LISTEN_CONNECTION:
 			case LISTEN_SOLICITATION:
 			case SENDING_SOLICITATION:
 				packet = new DatagramPacket(new byte[length], length);
@@ -138,8 +139,8 @@ public class JHPServer extends Thread {
 		scheduledExecutor.shutdown();
 		
 		try {
-			executor.awaitTermination(5, TimeUnit.SECONDS);
-			scheduledExecutor.awaitTermination(5, TimeUnit.SECONDS);
+			executor.awaitTermination(3, TimeUnit.SECONDS);
+			scheduledExecutor.awaitTermination(3, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -149,12 +150,8 @@ public class JHPServer extends Thread {
 		this.scheduledExecutor.shutdown();
 	}
 	
-	public void startListeningForSolicitations() {
-		this.myState = ServerState.LISTEN_SOLICITATION;
-	}
-
-	public void stopListeningForSolicitations() {
-		this.myState = ServerState.IDLE;
+	public void setState(ServerState state) {
+		this.myState = state;
 	}
 
 }

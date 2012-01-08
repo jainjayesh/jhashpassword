@@ -18,7 +18,7 @@ public class Partner {
 		this.myAddress = myAddress;
 	}
 
-	public InetSocketAddress getMyAddress() {
+	public InetSocketAddress getAddress() {
 		return myAddress;
 	}
 
