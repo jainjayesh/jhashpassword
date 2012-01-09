@@ -109,10 +109,7 @@
 		überprüfen Sie die eingegebene Seriennummer und kontaktieren Sie mich,
 		falls die die ich Ihnen geschickt habe nicht funktioniert.
 	</string>
-	<string name="msgWifiNotEnabled">
-		Das W-Lan ist deaktiviert. Bitte aktivieren Sie das
-		W-Lan für die Synchronization.
-	</string>
+	<string name="msgWifiNotEnabled">W-Lan ist deaktiviert. Bitte aktivieren Sie das W-Lan für die Synchronization und verbinden Sie dieses Gerät mit dem selben Netzwerk, mit dem ihr Synchronisationspartner verbunden ist. Möchten Sie W-Lan jetzt aktivieren?</string>
 	<string name="msgConnectionRejected">
 		Verbindung zurückgesetzt. Synchronisation
 		abgebrochen.
