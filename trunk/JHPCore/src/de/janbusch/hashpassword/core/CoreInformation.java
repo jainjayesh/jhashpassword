@@ -1,5 +1,7 @@
 package de.janbusch.hashpassword.core;
 
+import java.io.File;
+
 public class CoreInformation {
 	public static final String HASH_VERSION = "1.2";
 
@@ -10,5 +12,10 @@ public class CoreInformation {
 	public static final String DEFAULT_CHARACTERSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_0123456789!\"$%&/()=?+#-.,:;";
 	public static final String DEFAULT_PASSWORD_LENGTH = "32";
 	public static final String HASH_PASSWORD_XML = "HashPassword.xml";
+
+	public static final String QRCODEFILE = System
+			.getProperty("java.io.tmpdir")
+			+ File.separatorChar
+			+ "jhp_qrcode.png";
 	public static String DEFAULT_HASHTYPE = EHashType.SHA1.toString();
 }
