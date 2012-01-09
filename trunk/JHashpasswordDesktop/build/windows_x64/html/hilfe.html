@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=windows-1252">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 3.2  (Win32)">
+	<META NAME="CREATED" CONTENT="0;0">
+	<META NAME="CHANGEDBY" CONTENT="Jan Busch">
+	<META NAME="CHANGED" CONTENT="20100509;19495000">
+	<META NAME="CHANGEDBY" CONTENT="Jan Busch">
+	<!--<P><a href="help.html">English</a>
+</P>-->
+</HEAD>
+<BODY LANG="en-US" BGCOLOR="#ffffff" DIR="LTR">
+<P><a href="help.html">English</a></P>
+<P><FONT FACE="Arial"><FONT SIZE=3><SPAN LANG="de-DE"><B>Wie es zu
+dem Programm kam<BR></B></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><BR>Die
+Idee zu diesem Programm kam meinem Vater durch einen Bericht in den
+Heise News von 2004-08-09
+(<A HREF="http://www.heise.de/newsticker/meldung/49900">http://www.heise.de/newsticker/meldung/49900</A>).<BR><BR>Die
+meisten Menschen k&ouml;nnen sich keine gro&szlig;e Zahl
+unterschiedlicher Passw&ouml;rter f&uuml;r unterschiedliche Zwecke
+merken und benutzen dann das selbe Passwort mehrmals. Das macht das
+Passwort anf&auml;llig f&uuml;r das sog. </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I><B>Phishing</B></I></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">.
+Die Bekanntgabe eines Passworts an einer unverd&auml;chtigen Stelle
+erlaubt dann die Verwendung an einer Stelle, wo Sie das gar nicht
+m&ouml;gen (z. B. Homebanking).</SPAN></FONT></FONT></P>
+<P><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">Eine gute Idee
+w&auml;re ein einziges gutes Passwort (besser eine </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passphrase</I></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">;
+im Folgenden bezeichnet </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I><B>Passphrase</B></I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">das, was
+Sie sich merken m&uuml;ssen, </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I><B>Passwort</B></I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">dagegen
+das, was der Host zu sehen bekommt) </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>irgendwie</I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">einzigartig
+f&uuml;r verschiedene Hosts zu machen und zwar so, dass die Kenntnis
+des einen </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passworts</I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">selbst bei
+Kenntnis aller anderen Informationen (au&szlig;er der </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passphrase</I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">selbstverst&auml;ndlich)
+keinen Schluss auf ein anderes </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">erlaubt.
+Trotzdem soll man sich aber nur eine (gute) </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passphrase</I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">merken
+m&uuml;ssen.<BR><BR><BR></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=3><SPAN LANG="de-DE"><B>Wie
+das?</B></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=3><SPAN LANG="de-DE"><BR></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><BR></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><B>Hashing!<BR></B></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><BR>Hashing
+erzeugt einen Einbahncode eines Strings. Einbahncode hei&szlig;t,
+dass aus dem Ergebnis (dem Code) der Eingabe-String nicht zur&uuml;ck
+erschlossen werden kann, aber derselbe String immer den selben Code
+erzeugt.<BR><BR>Bei guten, kryptographischen Hashalgorithmen erzeugt
+selbst die kleinste &Auml;nderung im String ein v&ouml;llig
+unterschiedliches Ergebnis. Wenn wir also die </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passphrase</I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">um einen
+(abgespeicherten) Bezeichner f&uuml;r den Host und auch noch um einen
+(abgespeicherten) Bezeichner f&uuml;r den Login-Namen erg&auml;nzen,
+erhalten wir f&uuml;r jeden Host und jeden Login-Namen einen v&ouml;llig
+neuen Code. Und selbst aus der Kenntnis mehrerer Codes und der
+abgespeicherten Daten, l&auml;sst sich die </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passphrase</I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">nicht
+errechnen.<BR><BR>Den Code &uuml;bersetzen wir nun wieder in einen
+String, das Passwort, das ein sehr gutes Zufallsmuster hat, da er dem
+Bitmuster des nicht erratbaren Ergebnisses entspricht (das erreichen
+wir indem wir quasi eine Zahl zur Basis </SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>N</I></SPAN></FONT></FONT><SPAN LANG="de-DE">
+</SPAN><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">erzeugen,
+wobei wir einen bestimmten (abgespeicherten) Characterset mit N
+Zeichen als erlaubte &quot;</SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Ziffern</I></SPAN></FONT></FONT><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">&quot;
+benutzen).<BR><BR></SPAN></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><B><BR></B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3><SPAN LANG="de-DE"><B>Hashing
+- Voil&aacute;!<BR></B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><BR>Das
+ist es, was dieses Programm tut: Es nimmt Ihre </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passphrase</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">,
+die Sie sich leicht merken k&ouml;nnen (es sollte trotzdem eine gute
+Passphrase sein; s. z. B. 'diceware') f&uuml;gt einen von Ihnen
+angegebenen String f&uuml;r den Host und f&uuml;r den Login-Namen
+hinzu und erzeugt einen Hashcode (wahlweise </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I><B>MD5,</B></I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I><B>SHA1,</B></I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I><B>SHA256,</B></I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I><B>SHA384,</B></I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>oder</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I><B>SHA512</B></I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">)
+des Ergebnisstrings. Diesen Code verwandelt es dann mit dem von Ihnen
+bestimmten Zeichensatz in einen neuen Quasi-Zufallsstring um, der das
+eigentliche </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">darstellt
+und kopiert das Ergebnis wenn m&ouml;glich in der vollen notwendigen
+L&auml;nge resp. auf die maximal erlaubte L&auml;nge gek&uuml;rzt in
+die Zwischenablage.<BR><BR>Die von Ihnen angegebene L&auml;nge des
+eigentlichen </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">s
+ist eine Obergrenze, die von dem tats&auml;chlich erzeugten </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">auch
+unterschritten werden kann! Dennoch ist dieses </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">bei
+voller L&auml;nge eine Quasizufallszahl mit 128 (MD5) oder 160 (SHA1)
+oder der angegebenen Zahl Bits (SHA###) und ebenso sicher. Sollte
+aber die von Ihnen vorgegebene L&auml;nge die eigentlich notwendige
+Stellenzahl seinerseits unterschreiten, ist die Sicherheit nat&uuml;rlich
+auf </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><B>&lt;zeichenzahl_buchstabensatz&gt;</B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SUP><SPAN LANG="de-DE">&nbsp;&nbsp;</SPAN></SUP></FONT><FONT COLOR="#000000"><SUP><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><B>&lt;stellenzahl&gt;</B></SPAN></FONT></FONT></SUP></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">begrenzt
+(z.B. 64 Zeichen im Buchstabensatz, 10 Zeichen Passwortl&auml;nge =
+1.152.921.504.606.846.976 m&ouml;gliche Kombinationen - auch nicht
+schlecht). Sie k&ouml;nnen &uuml;brigens also auch bei
+eingeschr&auml;nkter L&auml;nge des zul&auml;ssigen </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">s
+die Sicherheit durch Hinzuf&uuml;gen von m&ouml;glichst vielen
+Zeichen zum Zeichensatz erh&ouml;hen (so der Host die Zeichen
+zul&auml;sst...). Falls Ihr Host 32 Zeichen L&auml;nge zul&auml;sst
+k&ouml;nnen Sie ruhig den vorgegebenen Zeichensatz bis SHA256
+beibehalten. Er reicht dann immer aus, das Bitmuster des Codes
+vollst&auml;ndig zu repr&auml;sentieren.<BR><BR>Wenn Sie m&ouml;chten,
+finden Sie den Knopf &quot;Buschstabensatz zuf&auml;llig mischen&quot;.
+Wenn Sie diesen benutzen, wir Ihr Zeichenvorrat in eine zuf&auml;llige
+Reihenfolge gebracht. Seien Sie vorsichtig und benutzen Sie diesen
+Knopf nur einmal, wenn Sie einen neuen Login anlegen (oder wenn sie
+so ein neues </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">erzeugen
+wollen)! Wenn Sie es sp&auml;ter tun, k&ouml;nnen Sie mglw. Ihr
+</SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">&nbsp;</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">nicht
+wieder herstellen! Dasselbe gilt nat&uuml;rlich auch, wenn Sie den
+Zeichenvorrat manuell ver&auml;ndern!<BR><BR><BR><BR></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3><SPAN LANG="de-DE"><B>Wie
+- wo - was?<BR></B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><BR>Alle
+Provider/Hosts Namen werden genau so, wie Sie sie eingegeben haben,
+wie gesagt in einer XML-Datei abgelegt. Dazu wird die von Ihnen
+angegebene </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">l&auml;nge,
+der Buchstabensatz und der Hashtyp gespeichert. Wenn Sie mehrere
+Logins beim gleichen Host haben, werden die auch gemerkt. Das
+eigentliche </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">wird
+aber jeweils erst zur Laufzeit mit Hilfe der von Ihnen einzugeben
+</SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passphrase</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">neu
+erzeugt und in die Zwischenablage kopiert. Das eigentlichen </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">wird
+also normalerweise nie sichtbar und ist somit auch nur schwer
+auszusp&auml;hen.<BR><BR>Ein echter Sicherheitsaspekt ist dabei, dass
+egal was Sie eingeben eine Passwort erzeugt wird. Sollte ein
+Angreifer Ihre XML-Datei und mein (dieses) Programm haben (wobei
+letzteres einfach ist), muss er jedes erzeugte Passwort direkt beim
+Provider (Host) ausprobieren. Typischerweise wird der Provider (Host)
+das bemerken und bei mehrfacher Falscheingabe mit einer Sperrfrist
+reagieren. Dann kann ein Brute-Force-Angriff ziemlich langwierig
+werden.<BR><BR>Dieses Programm speichert zu jedem Login individuell
+den verwendeten Hash-Algorithmus, die Passwortl&auml;nge und den
+erlaubten Zeichensatz in die XML-Datei. Dadurch ist das Programm noch
+flexibler.<BR><BR>Die aktuelle Version f&uuml;gt dem Ganzen noch die
+Hash-Methoden SHA256, SHA384 und SHA512 und die M&ouml;glichkeit die
+Reihenfolge des Zeichensatzes zu verw&uuml;rfeln hinzu. (Nat&uuml;rlich
+d&uuml;rfen Sie das nicht jedes Mal sondern nur beim ersten Mal wenn
+Sie einen neuen Login anlegen tun, sonst werden sie nicht mehr
+dasselbe Passwort erhalten. Da die meisten wohl einfach den
+vordefinierten 64-Zeichen Vorrat &uuml;bernehmen, wollte ich so ein
+wenig mehr Unterschied hinein bringen, da so also praktisch jeder
+Login seinen eigenen Zeichensatz benutzen kann. Es gibt immerhin
+1,268869x10</SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SUP><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">89</SPAN></FONT></FONT></SUP></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">&nbsp;&nbsp;</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">Permutationen,
+was das Angreifen ohne XML-File weiter deutlich erschwert.)<BR><BR>Einige
+Programme erlauben nicht die &Uuml;bernahme eines </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passworts</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">aus
+der Zwischenablage (soweit mir bekannt, betrifft das nicht die
+Web-Browser, aber mglw. m&ouml;chten Sie mein Programm auch
+anderweitig einsetzen...). Dazu haben sie einen Button, um dass
+erzeugte </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Passwort</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">anzuzeigen
+und m&uuml;ssen es abtippen.<BR><BR>Theoretisch k&ouml;nnen Sie mein
+Programm und die XML-Datei auf einem Memorystick mitnehmen und auch
+in einem Internet-Cafe verwenden.<BR><BR><BR></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3><SPAN LANG="de-DE"><B>Haftung<BR></B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><BR>Die
+Benutzung dieses Programms erfolgt auf Ihr eigenes Risiko! Ich
+&uuml;bernehme </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><B>keine
+Haftung</B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">f&uuml;r
+Sch&auml;den an Hardware, Software auf Ihrem oder einem anderen
+System, die durch die Benutzung dieses Programms entstehen! Ich
+&uuml;bernehme auch </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><B>keine
+Haftung</B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">f&uuml;r
+Verluste, die durch das Cracken des von diesem Programm erzeugten
+Passworts erfolgen.<BR><BR><BR></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=3><SPAN LANG="de-DE"><B>Thema
+Copyright<BR></B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><B><BR></B></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">Dieses
+Programm </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><U>ist
+und bleibt Freeware</U></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">und
+darf frei kopiert und verteilt werden, so lange das Programm in
+keiner Weise ver&auml;ndert wurde. Dies gilt insbesondere f&uuml;r
+das Copyright, das nicht ver&auml;ndert werden darf!<BR><BR>Ich
+ermuntere ansonsten sogar dazu, dieses Programm weiter zu geben,
+damit auch Ihre Freunde zu vermutlich sicheren Passworten kommen.
+(Sicherer als z. B. &bdquo;Manuela87&quot; sind sie
+allemal!)<BR><BR>Sollten Sie Vorschl&auml;ge haben: senden Sie mir
+eine E-Mail. Vielleicht werde ich das einbauen... Falls Sie Fehler
+finden: senden Sie mir </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><U>auf
+jeden Fall</U></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">eine
+E-Mail. Schwerwiegende Fehler werde ich </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><U>sicher</U></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">beseitigen.<BR><BR>Es
+ist unzul&auml;ssig das </SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><I>Programm
+als solches</I></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">zu
+verkaufen. Eine Kopiergeb&uuml;hr z. B. f&uuml;r die benutzten Medien
+ist zul&auml;ssig, darf aber 5 Euro nicht &uuml;bersteigen. Sie
+k&ouml;nnen die neueste Version dieses Programms aber auch hier
+<A HREF="http://homepages.fh-giessen.de/~jnbs21/software.html">http://homepages.fh-giessen.de/~jnbs21/software.html</A>
+</SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><U>kostenlos</U></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><SPAN LANG="de-DE">
+</SPAN></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE">herunter
+laden.<BR><BR>Ich versichere, dass dieses Programm in jeder
+urspr&uuml;nglichen Compilation durch mich nach bestem Wissen und
+Gewissen frei von Hintert&uuml;ren und Spionagefunktionen ist. Wenn
+Sie sicher gehen wollen, dass Sie eine einwandfreie Version vorliegen
+haben, versuchen Sie einen Download von der o. a. Adresse.<BR><BR><BR></SPAN></FONT></FONT></FONT><FONT COLOR="#000000"><FONT FACE="Arial"><FONT SIZE=2><SPAN LANG="de-DE"><B>Alle
+Trademarks sind Eigentum ihrer Halter! Alle Copyrights sind Eigentum
+ihrer Besitzer!<BR></B></SPAN></FONT></FONT></FONT><BR><BR>
+</P>
+</BODY>
+</HTML>

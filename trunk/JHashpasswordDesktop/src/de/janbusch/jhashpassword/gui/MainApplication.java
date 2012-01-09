@@ -1,7 +1,9 @@
 package de.janbusch.jhashpassword.gui;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.core.runtime.Status;
@@ -35,6 +37,11 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.swtdesigner.SWTResourceManager;
 
 import de.janbusch.hashpassword.core.CoreInformation;
@@ -107,7 +114,7 @@ public class MainApplication {
 				saveXMLFile();
 			}
 		});
-		
+
 		while (!shlJhashpassword.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -728,6 +735,44 @@ public class MainApplication {
 									SWT.FILL, SWT.CENTER, false, false, 1, 1));
 							btnShowClipboard
 									.setText(Messages.MainApplication_13);
+						}
+						{
+							Button btnShowQRcode = new Button(composite,
+									SWT.NONE);
+							btnShowQRcode
+									.addSelectionListener(new SelectionAdapter() {
+										@Override
+										public void widgetSelected(
+												SelectionEvent e) {
+											String clipboardString = ClipBoardUtil
+													.getFromClipboard();
+
+											try {
+												MultiFormatWriter writer = new MultiFormatWriter();
+												Hashtable<EncodeHintType, ErrorCorrectionLevel> hints = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
+												hints.put(
+														EncodeHintType.ERROR_CORRECTION,
+														ErrorCorrectionLevel.Q);
+												MatrixToImageWriter.writeToFile(
+														writer.encode(
+																clipboardString,
+																BarcodeFormat.QR_CODE,
+																300, 300, hints),
+														"png",
+														new File(
+																CoreInformation.QRCODEFILE));
+												new QRCodeDialog(
+														shlJhashpassword)
+														.open();
+											} catch (Exception e1) {
+												System.out.println("failure: "
+														+ e);
+											}
+										}
+									});
+							btnShowQRcode.setLayoutData(new GridData(SWT.FILL,
+									SWT.CENTER, false, false, 1, 1));
+							btnShowQRcode.setText("QR-Code");
 						}
 						composite.setTabList(new Control[] { txtPassphrase,
 								txtPassphraseR, btnGeneratePassword,
