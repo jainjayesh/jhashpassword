@@ -24,7 +24,6 @@ import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.net.ENetCommand;
 import de.janbusch.jhashpassword.net.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.JHPServer;
-import de.janbusch.jhashpassword.net.Util;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 
 public class HPSync extends Activity implements IJHPMsgHandler {
@@ -43,13 +42,25 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sync);
 
-		WifiManager wifiM = (WifiManager) getSystemService(WIFI_SERVICE);
+		final WifiManager wifiM = (WifiManager) getSystemService(WIFI_SERVICE);
 		if (!wifiM.isWifiEnabled()) {
-			// Pop up an info dialog.
-			Toast.makeText(getBaseContext(),
-					getString(R.string.msgWifiNotEnabled), Toast.LENGTH_LONG)
-					.show();
-			finish();
+			Builder inputDialog = new AlertDialog.Builder(HPSync.this);
+			inputDialog.setTitle(R.string.app_name_sync);
+			inputDialog.setMessage(R.string.msgWifiNotEnabled);
+			inputDialog.setPositiveButton(getString(R.string.Yes),
+					new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							wifiM.setWifiEnabled(true);
+						}
+					});
+			inputDialog.setNegativeButton(R.string.No, new OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			inputDialog.show();
 		}
 
 		// Grab views
@@ -84,8 +95,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 
 			try {
 				myJHPServer = new JHPServer(false, this,
-						de.janbusch.jhashpassword.net.Util
-								.getBroadcastAddress(getApplicationContext()),
+						Util.getBroadcastAddress(getApplicationContext()),
 						Util.getMacAddressAndroid(getApplicationContext()),
 						Util.getOperatingSystemAndroid());
 				myJHPServer.start();
@@ -192,7 +202,10 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		if (wl != null && wl.isHeld())
 			wl.release();
 
-		myJHPServer.killServer();
+		if (myJHPServer != null) {
+			myJHPServer.killServer();
+		}
+		
 		super.onPause();
 	}
 
