@@ -45,6 +45,8 @@ public class Messages extends NLS {
 	public static String MainApplication_48;
 	public static String MainApplication_5;
 
+	public static String MainApplication_50;
+
 	public static String MainApplication_57;
 
 	public static String MainApplication_58;
@@ -56,6 +58,10 @@ public class Messages extends NLS {
 	public static String MainApplication_tbtmProgram_text;
 	public static String MainApplication_tbtmSynchronisation_text;
 	public static String MainApplication_btnSync_text;
+	public static String MainApplication_grpHome_text;
+	public static String MainApplication_grpSettings_text;
+
+	public static String MainApplication_59;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
