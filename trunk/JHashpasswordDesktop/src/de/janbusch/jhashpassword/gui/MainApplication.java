@@ -18,18 +18,13 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.ExpandBar;
-import org.eclipse.swt.widgets.ExpandItem;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -233,796 +228,555 @@ public class MainApplication {
 					Status.OK_STATUS);
 		}
 	}
+	
+	private void checkPassphrases() {
+		if (txtPassphrase.getText().equals(
+				txtPassphraseR.getText())) {
+			btnGeneratePassword.setEnabled(true);
+			btnGeneratePassword
+					.setBackground(SWTResourceManager.getColor(
+							0, 255, 0));
+		} else {
+			btnGeneratePassword.setEnabled(false);
+			btnGeneratePassword
+					.setBackground(SWTResourceManager.getColor(
+							255, 0, 0));
+		}
+
+		if (!txtPassphrase.getText().isEmpty() && txtPassphraseR.getText().isEmpty()) {
+			btnGeneratePassword.setEnabled(true);
+			btnGeneratePassword
+					.setBackground(SWTResourceManager.getColor(
+							255, 0, 0));
+		}
+		
+		if(txtPassphrase.getText().isEmpty() && txtPassphraseR.getText().isEmpty() || txtPassphrase.getText().isEmpty()) {
+			btnGeneratePassword.setEnabled(false);
+			btnGeneratePassword
+			.setBackground(null);
+		}
+	}
 
 	/**
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
 		shlJhashpassword = new Shell(SWT.CLOSE | SWT.TITLE | SWT.MIN);
-		shlJhashpassword.setMinimumSize(new Point(340, 480));
+		shlJhashpassword.setSize(510, 380);
 		shlJhashpassword
 				.setImage(SWTResourceManager
 						.getImage(MainApplication.class,
 								"/de/janbusch/jhashpassword/images/32px-Crystal_Clear_action_lock-silver.png"));
-		shlJhashpassword.setSize(300, 480);
-		shlJhashpassword.setText(APPLICATION_TITLE); //$NON-NLS-1$
-		shlJhashpassword.setLayout(new GridLayout(1, false));
+		shlJhashpassword.setText(APPLICATION_TITLE);
+		shlJhashpassword.setLayout(new GridLayout(2, false));
 		{
-			Group group = new Group(shlJhashpassword, SWT.NONE);
-			group.setLayout(new FillLayout(SWT.HORIZONTAL));
-			group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
-					2));
+			Group grpHome = new Group(shlJhashpassword, SWT.NONE);
+			grpHome.setLayout(new GridLayout(5, false));
+			GridData gd_grpHome = new GridData(SWT.FILL, SWT.FILL, false, true,
+					1, 1);
+			gd_grpHome.widthHint = 217;
+			grpHome.setLayoutData(gd_grpHome);
+			grpHome.setText(Messages.MainApplication_grpHome_text);
 			{
-				ExpandBar expandBar = new ExpandBar(group, SWT.V_SCROLL);
-				expandBar.setBackground(SWTResourceManager
+				Label lblHostNamenWhlen = new Label(grpHome, SWT.NONE);
+				lblHostNamenWhlen.setText(Messages.MainApplication_5);
+			}
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			{
+				hostCombo = new Combo(grpHome, SWT.READ_ONLY);
+				hostCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+						false, false, 2, 1));
+				hostCombo.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						loadHostSettingsAndLogins();
+						ClipBoardUtil.addToClipboard(hostCombo.getText());
+					}
+				});
+			}
+			{
+				btnDelHost = new Button(grpHome, SWT.NONE);
+				btnDelHost.addSelectionListener(new SelectionAdapter() {
+					public void widgetSelected(SelectionEvent e) {
+						MessageBox messageBox = new MessageBox(
+								shlJhashpassword, SWT.ICON_WARNING | SWT.YES
+										| SWT.NO);
+						messageBox.setText(Messages.MainApplication_29);
+						messageBox.setMessage(Messages.MainApplication_38);
+						int buttonID = messageBox.open();
+
+						switch (buttonID) {
+						case SWT.YES:
+							Host host = hashPassword.getHosts().getHostByName(
+									hostCombo.getText());
+							if (host != null) {
+								hashPassword.getHosts().getHost().remove(host);
+								saveXMLFile();
+								loadXMLFile();
+							}
+							break;
+						case SWT.NO:
+							break;
+						default:
+							break;
+						}
+					}
+				});
+				btnDelHost
+						.setImage(SWTResourceManager
+								.getImage(MainApplication.class,
+										"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_button_cancel.png"));
+			}
+			{
+				btnAddHost = new Button(grpHome, SWT.NONE);
+				btnAddHost.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						InputDialog iD = new InputDialog(shlJhashpassword,
+								Messages.MainApplication_0,
+								Messages.MainApplication_1,
+								Messages.MainApplication_2, null);
+						iD.open();
+						String hostName = iD.getValue();
+
+						if (hostName == null || hostName.trim().isEmpty()) {
+							return;
+						}
+
+						Host host = hashPassword.getHosts().getHostByName(
+								hostName);
+
+						if (host != null) {
+							return;
+						}
+
+						Host newHost = new Host();
+						newHost.setName(hostName);
+						newHost.setCharset(CoreInformation.DEFAULT_CHARACTERSET);
+						newHost.setHashType(CoreInformation.DEFAULT_HASHTYPE);
+						newHost.setPasswordLength(CoreInformation.DEFAULT_PASSWORD_LENGTH);
+						Hosts hostList = hashPassword.getHosts();
+						hostList.getHost().add(newHost);
+
+						saveXMLFile();
+						loadXMLFile();
+
+					}
+				});
+				btnAddHost
+						.setImage(SWTResourceManager
+								.getImage(MainApplication.class,
+										"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_edit_add.png"));
+			}
+			new Label(grpHome, SWT.NONE);
+			{
+				Label lblLoginNamenWhlen = new Label(grpHome, SWT.NONE);
+				lblLoginNamenWhlen.setText(Messages.MainApplication_8);
+			}
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			{
+				loginCombo = new Combo(grpHome, SWT.READ_ONLY);
+				loginCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+						false, false, 2, 1));
+				loginCombo.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						Hosts hosts = hashPassword.getHosts();
+						Host currentHost = hosts.getHostByName(hostCombo
+								.getText());
+						LoginName currentLogin = null;
+
+						currentLogin = currentHost.getLoginNames()
+								.getLoginNameByName(loginCombo.getText());
+						if (currentLogin == null) {
+							loginCombo.select(0);
+						} else {
+							try {
+								loginCombo.setText(currentLogin.getName());
+								passwordLengthText.setText(currentLogin
+										.getPasswordLength().replaceAll(
+												"[^0-9]", "")); //$NON-NLS-1$ //$NON-NLS-2$
+								characterSetText.setText(currentLogin
+										.getCharset());
+								hashCombo.setText(currentLogin.getHashType());
+							} catch (NullPointerException e1) {
+								// No settings found
+							}
+						}
+
+						ClipBoardUtil.addToClipboard(loginCombo.getText());
+					}
+				});
+			}
+			{
+				Button btnDellLogin = new Button(grpHome, SWT.NONE);
+				btnDellLogin.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						MessageBox messageBox = new MessageBox(
+								shlJhashpassword, SWT.ICON_WARNING | SWT.YES
+										| SWT.NO);
+						messageBox.setText(Messages.MainApplication_39);
+						messageBox.setMessage(Messages.MainApplication_40);
+						int buttonID = messageBox.open();
+
+						switch (buttonID) {
+						case SWT.YES:
+							Host host = hashPassword.getHosts().getHostByName(
+									hostCombo.getText());
+							if (host != null) {
+								LoginName loginName = host.getLoginNames()
+										.getLoginNameByName(
+												loginCombo.getText());
+								if (loginName != null) {
+									host.getLoginNames().getLoginName()
+											.remove(loginName);
+									saveXMLFile();
+									loadXMLFile();
+								}
+							}
+							break;
+						case SWT.NO:
+							break;
+						default:
+							break;
+						}
+					}
+				});
+				btnDellLogin
+						.setImage(SWTResourceManager
+								.getImage(MainApplication.class,
+										"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_button_cancel.png"));
+			}
+			{
+				Button btnAddLogin = new Button(grpHome, SWT.NONE);
+				btnAddLogin.addSelectionListener(new SelectionAdapter() {
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						Host host = hashPassword.getHosts().getHostByName(
+								hostCombo.getText());
+
+						if (host == null) {
+							return;
+						}
+
+						InputDialog iD = new InputDialog(shlJhashpassword,
+								Messages.MainApplication_3,
+								Messages.MainApplication_6,
+								Messages.MainApplication_7, null);
+						iD.open();
+						String loginName = iD.getValue();
+
+						if (loginName == null || loginName.trim().isEmpty()) {
+							return;
+						}
+
+						if (host.getLoginNames().getLoginNameByName(loginName) == null) {
+							LoginName newLoginName = new LoginName();
+							newLoginName.setName(loginName);
+							host.getLoginNames().getLoginName()
+									.add(newLoginName);
+
+							saveXMLFile();
+							loadXMLFile();
+						}
+
+					}
+				});
+				btnAddLogin
+						.setImage(SWTResourceManager
+								.getImage(MainApplication.class,
+										"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_edit_add.png"));
+			}
+			new Label(grpHome, SWT.NONE);
+			{
+				Label lblPassphraseEingeben = new Label(grpHome, SWT.SHADOW_IN);
+				lblPassphraseEingeben.setBackground(SWTResourceManager
 						.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-				{
-					ExpandItem xpndtmHostRelationship = new ExpandItem(
-							expandBar, SWT.NONE);
-					xpndtmHostRelationship.setExpanded(true);
-					xpndtmHostRelationship
-							.setImage(SWTResourceManager
-									.getImage(MainApplication.class,
-											"/de/janbusch/jhashpassword/images/32px-Crystal_Clear_action_gohome.png"));
-					xpndtmHostRelationship.setText(Messages.MainApplication_4);
-					{
-						Composite composite = new Composite(expandBar,
-								SWT.BORDER);
-						xpndtmHostRelationship.setControl(composite);
-						composite.setLayout(new GridLayout(3, false));
-						{
-							Label lblHostNamenWhlen = new Label(composite,
-									SWT.NONE);
-							lblHostNamenWhlen
-									.setText(Messages.MainApplication_5);
-						}
-						new Label(composite, SWT.NONE);
-						new Label(composite, SWT.NONE);
-						{
-							hostCombo = new Combo(composite, SWT.READ_ONLY);
-							hostCombo
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											loadHostSettingsAndLogins();
-											ClipBoardUtil
-													.addToClipboard(hostCombo
-															.getText());
-										}
-									});
-							hostCombo.setLayoutData(new GridData(SWT.FILL,
-									SWT.CENTER, true, false, 1, 1));
-						}
-						{
-							btnDelHost = new Button(composite, SWT.NONE);
-							btnDelHost
-									.addSelectionListener(new SelectionAdapter() {
-										public void widgetSelected(
-												SelectionEvent e) {
-											MessageBox messageBox = new MessageBox(
-													shlJhashpassword,
-													SWT.ICON_WARNING | SWT.YES
-															| SWT.NO);
-											messageBox
-													.setText(Messages.MainApplication_29);
-											messageBox
-													.setMessage(Messages.MainApplication_38);
-											int buttonID = messageBox.open();
-
-											switch (buttonID) {
-											case SWT.YES:
-												Host host = hashPassword
-														.getHosts()
-														.getHostByName(
-																hostCombo
-																		.getText());
-												if (host != null) {
-													hashPassword.getHosts()
-															.getHost()
-															.remove(host);
-													saveXMLFile();
-													loadXMLFile();
-												}
-												break;
-											case SWT.NO:
-												break;
-											default:
-												break;
-											}
-										}
-									});
-							btnDelHost
-									.setImage(SWTResourceManager
-											.getImage(MainApplication.class,
-													"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_button_cancel.png"));
-						}
-						{
-							btnAddHost = new Button(composite, SWT.NONE);
-							btnAddHost
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											InputDialog iD = new InputDialog(
-													shlJhashpassword,
-													Messages.MainApplication_0,
-													Messages.MainApplication_1,
-													Messages.MainApplication_2,
-													null);
-											iD.open();
-											String hostName = iD.getValue();
-
-											if (hostName == null
-													|| hostName.trim()
-															.isEmpty()) {
-												return;
-											}
-
-											Host host = hashPassword.getHosts()
-													.getHostByName(hostName);
-
-											if (host != null) {
-												return;
-											}
-
-											Host newHost = new Host();
-											newHost.setName(hostName);
-											newHost.setCharset(CoreInformation.DEFAULT_CHARACTERSET);
-											newHost.setHashType(CoreInformation.DEFAULT_HASHTYPE);
-											newHost.setPasswordLength(CoreInformation.DEFAULT_PASSWORD_LENGTH);
-											Hosts hostList = hashPassword
-													.getHosts();
-											hostList.getHost().add(newHost);
-
-											saveXMLFile();
-											loadXMLFile();
-
-										}
-									});
-							btnAddHost
-									.setImage(SWTResourceManager
-											.getImage(MainApplication.class,
-													"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_edit_add.png"));
-						}
-						{
-							Label lblLoginNamenWhlen = new Label(composite,
-									SWT.NONE);
-							lblLoginNamenWhlen
-									.setText(Messages.MainApplication_8);
-						}
-						new Label(composite, SWT.NONE);
-						new Label(composite, SWT.NONE);
-						{
-							loginCombo = new Combo(composite, SWT.READ_ONLY);
-							{
-								GridData gridData = new GridData(SWT.FILL,
-										SWT.CENTER, true, false, 1, 1);
-								gridData.widthHint = 163;
-								loginCombo.setLayoutData(gridData);
-							}
-							loginCombo
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											Hosts hosts = hashPassword
-													.getHosts();
-											Host currentHost = hosts
-													.getHostByName(hostCombo
-															.getText());
-											LoginName currentLogin = null;
-
-											currentLogin = currentHost
-													.getLoginNames()
-													.getLoginNameByName(
-															loginCombo
-																	.getText());
-											if (currentLogin == null) {
-												loginCombo.select(0);
-											} else {
-												try {
-													loginCombo
-															.setText(currentLogin
-																	.getName());
-													passwordLengthText
-															.setText(currentLogin
-																	.getPasswordLength()
-																	.replaceAll(
-																			"[^0-9]", "")); //$NON-NLS-1$ //$NON-NLS-2$
-													characterSetText
-															.setText(currentLogin
-																	.getCharset());
-													hashCombo
-															.setText(currentLogin
-																	.getHashType());
-												} catch (NullPointerException e1) {
-													// No settings found
-												}
-											}
-
-											ClipBoardUtil
-													.addToClipboard(loginCombo
-															.getText());
-										}
-									});
-						}
-						{
-							Button btnDellLogin = new Button(composite,
-									SWT.NONE);
-							btnDellLogin
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											MessageBox messageBox = new MessageBox(
-													shlJhashpassword,
-													SWT.ICON_WARNING | SWT.YES
-															| SWT.NO);
-											messageBox
-													.setText(Messages.MainApplication_39);
-											messageBox
-													.setMessage(Messages.MainApplication_40);
-											int buttonID = messageBox.open();
-
-											switch (buttonID) {
-											case SWT.YES:
-												Host host = hashPassword
-														.getHosts()
-														.getHostByName(
-																hostCombo
-																		.getText());
-												if (host != null) {
-													LoginName loginName = host
-															.getLoginNames()
-															.getLoginNameByName(
-																	loginCombo
-																			.getText());
-													if (loginName != null) {
-														host.getLoginNames()
-																.getLoginName()
-																.remove(loginName);
-														saveXMLFile();
-														loadXMLFile();
-													}
-												}
-												break;
-											case SWT.NO:
-												break;
-											default:
-												break;
-											}
-										}
-									});
-							btnDellLogin
-									.setImage(SWTResourceManager
-											.getImage(MainApplication.class,
-													"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_button_cancel.png"));
-						}
-						{
-							Button btnAddLogin = new Button(composite, SWT.NONE);
-							btnAddLogin
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											Host host = hashPassword
-													.getHosts()
-													.getHostByName(
-															hostCombo.getText());
-
-											if (host == null) {
-												return;
-											}
-
-											InputDialog iD = new InputDialog(
-													shlJhashpassword,
-													Messages.MainApplication_3,
-													Messages.MainApplication_6,
-													Messages.MainApplication_7,
-													null);
-											iD.open();
-											String loginName = iD.getValue();
-
-											if (loginName == null
-													|| loginName.trim()
-															.isEmpty()) {
-												return;
-											}
-
-											if (host.getLoginNames()
-													.getLoginNameByName(
-															loginName) == null) {
-												LoginName newLoginName = new LoginName();
-												newLoginName.setName(loginName);
-												host.getLoginNames()
-														.getLoginName()
-														.add(newLoginName);
-
-												saveXMLFile();
-												loadXMLFile();
-											}
-
-										}
-									});
-							btnAddLogin
-									.setImage(SWTResourceManager
-											.getImage(MainApplication.class,
-													"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_edit_add.png"));
-						}
-						composite.setTabList(new Control[] { hostCombo,
-								loginCombo, btnDelHost, btnAddHost });
+				lblPassphraseEingeben.setText(Messages.MainApplication_10);
+			}
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			{
+				txtPassphrase = new Text(grpHome, SWT.BORDER | SWT.PASSWORD);
+				txtPassphrase.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+						false, false, 4, 1));
+				txtPassphrase.addModifyListener(new ModifyListener() {
+					public void modifyText(ModifyEvent arg0) {
+						checkPassphrases();
 					}
-					xpndtmHostRelationship
-							.setHeight(xpndtmHostRelationship.getControl()
-									.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+				});
+			}
+			new Label(grpHome, SWT.NONE);
+			{
+				Label lblPassphraseWiederholen = new Label(grpHome, SWT.NONE);
+				lblPassphraseWiederholen.setBackground(SWTResourceManager
+						.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+				lblPassphraseWiederholen.setText(Messages.MainApplication_11);
+			}
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			new Label(grpHome, SWT.NONE);
+			txtPassphraseR = new Text(grpHome, SWT.BORDER | SWT.PASSWORD);
+			txtPassphraseR.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+					false, false, 4, 1));
+			{
+				txtPassphraseR.addKeyListener(new KeyListener() {
+
+					@Override
+					public void keyReleased(KeyEvent arg0) {
+						if (arg0.keyCode == 13 || arg0.keyCode == 16777296) {
+							btnGeneratePassword.notifyListeners(SWT.Selection,
+									new Event());
+						}
+					}
+
+					@Override
+					public void keyPressed(KeyEvent arg0) {
+						// Nothing
+					}
+				});
+			}
+			txtPassphraseR.addModifyListener(new ModifyListener() {
+				public void modifyText(ModifyEvent arg0) {
+					checkPassphrases();
+				}
+			});
+			new Label(grpHome, SWT.NONE);
+			{
+				Composite composite = new Composite(grpHome, SWT.NONE);
+				composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
+						false, 4, 1));
+				composite.setLayout(new GridLayout(2, false));
+				{
+					btnGeneratePassword = new Button(composite, SWT.NONE);
+					btnGeneratePassword.setLayoutData(new GridData(SWT.FILL,
+							SWT.CENTER, true, false, 2, 1));
+					btnGeneratePassword
+							.addSelectionListener(new SelectionAdapter() {
+								@Override
+								public void widgetSelected(SelectionEvent e) {
+									String hostname = hostCombo.getText();
+									String loginname = loginCombo.getText();
+									final String passphrase = txtPassphrase
+											.getText();
+									EHashType hashType = EHashType
+											.valueOf(hashCombo.getText());
+									String characterSet = characterSetText
+											.getText();
+									int maxPwLength = Integer
+											.parseInt(passwordLengthText
+													.getText());
+
+									String password = HashUtil
+											.generatePassword(hostname,
+													loginname, passphrase,
+													hashType, characterSet,
+													maxPwLength);
+
+									ClipBoardUtil.addToClipboard(password);
+
+									txtPassphrase.setText("");
+									txtPassphraseR.setText("");
+								}
+							});
+					btnGeneratePassword.setText(Messages.MainApplication_12);
+					btnGeneratePassword.setEnabled(false);
 				}
 				{
-					ExpandItem xpndtmPassphrase = new ExpandItem(expandBar,
-							SWT.NONE);
-					xpndtmPassphrase.setExpanded(true);
-					xpndtmPassphrase
-							.setImage(SWTResourceManager
-									.getImage(MainApplication.class,
-											"/de/janbusch/jhashpassword/images/32px-Crystal_Clear_action_lock-silver.png"));
-					xpndtmPassphrase.setText(Messages.MainApplication_9);
-					{
-						Composite composite = new Composite(expandBar,
-								SWT.BORDER);
-						composite.setBackground(SWTResourceManager
-								.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-						xpndtmPassphrase.setControl(composite);
-						composite.setLayout(new GridLayout(2, false));
-						{
-							Label lblPassphraseEingeben = new Label(composite,
-									SWT.SHADOW_IN);
-							lblPassphraseEingeben
-									.setBackground(SWTResourceManager
-											.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-							lblPassphraseEingeben.setLayoutData(new GridData(
-									SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-							lblPassphraseEingeben
-									.setText(Messages.MainApplication_10);
-						}
-						{
-							txtPassphrase = new Text(composite, SWT.BORDER
-									| SWT.PASSWORD);
-							txtPassphrase
-									.addModifyListener(new ModifyListener() {
-										public void modifyText(ModifyEvent arg0) {
-											if (!txtPassphrase.getText()
-													.isEmpty()
-													&& txtPassphrase
-															.getText()
-															.equals(txtPassphraseR
-																	.getText())) {
-												btnGeneratePassword
-														.setEnabled(true);
-											} else {
-												btnGeneratePassword
-														.setEnabled(false);
-											}
-										}
-									});
-							{
-								GridData gridData = new GridData(SWT.FILL,
-										SWT.CENTER, true, false, 2, 1);
-								gridData.widthHint = 250;
-								txtPassphrase.setLayoutData(gridData);
-							}
-						}
-						{
-							Label lblPassphraseWiederholen = new Label(
-									composite, SWT.NONE);
-							lblPassphraseWiederholen
-									.setBackground(SWTResourceManager
-											.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-							lblPassphraseWiederholen
-									.setLayoutData(new GridData(SWT.LEFT,
-											SWT.CENTER, false, false, 2, 1));
-							lblPassphraseWiederholen
-									.setText(Messages.MainApplication_11);
-						}
-						{
-							txtPassphraseR = new Text(composite, SWT.BORDER
-									| SWT.PASSWORD);
-							{
-								GridData gridData = new GridData(SWT.FILL,
-										SWT.CENTER, true, false, 2, 1);
-								gridData.widthHint = 250;
-								txtPassphraseR.setLayoutData(gridData);
-								txtPassphraseR
-										.addKeyListener(new KeyListener() {
+					btnShowClipboard = new Button(composite, SWT.NONE);
+					btnShowClipboard.setLayoutData(new GridData(SWT.FILL,
+							SWT.CENTER, true, false, 1, 1));
+					btnShowClipboard
+							.addSelectionListener(new SelectionAdapter() {
+								@Override
+								public void widgetSelected(SelectionEvent e) {
+									String clipboardString = ClipBoardUtil
+											.getFromClipboard();
 
-											@Override
-											public void keyReleased(
-													KeyEvent arg0) {
-												if (arg0.keyCode == 13
-														|| arg0.keyCode == 16777296) {
-													btnGeneratePassword
-															.notifyListeners(
-																	SWT.Selection,
-																	new Event());
-												}
-											}
-
-											@Override
-											public void keyPressed(KeyEvent arg0) {
-												// Nothing
-											}
-										});
-							}
-							txtPassphraseR
-									.addModifyListener(new ModifyListener() {
-										public void modifyText(ModifyEvent arg0) {
-											if (!txtPassphraseR.getText()
-													.isEmpty()
-													&& txtPassphraseR
-															.getText()
-															.equals(txtPassphrase
-																	.getText())) {
-												btnGeneratePassword
-														.setEnabled(true);
-											} else {
-												btnGeneratePassword
-														.setEnabled(false);
-											}
-										}
-									});
-						}
-						{
-							btnGeneratePassword = new Button(composite,
-									SWT.NONE);
-							btnGeneratePassword
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											String hostname = hostCombo
-													.getText();
-											String loginname = loginCombo
-													.getText();
-											final String passphrase = txtPassphrase
-													.getText();
-											EHashType hashType = EHashType
-													.valueOf(hashCombo
-															.getText());
-											String characterSet = characterSetText
-													.getText();
-											int maxPwLength = Integer
-													.parseInt(passwordLengthText
-															.getText());
-
-											String password = HashUtil
-													.generatePassword(hostname,
-															loginname,
-															passphrase,
-															hashType,
-															characterSet,
-															maxPwLength);
-
-											ClipBoardUtil
-													.addToClipboard(password);
-
-											txtPassphrase.setText("");
-											txtPassphraseR.setText("");
-										}
-									});
-							btnGeneratePassword.setLayoutData(new GridData(
-									SWT.FILL, SWT.CENTER, false, false, 1, 1));
-							btnGeneratePassword
-									.setText(Messages.MainApplication_12);
-							btnGeneratePassword.setEnabled(false);
-						}
-						{
-							btnShowClipboard = new Button(composite, SWT.NONE);
-							btnShowClipboard
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											String clipboardString = ClipBoardUtil
-													.getFromClipboard();
-
-											MessageBox mB = new MessageBox(
-													shlJhashpassword);
-											mB.setText(Messages.MainApplication_48);
-											mB.setMessage(clipboardString);
-											mB.open();
-										}
-									});
-							btnShowClipboard.setLayoutData(new GridData(
-									SWT.FILL, SWT.CENTER, false, false, 1, 1));
-							btnShowClipboard
-									.setText(Messages.MainApplication_13);
-						}
-						{
-							Button btnShowQRcode = new Button(composite,
-									SWT.NONE);
-							btnShowQRcode
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											String clipboardString = ClipBoardUtil
-													.getFromClipboard();
-
-											try {
-												MultiFormatWriter writer = new MultiFormatWriter();
-												Hashtable<EncodeHintType, ErrorCorrectionLevel> hints = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
-												hints.put(
-														EncodeHintType.ERROR_CORRECTION,
-														ErrorCorrectionLevel.Q);
-												MatrixToImageWriter.writeToFile(
-														writer.encode(
-																clipboardString,
-																BarcodeFormat.QR_CODE,
-																300, 300, hints),
-														"png",
-														new File(
-																CoreInformation.QRCODEFILE));
-												new QRCodeDialog(
-														shlJhashpassword)
-														.open();
-											} catch (Exception e1) {
-												System.out.println("failure: "
-														+ e);
-											}
-										}
-									});
-							btnShowQRcode.setLayoutData(new GridData(SWT.FILL,
-									SWT.CENTER, false, false, 1, 1));
-							btnShowQRcode.setText("QR-Code");
-						}
-						composite.setTabList(new Control[] { txtPassphrase,
-								txtPassphraseR, btnGeneratePassword,
-								btnShowClipboard });
-					}
-					xpndtmPassphrase.setHeight(xpndtmPassphrase.getControl()
-							.computeSize(SWT.DEFAULT, SWT.DEFAULT).y);
+									MessageBox mB = new MessageBox(
+											shlJhashpassword);
+									mB.setText(Messages.MainApplication_48);
+									mB.setMessage(clipboardString);
+									mB.open();
+								}
+							});
+					btnShowClipboard.setText(Messages.MainApplication_13);
 				}
 				{
-					ExpandItem xpndtmSettings = new ExpandItem(expandBar,
-							SWT.NONE);
-					xpndtmSettings
-							.setImage(SWTResourceManager
-									.getImage(MainApplication.class,
-											"/de/janbusch/jhashpassword/images/32px-Crystal_Clear_app_kcontrol.png"));
-					xpndtmSettings.setText(Messages.MainApplication_14);
-					{
-						Composite composite = new Composite(expandBar,
-								SWT.BORDER);
-						xpndtmSettings.setControl(composite);
-						composite.setLayout(new GridLayout(4, false));
-						{
-							Label lblHashTypWhlen = new Label(composite,
-									SWT.NONE);
-							lblHashTypWhlen.setLayoutData(new GridData(
-									SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-							lblHashTypWhlen
-									.setText(Messages.MainApplication_15);
-						}
-						{
-							hashCombo = new Combo(composite, SWT.READ_ONLY);
-							hashCombo
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											btnSave.setEnabled(true);
-										}
-									});
-							hashCombo.setLayoutData(new GridData(SWT.FILL,
-									SWT.CENTER, false, false, 2, 1));
-							for (EHashType hashType : EHashType.values()) {
-								hashCombo.add(hashType.toString());
+					Button btnShowQRcode = new Button(composite, SWT.NONE);
+					btnShowQRcode.setLayoutData(new GridData(SWT.FILL,
+							SWT.CENTER, true, false, 1, 1));
+					btnShowQRcode.addSelectionListener(new SelectionAdapter() {
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+							String clipboardString = ClipBoardUtil
+									.getFromClipboard();
+
+							try {
+								MultiFormatWriter writer = new MultiFormatWriter();
+								Hashtable<EncodeHintType, ErrorCorrectionLevel> hints = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
+								hints.put(EncodeHintType.ERROR_CORRECTION,
+										ErrorCorrectionLevel.Q);
+								MatrixToImageWriter.writeToFile(writer.encode(
+										clipboardString, BarcodeFormat.QR_CODE,
+										300, 300, hints), "png", new File(
+										CoreInformation.QRCODEFILE));
+								new QRCodeDialog(shlJhashpassword).open();
+							} catch (Exception e1) {
+								MessageBox messageBox = new MessageBox(
+										shlJhashpassword, SWT.ICON_INFORMATION
+												| SWT.OK);
+								messageBox.setText("QR-Code");
+								messageBox
+										.setMessage(Messages.MainApplication_50);
+								messageBox.open();
 							}
-							hashCombo.select(1);
 						}
-						{
-							Label lblMaximalePasswortLnge = new Label(
-									composite, SWT.NONE);
-							lblMaximalePasswortLnge.setLayoutData(new GridData(
-									SWT.LEFT, SWT.CENTER, false, false, 2, 1));
-							lblMaximalePasswortLnge
-									.setText(Messages.MainApplication_16);
-						}
-						{
-							passwordLengthText = new Text(composite, SWT.BORDER);
-							passwordLengthText.setLayoutData(new GridData(
-									SWT.FILL, SWT.CENTER, true, false, 2, 1));
-							passwordLengthText
-									.addFocusListener(new FocusAdapter() {
-										@Override
-										public void focusLost(FocusEvent e) {
-											if ((Boolean) passwordLengthText
-													.getData("hasChanged")) {
-												btnSave.setEnabled(true);
-												passwordLengthText.setData(
-														"hasChanged", false);
-											}
-										}
-									});
-							passwordLengthText
-									.addModifyListener(new ModifyListener() {
-										public void modifyText(ModifyEvent arg0) {
-											passwordLengthText.setData(
-													"hasChanged", true);
-										}
-									});
-							passwordLengthText
-									.setText(CoreInformation.DEFAULT_PASSWORD_LENGTH);
-						}
-						{
-							Label lblCharacterSetDefinieren = new Label(
-									composite, SWT.NONE);
-							lblCharacterSetDefinieren
-									.setText(Messages.MainApplication_18);
-						}
-						new Label(composite, SWT.NONE);
-						new Label(composite, SWT.NONE);
-						new Label(composite, SWT.NONE);
-						{
-							characterSetText = new Text(composite, SWT.BORDER
-									| SWT.WRAP | SWT.MULTI);
-							characterSetText
-									.addFocusListener(new FocusAdapter() {
-										@Override
-										public void focusLost(FocusEvent e) {
-											if ((Boolean) characterSetText
-													.getData("hasChanged")) {
-												btnSave.setEnabled(true);
-												characterSetText.setData(
-														"hasChanged", false);
-											}
-										}
-									});
-							characterSetText
-									.addModifyListener(new ModifyListener() {
-										public void modifyText(ModifyEvent arg0) {
-											characterSetText.setData(
-													"hasChanged", true);
-										}
-									});
-							{
-								GridData gridData = new GridData(SWT.FILL,
-										SWT.CENTER, true, false, 3, 1);
-								gridData.widthHint = 158;
-								characterSetText.setLayoutData(gridData);
-							}
-							characterSetText.setSize(140,
-									characterSetText.getSize().y);
-							characterSetText
-									.setText(CoreInformation.DEFAULT_CHARACTERSET);
-						}
-						{
-							btnCharacterset = new Button(composite, SWT.NONE);
-							btnCharacterset
-									.addSelectionListener(new SelectionAdapter() {
-										@Override
-										public void widgetSelected(
-												SelectionEvent e) {
-											char[] currentCharacterSet = characterSetText
-													.getText().toCharArray();
-											List<Character> charList = new ArrayList<Character>();
-											StringBuilder sB = new StringBuilder();
-
-											for (char c : currentCharacterSet) {
-												charList.add(c);
-											}
-
-											while (charList.size() > 0) {
-												sB.append(charList.remove((int) (Math
-														.random() * charList
-														.size())));
-											}
-
-											characterSetText.setText(sB
-													.toString());
-											characterSetText.notifyListeners(
-													SWT.FocusOut, new Event());
-										}
-									});
-							btnCharacterset
-									.setImage(SWTResourceManager
-											.getImage(MainApplication.class,
-													"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_edit.png"));
-						}
-						{
-							Label lblZwischenablageLeer = new Label(composite,
-									SWT.NONE);
-							lblZwischenablageLeer.setEnabled(false);
-							lblZwischenablageLeer
-									.setText(Messages.MainApplication_20);
-						}
-						new Label(composite, SWT.NONE);
-						new Label(composite, SWT.NONE);
-						new Label(composite, SWT.NONE);
-						{
-							cacheCombo = new Combo(composite, SWT.READ_ONLY);
-							cacheCombo.setVisibleItemCount(3);
-							cacheCombo.setToolTipText("");
-							cacheCombo.setItems(new String[] {
-									Messages.MainApplication_21,
-									Messages.MainApplication_22,
-									Messages.MainApplication_23 });
-							cacheCombo.setLayoutData(new GridData(SWT.LEFT,
-									SWT.CENTER, false, false, 3, 1));
-							cacheCombo.select(1);
-							cacheCombo.setEnabled(false);
-						}
-						new Label(composite, SWT.NONE);
-					}
-					xpndtmSettings.setHeight(200);
+					});
+					btnShowQRcode.setText("QR-Code");
 				}
 			}
+			new Label(grpHome, SWT.NONE);
+		}
+
+		Group grpSettings = new Group(shlJhashpassword, SWT.NONE);
+		grpSettings.setLayout(new GridLayout(2, false));
+		grpSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
+				1, 1));
+		grpSettings.setText(Messages.MainApplication_grpSettings_text);
+		{
+			Label lblHashTypWhlen = new Label(grpSettings, SWT.NONE);
+			lblHashTypWhlen.setText(Messages.MainApplication_15);
+		}
+		hashCombo = new Combo(grpSettings, SWT.READ_ONLY);
+		hashCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
+				false, 1, 1));
+		for (EHashType hashType : EHashType.values()) {
+			hashCombo.add(hashType.toString());
+		}
+		hashCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				btnSave.setEnabled(true);
+			}
+		});
+		hashCombo.select(1);
+		{
+			Label lblMaximalePasswortLnge = new Label(grpSettings, SWT.NONE);
+			lblMaximalePasswortLnge.setText(Messages.MainApplication_16);
 		}
 		{
+			passwordLengthText = new Text(grpSettings, SWT.BORDER);
+			passwordLengthText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+					false, false, 1, 1));
+			passwordLengthText.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if ((Boolean) passwordLengthText.getData("hasChanged")) {
+						btnSave.setEnabled(true);
+						passwordLengthText.setData("hasChanged", false);
+					}
+				}
+			});
+			passwordLengthText.addModifyListener(new ModifyListener() {
+				public void modifyText(ModifyEvent arg0) {
+					passwordLengthText.setData("hasChanged", true);
+				}
+			});
+			passwordLengthText.setText(CoreInformation.DEFAULT_PASSWORD_LENGTH);
+		}
+		{
+			Label lblCharacterSetDefinieren = new Label(grpSettings, SWT.NONE);
+			lblCharacterSetDefinieren.setText(Messages.MainApplication_18);
+		}
+		{
+			btnCharacterset = new Button(grpSettings, SWT.NONE);
+			btnCharacterset.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					char[] currentCharacterSet = characterSetText.getText()
+							.toCharArray();
+					List<Character> charList = new ArrayList<Character>();
+					StringBuilder sB = new StringBuilder();
+
+					for (char c : currentCharacterSet) {
+						charList.add(c);
+					}
+
+					while (charList.size() > 0) {
+						sB.append(charList.remove((int) (Math.random() * charList
+								.size())));
+					}
+
+					characterSetText.setText(sB.toString());
+					characterSetText.notifyListeners(SWT.FocusOut, new Event());
+				}
+			});
+			btnCharacterset
+					.setImage(SWTResourceManager
+							.getImage(MainApplication.class,
+									"/de/janbusch/jhashpassword/images/16px-Crystal_Clear_action_edit.png"));
+		}
+		{
+			characterSetText = new Text(grpSettings, SWT.BORDER | SWT.WRAP
+					| SWT.MULTI);
+			characterSetText.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
+					true, true, 2, 1));
+			characterSetText.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					if ((Boolean) characterSetText.getData("hasChanged")) {
+						btnSave.setEnabled(true);
+						characterSetText.setData("hasChanged", false);
+					}
+				}
+			});
+			characterSetText.addModifyListener(new ModifyListener() {
+				public void modifyText(ModifyEvent arg0) {
+					characterSetText.setData("hasChanged", true);
+				}
+			});
+			characterSetText.setSize(100, characterSetText.getSize().y);
+			characterSetText.setText(CoreInformation.DEFAULT_CHARACTERSET);
+		}
+		{
+			Label lblZwischenablageLeer = new Label(grpSettings, SWT.NONE);
+			lblZwischenablageLeer.setEnabled(false);
+			lblZwischenablageLeer.setText(Messages.MainApplication_20);
+		}
+		new Label(grpSettings, SWT.NONE);
+		{
+			cacheCombo = new Combo(grpSettings, SWT.READ_ONLY);
+			cacheCombo.setVisibleItemCount(3);
+			cacheCombo.setToolTipText("");
+			cacheCombo.setItems(new String[] { Messages.MainApplication_21,
+					Messages.MainApplication_22, Messages.MainApplication_23 });
+			cacheCombo.select(1);
+			cacheCombo.setEnabled(false);
+		}
+		new Label(grpSettings, SWT.NONE);
+		{
 			Group grpButtons = new Group(shlJhashpassword, SWT.NONE);
+			grpButtons.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
+					true, 2, 1));
 			grpButtons.setLayout(new GridLayout(5, false));
-			grpButtons.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false,
-					false, 1, 1));
 			{
 				btnSave = new Button(grpButtons, SWT.NONE);
 				btnSave.setEnabled(false);
 				btnSave.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						MessageBox messageBox = new MessageBox(
-								shlJhashpassword, SWT.ICON_WARNING | SWT.YES
-										| SWT.NO);
-						messageBox.setText(Messages.MainApplication_57);
-						messageBox.setMessage(Messages.MainApplication_58);
-						int buttonID = messageBox.open();
-
-						switch (buttonID) {
-						case SWT.YES:
-							try {
-								Hosts hosts = hashPassword.getHosts();
-								Host currentHost = hosts
-										.getHostByName(hostCombo.getText());
-								LoginName currentLogin = currentHost
-										.getLoginNames().getLoginNameByName(
-												loginCombo.getText());
-								if (currentHost.getLoginNames().getLoginName()
-										.size() > 1) {
-									currentLogin.setCharset(characterSetText
-											.getText());
-									currentLogin.setHashType(hashCombo
-											.getText());
-									currentLogin
-											.setPasswordLength(passwordLengthText
-													.getText());
-								} else {
-									currentHost.setCharset(characterSetText
-											.getText());
-									currentHost.setHashType(hashCombo.getText());
-									currentHost
-											.setPasswordLength(passwordLengthText
-													.getText());
-								}
-
-								saveXMLFile();
-								MessageBox mB = new MessageBox(shlJhashpassword);
-								mB.setText(Messages.MainApplication_32);
-								mB.setMessage(Messages.MainApplication_33);
-								mB.open();
-							} catch (Exception exc) {
-								ErrorDialog.openError(shlJhashpassword,
-										Messages.MainApplication_34,
-										Messages.MainApplication_35,
-										Status.OK_STATUS);
-							}
-							break;
-						case SWT.NO:
-							loadXMLFile();
-							break;
-						default:
-							loadXMLFile();
-							break;
-						}
-
-						btnSave.setEnabled(false);
+						saveSettings();
 					}
 				});
 				btnSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -1031,6 +785,8 @@ public class MainApplication {
 			}
 			{
 				Button btnSync = new Button(grpButtons, SWT.NONE);
+				btnSync.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+						false, 1, 1));
 				btnSync.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -1069,6 +825,9 @@ public class MainApplication {
 				btnbeenden.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
+						if (btnSave.isEnabled()) {
+							saveSettings();
+						}
 						ClipBoardUtil.addToClipboard("");
 						saveXMLFile();
 						System.exit(0);
@@ -1079,5 +838,52 @@ public class MainApplication {
 				btnbeenden.setText(Messages.MainApplication_37);
 			}
 		}
+	}
+
+	private void saveSettings() {
+		MessageBox messageBox = new MessageBox(shlJhashpassword,
+				SWT.ICON_WARNING | SWT.YES | SWT.NO);
+		messageBox.setText(Messages.MainApplication_57);
+		messageBox.setMessage(Messages.MainApplication_59);
+		int buttonID = messageBox.open();
+
+		switch (buttonID) {
+		case SWT.YES:
+			try {
+				Hosts hosts = hashPassword.getHosts();
+				Host currentHost = hosts.getHostByName(hostCombo.getText());
+				LoginName currentLogin = currentHost.getLoginNames()
+						.getLoginNameByName(loginCombo.getText());
+				if (currentHost.getLoginNames().getLoginName().size() > 1) {
+					currentLogin.setCharset(characterSetText.getText());
+					currentLogin.setHashType(hashCombo.getText());
+					currentLogin
+							.setPasswordLength(passwordLengthText.getText());
+				} else {
+					currentHost.setCharset(characterSetText.getText());
+					currentHost.setHashType(hashCombo.getText());
+					currentHost.setPasswordLength(passwordLengthText.getText());
+				}
+
+				saveXMLFile();
+				MessageBox mB = new MessageBox(shlJhashpassword);
+				mB.setText(Messages.MainApplication_32);
+				mB.setMessage(Messages.MainApplication_33);
+				mB.open();
+			} catch (Exception exc) {
+				ErrorDialog.openError(shlJhashpassword,
+						Messages.MainApplication_34,
+						Messages.MainApplication_35, Status.OK_STATUS);
+			}
+			break;
+		case SWT.NO:
+			loadXMLFile();
+			break;
+		default:
+			loadXMLFile();
+			break;
+		}
+
+		btnSave.setEnabled(false);
 	}
 }

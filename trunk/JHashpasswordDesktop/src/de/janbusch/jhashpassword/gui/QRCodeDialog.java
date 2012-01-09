@@ -62,7 +62,7 @@ public class QRCodeDialog extends Dialog {
 		shlQRCode = new Shell(getParent(), SWT.DIALOG_TRIM
 				| SWT.APPLICATION_MODAL);
 		shlQRCode.setText("QR-Code");
-		shlQRCode.setSize(310, 310);
+		shlQRCode.setSize(310, 315);
 		shlQRCode.setLayout(new FillLayout(SWT.HORIZONTAL));
 
 		Label lblNewLabel = new Label(shlQRCode, SWT.NONE);
