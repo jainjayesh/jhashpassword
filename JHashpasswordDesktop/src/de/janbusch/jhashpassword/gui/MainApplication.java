@@ -272,7 +272,7 @@ public class MainApplication {
 		{
 			Group grpHome = new Group(shlJhashpassword, SWT.NONE);
 			grpHome.setLayout(new GridLayout(5, false));
-			GridData gd_grpHome = new GridData(SWT.FILL, SWT.FILL, false, true,
+			GridData gd_grpHome = new GridData(SWT.FILL, SWT.FILL, true, true,
 					1, 1);
 			gd_grpHome.widthHint = 217;
 			grpHome.setLayoutData(gd_grpHome);
@@ -651,7 +651,7 @@ public class MainApplication {
 
 		Group grpSettings = new Group(shlJhashpassword, SWT.NONE);
 		grpSettings.setLayout(new GridLayout(2, false));
-		grpSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
+		grpSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,
 				1, 1));
 		grpSettings.setText(Messages.MainApplication_grpSettings_text);
 		{
@@ -730,8 +730,11 @@ public class MainApplication {
 		{
 			characterSetText = new Text(grpSettings, SWT.BORDER | SWT.WRAP
 					| SWT.MULTI);
-			characterSetText.setLayoutData(new GridData(SWT.FILL, SWT.FILL,
-					true, true, 2, 1));
+			GridData gd_characterSetText = new GridData(SWT.FILL, SWT.TOP,
+					true, true, 2, 1);
+			gd_characterSetText.heightHint = 106;
+			gd_characterSetText.widthHint = 232;
+			characterSetText.setLayoutData(gd_characterSetText);
 			characterSetText.addFocusListener(new FocusAdapter() {
 				@Override
 				public void focusLost(FocusEvent e) {
