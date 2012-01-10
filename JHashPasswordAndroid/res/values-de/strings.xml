@@ -2,7 +2,7 @@
 <resources>
 	<!-- App Description -->
 	<string name="app_desc">JHashPassword erzeugt sichere, unterschiedliche
-		Passwörter für jeden Host (Websites, Online-Banking, ...) mit einer
+		Passwörter für jeden Host (Websites, Online-Banking, ..) mit einer
 		einzigen Passphrase!</string>
 
 	<!-- Activity names -->
@@ -10,7 +10,7 @@
 	<string name="app_name_sync">Synchronisation</string>
 
 	<!-- Notifications -->
-	<string name="notificationClipboard">Passwort aus der Zwischenablage entfernen...</string>
+	<string name="notificationClipboard">Passwort aus der Zwischenablage entfernen..</string>
 
 	<!-- Activation-Mail -->
 	<string name="mailSubject">JHashPassword aktivieren - Go Pro</string>
@@ -58,6 +58,7 @@
 	<string name="btnCancelNReturn">Verwerfen</string>
 	<string name="btnShowClipboard">Zwischenablage zeigen</string>
 	<string name="btnClearClipboard">Zwischenablage leeren</string>
+ 	<string name="btnReadQRCode">QR-Code scannen</string>
 	<string name="btnDonate">Spenden</string>
 	<string name="btnActivate">Aktivieren</string>
 	<string name="btnSendActCode">Mail senden</string>
@@ -102,7 +103,7 @@
 		Die eingegebene Serien-Nummer ist ungültig. Bitte überprüfen Sie die eingegebene Serien-Nummer und kontaktieren Sie mich, falls die von mir gesendete nicht funktionieren sollte!
 	</string>
 	<string name="msgSerialAccepted">
-		Die eingegebene Serien-Nummer wurde akzeptiert. Starte JHashPassword neu...
+		Die eingegebene Serien-Nummer wurde akzeptiert. Starte JHashPassword neu..
 	</string>
 	<string name="msgWrongSerial">
 		Die eingegebene Seriennummer ist ungültig. Bitte
@@ -121,7 +122,7 @@
 		Nehmen Sie die eingehende Verbindungsanfrage an von
 	</string>
 	<string name="msgWaitingForSync">
-		Warte auf eingehende Synchronisationsanfrage...
+		Warte auf eingehende Synchronisationsanfrage..
 	</string>
 	<string name="msgOnlyInPro">
 		Entschuldigung, aber dieses Feature ist nur in der

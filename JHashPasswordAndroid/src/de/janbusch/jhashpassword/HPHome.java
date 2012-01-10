@@ -30,6 +30,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.hashpassword.core.EHashType;
 import de.janbusch.hashpassword.core.HashUtil;
@@ -45,6 +49,7 @@ public class HPHome extends Activity {
 	private static final int REQUESTCODE_SETTINGSXML = 0;
 	private static final int REQUESTCODE_IMPEXP = 1;
 	private static final int REQUESTCODE_CLEAR_CLIPBOARD = 2;
+	private static final int SCAN_QRCODE = 3;
 
 	private static final int NOTIFICATION_ID = 1337;
 
@@ -484,7 +489,8 @@ public class HPHome extends Activity {
 					getString(R.string.msgPasswordCreated), Toast.LENGTH_LONG)
 					.show();
 
-			Log.d(this.toString(), "Password generated, timer started: " + timeout);
+			Log.d(this.toString(), "Password generated, timer started: "
+					+ timeout);
 			finish();
 			return true;
 		case R.id.btnShowClipboard:
@@ -544,6 +550,11 @@ public class HPHome extends Activity {
 					getString(R.string.msgClipboardCleared), Toast.LENGTH_SHORT)
 					.show();
 			return true;
+		case R.id.readqrcode:
+			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+			intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+			startActivityForResult(intent, SCAN_QRCODE);
+			return true;
 		case R.id.exit:
 			closeJHP();
 			return true;
@@ -588,6 +599,23 @@ public class HPHome extends Activity {
 				loadLoginNames();
 				break;
 			case Activity.RESULT_CANCELED:
+				break;
+			default:
+				Log.d(this.toString(), "Unknown resultcode: " + resultCode);
+				break;
+			}
+			break;
+		case SCAN_QRCODE:
+			switch (resultCode) {
+			case Activity.RESULT_OK:
+				String contents = data.getStringExtra("SCAN_RESULT");
+				Toast.makeText(this, "Scanned password and copied to clipboard!",
+						Toast.LENGTH_LONG);
+				clipboard.setText(contents);
+				break;
+			case Activity.RESULT_CANCELED:
+				Toast.makeText(this, "Scanning QR-Code failed.",
+						Toast.LENGTH_SHORT);
 				break;
 			default:
 				Log.d(this.toString(), "Unknown resultcode: " + resultCode);
