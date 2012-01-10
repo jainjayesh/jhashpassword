@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/settings" android:title="@string/optmen_Settings" 
-		android:icon="@android:drawable/ic_menu_manage" />
-	<item android:id="@+id/clearclipb" android:icon="@android:drawable/ic_menu_delete"
-		android:title="@string/btnClearClipboard" />
-	<item android:id="@+id/goPro" android:icon="@drawable/paypal_logo" android:title="@string/btnDonate" />
-	<item android:id="@+id/aboutjhp" android:title="@string/optmen_Aboutjhp"
-		android:icon="@drawable/icon_50px" />
-	<item android:id="@+id/help" android:title="@string/optmen_Help"
-		android:icon="@android:drawable/ic_menu_help" />
-	<item android:id="@+id/exit" android:icon="@android:drawable/ic_menu_close_clear_cancel"
-		android:title="@string/btnExit" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/optmen_Settings"/>
+    <item
+        android:id="@+id/clearclipb"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/btnClearClipboard"/>
+    <item
+        android:id="@+id/readqrcode"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="@string/btnReadQRCode"/>
+    <item
+        android:id="@+id/goPro"
+        android:icon="@drawable/paypal_logo"
+        android:title="@string/btnDonate"/>
+    <item
+        android:id="@+id/aboutjhp"
+        android:icon="@drawable/icon_50px"
+        android:title="@string/optmen_Aboutjhp"/>
+    <item
+        android:id="@+id/help"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="@string/optmen_Help"/>
+    <item
+        android:id="@+id/exit"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="@string/btnExit"/>
+
 </menu>

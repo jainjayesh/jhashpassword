@@ -60,6 +60,7 @@
  <string name="btnCancelNReturn">Discard</string>
  <string name="btnShowClipboard">Show clipboard</string>
  <string name="btnClearClipboard">Empty clipboard</string>
+ <string name="btnReadQRCode">Scan QR-Code</string>
  <string name="btnDonate">Donate</string>
  <string name="btnActivate">Activate</string>
  <string name="btnSendActCode">Send mail</string>
