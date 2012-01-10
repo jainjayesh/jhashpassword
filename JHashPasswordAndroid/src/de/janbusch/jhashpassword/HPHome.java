@@ -31,9 +31,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
-
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.hashpassword.core.EHashType;
 import de.janbusch.hashpassword.core.HashUtil;
@@ -448,50 +445,7 @@ public class HPHome extends Activity {
 			txtPassphraseOne.setText(new String());
 			txtPassphraseTwo.setText(new String());
 
-			Notification n = new Notification(R.drawable.icon,
-					getString(R.string.notificationClipboard),
-					System.currentTimeMillis());
-			Intent notificationIntent = new Intent(this, HPHome.class);
-			notificationIntent.putExtra("REQUESTCODE_CLEAR_CLIPBOARD",
-					REQUESTCODE_CLEAR_CLIPBOARD);
-			PendingIntent contentIntent = PendingIntent.getActivity(
-					getBaseContext(), 0, notificationIntent, 0);
-			n.setLatestEventInfo(getApplicationContext(),
-					getString(R.string.app_name),
-					getString(R.string.notificationClipboard), contentIntent);
-
-			n.flags |= Notification.FLAG_AUTO_CANCEL;
-			notifitcationManager.notify(NOTIFICATION_ID, n);
-
-			Integer timeout = hashPassword.getTimeOut();
-			if (timeout > 0) {
-				hpTimer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						clipboard.setText("");
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								Toast.makeText(
-										getBaseContext(),
-										getString(R.string.msgClipboardCleared),
-										Toast.LENGTH_SHORT).show();
-							}
-						});
-						notifitcationManager.cancel(NOTIFICATION_ID);
-						Log.d(this.toString(),
-								"Removed password from clipboard!");
-					}
-				}, timeout);
-			}
-
-			Toast.makeText(getBaseContext(),
-					getString(R.string.msgPasswordCreated), Toast.LENGTH_LONG)
-					.show();
-
-			Log.d(this.toString(), "Password generated, timer started: "
-					+ timeout);
-			finish();
+			startTimerShowNotification();
 			return true;
 		case R.id.btnShowClipboard:
 			AlertDialog.Builder infoDialog = new AlertDialog.Builder(this);
@@ -504,6 +458,53 @@ public class HPHome extends Activity {
 			Log.d(this.toString(), "Clicked button has no case.");
 			return false;
 		}
+	}
+
+	private void startTimerShowNotification() {
+		Notification n = new Notification(R.drawable.icon_50px,
+				getString(R.string.notificationClipboard),
+				System.currentTimeMillis());
+		Intent notificationIntent = new Intent(this, HPHome.class);
+		notificationIntent.putExtra("REQUESTCODE_CLEAR_CLIPBOARD",
+				REQUESTCODE_CLEAR_CLIPBOARD);
+		PendingIntent contentIntent = PendingIntent.getActivity(
+				getBaseContext(), 0, notificationIntent, 0);
+		n.setLatestEventInfo(getApplicationContext(),
+				getString(R.string.app_name),
+				getString(R.string.notificationClipboard), contentIntent);
+
+		n.flags |= Notification.FLAG_AUTO_CANCEL;
+		notifitcationManager.notify(NOTIFICATION_ID, n);
+
+		Integer timeout = hashPassword.getTimeOut();
+		if (timeout > 0) {
+			hpTimer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					clipboard.setText("");
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(
+									getBaseContext(),
+									getString(R.string.msgClipboardCleared),
+									Toast.LENGTH_LONG).show();
+						}
+					});
+					notifitcationManager.cancel(NOTIFICATION_ID);
+					Log.d(this.toString(),
+							"Removed password from clipboard!");
+				}
+			}, timeout);
+		}
+
+		Toast.makeText(getBaseContext(),
+				getString(R.string.msgPasswordCreated), Toast.LENGTH_LONG)
+				.show();
+
+		Log.d(this.toString(), "Password generated, timer started: "
+				+ timeout);
+		finish();
 	}
 
 	@Override
@@ -609,13 +610,12 @@ public class HPHome extends Activity {
 			switch (resultCode) {
 			case Activity.RESULT_OK:
 				String contents = data.getStringExtra("SCAN_RESULT");
-				Toast.makeText(this, "Scanned password and copied to clipboard!",
-						Toast.LENGTH_LONG);
 				clipboard.setText(contents);
+				startTimerShowNotification();
 				break;
 			case Activity.RESULT_CANCELED:
 				Toast.makeText(this, "Scanning QR-Code failed.",
-						Toast.LENGTH_SHORT);
+						Toast.LENGTH_SHORT).show();
 				break;
 			default:
 				Log.d(this.toString(), "Unknown resultcode: " + resultCode);
