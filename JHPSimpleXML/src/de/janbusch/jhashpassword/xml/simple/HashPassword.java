@@ -2,6 +2,7 @@ package de.janbusch.jhashpassword.xml.simple;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Collections;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
@@ -190,6 +191,17 @@ public class HashPassword implements Serializable {
 	 */
 	public void setTimeout(Integer value) {
 		this.timeout = value;
+	}
+	
+	/**
+	 * Sorts the entries alphabetical.
+	 */
+	public void sort() {
+		Collections.sort(this.hosts.getHost());
+		
+		for(Host host : this.hosts.getHost()) {
+			Collections.sort(host.getLoginNames().getLoginName());
+		}
 	}
 
 }
