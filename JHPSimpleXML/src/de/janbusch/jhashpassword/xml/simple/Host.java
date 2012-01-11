@@ -195,7 +195,7 @@ public class Host implements Serializable, Comparable<Host> {
 
 	@Override
 	public int compareTo(Host arg0) {
-		return arg0.getName().compareTo(this.name);
+		return this.name.compareTo(arg0.getName());
 	}
 
 }
