@@ -33,7 +33,7 @@ import org.simpleframework.xml.Root;
  * 
  */
 @Root
-public class LoginName implements Serializable {
+public class LoginName implements Serializable, Comparable<LoginName> {
 
 	/**
 	 * SerialVersionUID
@@ -131,6 +131,11 @@ public class LoginName implements Serializable {
 	 */
 	public void setPasswordLength(String value) {
 		this.passwordLength = value;
+	}
+
+	@Override
+	public int compareTo(LoginName o) {
+		return o.getName().compareTo(this.name);
 	}
 
 }

@@ -21,7 +21,8 @@ public class SimpleXMLUtil {
 
 		Serializer serializer = new Persister();
 		hashPassword = serializer.read(HashPassword.class, hashpasswordXMLFile);
-
+		hashPassword.sort();
+		
 		return hashPassword;
 	}
 

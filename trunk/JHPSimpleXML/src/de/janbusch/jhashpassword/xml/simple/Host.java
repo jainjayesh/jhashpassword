@@ -41,7 +41,7 @@ import org.simpleframework.xml.Root;
  * 
  */
 @Root
-public class Host implements Serializable {
+public class Host implements Serializable, Comparable<Host> {
 
 	/**
 	 * SerialVersionUID
@@ -191,6 +191,11 @@ public class Host implements Serializable {
 	 */
 	public void setName(String value) {
 		this.name = value;
+	}
+
+	@Override
+	public int compareTo(Host arg0) {
+		return arg0.getName().compareTo(this.name);
 	}
 
 }
