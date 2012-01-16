@@ -20,7 +20,7 @@ public class HashPassword implements Serializable {
 	 * SerialVersionUID
 	 */
 	private static final long serialVersionUID = 4420194836998361651L;
-	public static final String jhpSXMLVersion = "2.3"; 
+	public static final String jhpSXMLVersion = "2.4"; 
 	
 	@Element(name = "Hosts", required = false)
 	private Hosts hosts;

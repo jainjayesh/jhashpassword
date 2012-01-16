@@ -14,13 +14,12 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/banner"
+            android:background="@layout/banner_gradient"
             android:orientation="horizontal" >
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:contentDescription="+JHashPassword Icon"
                 android:src="@drawable/icon_50px" />
 
             <TextView
@@ -41,13 +40,13 @@
             </TextView>
         </LinearLayout>
     </RelativeLayout>
-
+
     <LinearLayout
         android:id="@+id/bottom_control_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/banner"
+        android:background="@layout/banner_gradient"
         android:orientation="horizontal"
         android:paddingBottom="4dip"
         android:paddingLeft="3dip"
@@ -99,6 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_weight="1"
+                    android:textColor="#fff"
                     android:text="@string/txtHostname" >
                 </TextView>
 
@@ -109,6 +109,7 @@
                     android:layout_weight="1"
                     android:hapticFeedbackEnabled="true"
                     android:longClickable="true"
+                    android:textColor="#fff"
                     android:prompt="@string/hostname_prompt" >
                 </Spinner>
 
@@ -117,6 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
+                    android:textColor="#fff"
                     android:layout_weight="1"
                     android:text="@string/txtLoginname" >
                 </TextView>
@@ -127,6 +129,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hapticFeedbackEnabled="true"
+                    android:textColor="#fff"
                     android:longClickable="true"
                     android:prompt="@string/loginname_prompt" >
                 </Spinner>
@@ -153,6 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_weight="1"
+                    android:textColor="#fff"
                     android:text="@string/txtPassphraseOne" >
                 </TextView>
 
