@@ -160,6 +160,7 @@ public class HPHome extends Activity {
 	private void loadXML() {
 		try {
 			hashPassword = SimpleXMLUtil.getXML(getBaseContext());
+			hashPassword.sort();
 			Log.d(this.toString(), "HashPassword.xml was read!");
 		} catch (Exception e) {
 			if (e instanceof FileNotFoundException) { // No HashPassword.xml

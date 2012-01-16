@@ -135,7 +135,7 @@ public class LoginName implements Serializable, Comparable<LoginName> {
 
 	@Override
 	public int compareTo(LoginName o) {
-		return this.name.compareTo(o.getName());
+		return this.name.toLowerCase().compareTo(o.getName().toLowerCase());
 	}
 
 }
