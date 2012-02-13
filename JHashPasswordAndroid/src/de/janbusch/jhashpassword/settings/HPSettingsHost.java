@@ -3,8 +3,12 @@ package de.janbusch.jhashpassword.settings;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -21,12 +25,15 @@ public class HPSettingsHost extends Activity {
 	private EditText etPWLen;
 	private Spinner sprHashtype;
 	private LoginName currentLogin;
+	private boolean hasChanged;
+	private int iCurrentSelection;
 
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_host);
+		hasChanged = false;
 
 		// Get the hashPassword object.
 		this.hashPassword = (HashPassword) getIntent().getSerializableExtra(
@@ -43,6 +50,42 @@ public class HPSettingsHost extends Activity {
 		etPWLen = (EditText) findViewById(R.id.etPasswordLength);
 		etCharset = (EditText) findViewById(R.id.etCharset);
 		sprHashtype = (Spinner) findViewById(R.id.sprHashtype);
+
+		TextWatcher watcher = new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				hasChanged = true;
+			}
+		};
+
+		etCharset.addTextChangedListener(watcher);
+		etPWLen.addTextChangedListener(watcher);
+
+		sprHashtype.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int i, long arg3) {
+				if (iCurrentSelection != i) {
+					hasChanged = true;
+				}
+				iCurrentSelection = i;
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
 
 		int hashTypePos = -1;
 		etPWLen.setText(currentHost.getPasswordLength().replaceAll(
@@ -65,6 +108,7 @@ public class HPSettingsHost extends Activity {
 		if (hashTypePos != -1) {
 			sprHashtype.setSelection(hashTypePos);
 		}
+		iCurrentSelection = sprHashtype.getSelectedItemPosition();
 	}
 
 	/**
@@ -86,6 +130,7 @@ public class HPSettingsHost extends Activity {
 			if (hashTypePos != -1) {
 				sprHashtype.setSelection(hashTypePos);
 			}
+			hasChanged = true;
 			return true;
 		default:
 			Log.d(this.toString(), "Clicked button has no case.");
@@ -106,8 +151,10 @@ public class HPSettingsHost extends Activity {
 			currentLogin.setPasswordLength(etPWLen.getText().toString());
 			currentLogin.setHashType(sprHashtype.getSelectedItem().toString());
 		}
-		setResult(Activity.RESULT_OK,
-				new Intent().putExtra(getString(R.string.hp), hashPassword));
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra(getString(R.string.hp), hashPassword);
+		resultIntent.putExtra(getString(R.string.settingsChanged), hasChanged);
+		setResult(Activity.RESULT_OK, resultIntent);
 		finish();
 	}
 

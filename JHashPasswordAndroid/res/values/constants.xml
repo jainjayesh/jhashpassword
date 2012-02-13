@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
  <string name="app_name">JHashPassword</string>
- <string name="version">1.1.92</string>
+ <string name="version">2.0.0</string>
  <string name="ext_storage_dir">JHashPassword</string>
- <string name="myHomepage"> http://iss0splace.wordpress.com/</string>
+ <string name="myHomepage">https://iss0splace.wordpress.com/</string>
  <string name="myMailAddress">jan.n.busch@googlemail.com</string>
  <string name="donateLink">
 		<![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=K59FW98EB79HE]]>
@@ -12,4 +12,5 @@
  <string name="host">currentHost</string>
  <string name="login">currentLogin</string>
  <string name="selectedFile">selectedFile</string>
+ <string name="settingsChanged">SETTINGS_CHANGED_BOOL</string>
 </resources>

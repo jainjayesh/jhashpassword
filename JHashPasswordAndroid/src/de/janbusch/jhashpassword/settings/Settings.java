@@ -36,6 +36,7 @@ public class Settings extends Activity {
 	private final static int REQUESTCODE_SETTINGSXML = 0;
 	private static final int REQUESTCODE_IMPEXP = 1;
 	private static final int REQUESTCODE_SYNC = 2;
+	private boolean hasChanges;
 	private HashPassword hashPassword;
 
 	public Map<String, ?> createItem(String title, String caption) {
@@ -49,6 +50,7 @@ public class Settings extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.hpsettings);
+		hasChanges = false;
 
 		// Get the hashPassword object.
 		this.hashPassword = (HashPassword) getIntent().getSerializableExtra(
@@ -127,6 +129,7 @@ public class Settings extends Activity {
 											.findViewById(R.id.txtValue);
 									txtView.setText(seekBar.getProgress()
 											+ " min.");
+									hasChanges = true;
 								}
 							});
 					new AlertDialog.Builder(Settings.this)
@@ -143,7 +146,7 @@ public class Settings extends Activity {
 													.getProgress() * 1000 * 60);
 										}
 									})
-							.setNegativeButton(R.string.Abort,
+							.setNegativeButton(R.string.Cancel,
 									new DialogInterface.OnClickListener() {
 										public void onClick(
 												DialogInterface dialog,
@@ -171,35 +174,41 @@ public class Settings extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		Builder inputDialog = new AlertDialog.Builder(this);
-		inputDialog.setTitle(R.string.titleSaveSettings);
-		inputDialog.setMessage(R.string.msgSaveSettings);
-		inputDialog.setPositiveButton(getString(R.string.Yes),
-				new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Settings.super.onBackPressed();
-						saveXML();
-						Toast.makeText(getBaseContext(),
-								getString(R.string.settingsSaved),
-								Toast.LENGTH_SHORT).show();
-						setResult(Activity.RESULT_OK, new Intent());
-						finish();
-					}
-				});
-		inputDialog.setNegativeButton(getString(R.string.No),
-				new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Settings.super.onBackPressed();
-						Toast.makeText(getBaseContext(),
-								getString(R.string.settingsSavingDiscarded),
-								Toast.LENGTH_SHORT).show();
-						setResult(Activity.RESULT_CANCELED, new Intent());
-						finish();
-					}
-				});
-		inputDialog.show();
+		if (hasChanges) {
+			Builder inputDialog = new AlertDialog.Builder(this);
+			inputDialog.setTitle(R.string.titleSaveSettings);
+			inputDialog.setMessage(R.string.msgSaveSettings);
+			inputDialog.setPositiveButton(getString(R.string.Yes),
+					new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Settings.super.onBackPressed();
+							saveXML();
+							Toast.makeText(getBaseContext(),
+									getString(R.string.settingsSaved),
+									Toast.LENGTH_SHORT).show();
+							setResult(Activity.RESULT_OK, new Intent());
+							finish();
+						}
+					});
+			inputDialog.setNegativeButton(getString(R.string.No),
+					new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Settings.super.onBackPressed();
+							Toast.makeText(
+									getBaseContext(),
+									getString(R.string.settingsSavingDiscarded),
+									Toast.LENGTH_SHORT).show();
+							setResult(Activity.RESULT_CANCELED, new Intent());
+							finish();
+						}
+					});
+			inputDialog.show();
+		} else {
+			setResult(Activity.RESULT_OK, new Intent());
+			finish();
+		}
 	}
 
 	@Override
@@ -213,6 +222,8 @@ public class Settings extends Activity {
 				Log.d(this.toString(), "RESULT_OK, reloading!");
 				hashPassword = (HashPassword) data
 						.getSerializableExtra(getString(R.string.hp));
+				hasChanges = data.getBooleanExtra(
+						getString(R.string.settingsChanged), false);
 			case Activity.RESULT_CANCELED:
 				Log.d(this.toString(), "RESULT_CANCELED!");
 				break;

@@ -19,10 +19,11 @@
 
 	<!-- Dialog Buttons -->
 	<string name="OK">OK</string>
-	<string name="Abort">Abbrechen</string>
+	<string name="Cancel">Abbrechen</string>
 	<string name="Yes">Ja</string>
 	<string name="Permanent">Dauerhaft</string>
 	<string name="No">Nein</string>
+	<string name="Nothing">Nichts</string>
 
 	<!-- GUI Elements -->
 	<string name="toastReqAckDiscarded">Verbindungsanfrage abgelehnt!</string>
@@ -40,6 +41,7 @@
 	<string name="txtHashtype">Hashtype wählen:</string>
 	<string name="txtCharset">Characterset bearbeiten:</string>
 	<string name="txtPasswordLength">Passwortlänge:</string>
+	<string name="txtMinimize">Passwort generiert!</string>
 
 	<string name="btnStartSync">Sync starten</string>
 	<string name="btnStopSync">Sync stoppen</string>
@@ -62,7 +64,8 @@
 	<string name="btnDonate">Spenden</string>
 	<string name="btnActivate">Aktivieren</string>
 	<string name="btnSendActCode">Mail senden</string>
-
+	<string name="btnMinimize">Minimieren</string>
+	
 	<!-- HPHome Options-Menu -->
 	<string name="optmen_Settings">Einstellungen</string><string name="optmen_Aboutjhp">Über</string>
 	<string name="optmen_SettingsXML">Hosts und Logins</string>
@@ -136,7 +139,7 @@
 	</string>
 	<string name="msgPasswordCreated">
 		Passwort erzeugt und in Zwischenablage abgelegt!
-		Das Passwort wird nach der von Ihnen gewählten Zeit aus der Zwischenablage entfernt.
+		Das Passwort wird nach %1$s Minuten aus der Zwischenablage entfernt.
 	</string>
 	<string name="msgDelete">
 		Achtung! Sie sind dabei die
@@ -201,6 +204,6 @@
  	<string name="pressbacktwice">Bitte 2x drücken um zurück zu kehren.</string>
 
 	<!-- Help -->
-	<string name="helpFile">software/jhashpassword/android™/jhashpassword-fur-android-hilfe/</string>
+	<string name="helpFile">software/jhashpassword/android/jhashpassword-fur-android-hilfe/</string>
 
 </resources>

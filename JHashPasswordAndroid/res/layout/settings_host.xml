@@ -10,35 +10,6 @@
         android:id="@+id/top_control_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/banner"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/icon_50px" />
-
-            <TextView
-                android:id="@+id/txtApp_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|left"
-                android:gravity="center|center_horizontal"
-                android:paddingLeft="5dip"
-                android:shadowColor="#FF000000"
-                android:shadowDx="0"
-                android:shadowDy="-1"
-                android:shadowRadius="0.2"
-                android:text="@string/app_name"
-                android:textColor="#FFFFFFFF"
-                android:textSize="18dip"
-                android:textStyle="bold" >
-            </TextView>
-        </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
@@ -46,7 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/banner"
+        android:background="@drawable/bannerbottomnothard"
         android:orientation="vertical"
         android:paddingBottom="4dip"
         android:paddingLeft="3dip"
@@ -68,32 +39,38 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical" >
-
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical" >
-
+
                 <TextView
                     android:id="@+id/txtHashtype"
+                    style="@android:style/TextAppearance.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txtHashtype" >
+
                 </TextView>
 
                 <Spinner
                     android:id="@+id/sprHashtype"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/hashtypes" >
+                    android:entries="@array/hashtypes" 
+                    
+                    >
                 </Spinner>
-
+
                 <TextView
                     android:id="@+id/txtPasswordLength"
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txtPasswordLength" >
+
                 </TextView>
 
                 <EditText
@@ -105,22 +82,27 @@
 
                 <View
                     android:layout_width="wrap_content"
-                    android:layout_height="10dip" />
+                    android:layout_height="25dip"
+                    android:layout_weight="1" />
 
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="2dip"
-                    android:background="#FF909090" />
+                    android:layout_weight="1"
+                    android:background="@drawable/divider" />
 
                 <View
                     android:layout_width="wrap_content"
-                    android:layout_height="10dip" />
-
+                    android:layout_height="25dip"
+                    android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/txtCharset"
+                    style="@android:style/TextAppearance.DeviceDefault.Medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txtCharset" >
+
                 </TextView>
 
                 <EditText
@@ -133,16 +115,19 @@
 
                 <View
                     android:layout_width="wrap_content"
-                    android:layout_height="10dip" />
+                    android:layout_height="25dip"
+                    android:layout_weight="1" />
 
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="2dip"
-                    android:background="#FF909090" />
+                    android:layout_weight="1"
+                    android:background="@drawable/divider" />
 
                 <View
                     android:layout_width="wrap_content"
-                    android:layout_height="10dip" />
+                    android:layout_height="25dip"
+                    android:layout_weight="1" />
 
                 <Button
                     android:id="@+id/btnReset"
@@ -152,6 +137,7 @@
                     android:text="@string/btnReset" >
                 </Button>
             </LinearLayout>
+
         </ScrollView>
     </RelativeLayout>
 

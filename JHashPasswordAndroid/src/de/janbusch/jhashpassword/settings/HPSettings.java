@@ -29,6 +29,9 @@ public class HPSettings extends Activity {
 	private Button btnRemLogin;
 	private ArrayAdapter<CharSequence> sprHostnameAdapter;
 	private Button btnEditLogin;
+	private boolean hasChanged;
+	private int iCurrentSelectionHost;
+	private int iCurrentSelectionLogin;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +54,28 @@ public class HPSettings extends Activity {
 		sprHostname.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parentView,
-					View selectedItemView, int position, long id) {
+					View selectedItemView, int i, long id) {
 				loadLoginNames();
+				if (iCurrentSelectionHost != i) {
+					hasChanged = true;
+				}
+				iCurrentSelectionHost = i;
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parentView) {
+				// why should I do something?
+			}
+
+		});
+		sprLoginname.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parentView,
+					View selectedItemView, int i, long id) {
+				if (iCurrentSelectionLogin != i) {
+					hasChanged = true;
+				}
+				iCurrentSelectionLogin = i;
 			}
 
 			@Override
@@ -65,6 +88,9 @@ public class HPSettings extends Activity {
 		// Do the other crap.
 		loadHostNames();
 		loadLoginNames();
+		
+		iCurrentSelectionHost = sprHostname.getSelectedItemPosition();
+		iCurrentSelectionLogin = sprLoginname.getSelectedItemPosition();
 	}
 
 	private void loadHostNames() {
@@ -188,10 +214,11 @@ public class HPSettings extends Activity {
 								hashPassword.setLastHost(newHostName);
 								loadHostNames();
 								loadLoginNames();
+								hasChanged = true;
 							}
 						}
 					});
-			inputDialog.setNegativeButton(getString(R.string.Abort), null);
+			inputDialog.setNegativeButton(getString(R.string.Cancel), null);
 			inputDialog.show();
 			return true;
 		case R.id.btnRemHost:
@@ -200,6 +227,7 @@ public class HPSettings extends Activity {
 						sprHostname.getSelectedItem().toString());
 				if (currentHost != null) {
 					hashPassword.getHosts().getHost().remove(currentHost);
+					hasChanged = true;
 				}
 				loadHostNames();
 				loadLoginNames();
@@ -272,13 +300,13 @@ public class HPSettings extends Activity {
 										currentHost.getLoginNames()
 												.getLoginName().add(newLogin);
 										currentHost.setLastLogin(newLoginName);
-										loadLoginNames();
+										hasChanged = true;
 									}
 								}
 								loadLoginNames();
 							}
 						});
-				inputDialog.setNegativeButton(getString(R.string.Abort), null);
+				inputDialog.setNegativeButton(getString(R.string.Cancel), null);
 				inputDialog.show();
 			}
 			return true;
@@ -294,6 +322,7 @@ public class HPSettings extends Activity {
 					if (currentLogin != null) {
 						currentHost.getLoginNames().getLoginName()
 								.remove(currentLogin);
+						hasChanged = true;
 					}
 				}
 				loadLoginNames();
@@ -307,8 +336,10 @@ public class HPSettings extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		setResult(Activity.RESULT_OK, new Intent().putExtra(
-				getString(R.string.hp), hashPassword));
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra(getString(R.string.hp), hashPassword);
+		resultIntent.putExtra(getString(R.string.settingsChanged), hasChanged);
+		setResult(Activity.RESULT_OK, resultIntent);
 		finish();
 	}
 
@@ -321,6 +352,8 @@ public class HPSettings extends Activity {
 			Log.d(this.toString(), "Result okay, reloading!");
 			hashPassword = (HashPassword) data
 					.getSerializableExtra("hashPassword");
+			hasChanged = data.getBooleanExtra(
+					getString(R.string.settingsChanged), false);
 			break;
 		case Activity.RESULT_CANCELED:
 			Log.d(this.toString(), "Result canceled!");
