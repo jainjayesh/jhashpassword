@@ -129,7 +129,6 @@ public class Settings extends Activity {
 											.findViewById(R.id.txtValue);
 									txtView.setText(seekBar.getProgress()
 											+ " min.");
-									hasChanges = true;
 								}
 							});
 					new AlertDialog.Builder(Settings.this)
@@ -144,6 +143,7 @@ public class Settings extends Activity {
 													.findViewById(R.id.seekBar);
 											hashPassword.setTimeout(mSeekBar1
 													.getProgress() * 1000 * 60);
+											hasChanges = true;
 										}
 									})
 							.setNegativeButton(R.string.Cancel,
@@ -151,6 +151,7 @@ public class Settings extends Activity {
 										public void onClick(
 												DialogInterface dialog,
 												int whichButton) {
+											hasChanges = false;
 										}
 									}).create().show();
 					break;
