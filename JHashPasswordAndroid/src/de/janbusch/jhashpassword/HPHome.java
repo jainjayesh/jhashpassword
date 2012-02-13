@@ -12,7 +12,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.ColorStateList;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.ClipboardManager;
@@ -23,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -339,11 +342,23 @@ public class HPHome extends Activity {
 		TextWatcher pwWatcher = new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				if (s.toString().toString().length() > 0) {
-					btnGenPW.setEnabled(txtPassphraseOne.getText().toString()
-							.matches(txtPassphraseTwo.getText().toString()));
+				if (txtPassphraseOne.getText().toString().equals(
+						txtPassphraseTwo.getText().toString())) {
+					btnGenPW.setEnabled(true);
+					btnGenPW.setTextColor(Color.parseColor("#56AB52"));
 				} else {
 					btnGenPW.setEnabled(false);
+					btnGenPW.setTextColor(Color.parseColor("#A83232"));
+				}
+
+				if (txtPassphraseOne.getText().toString().length() != 0 && txtPassphraseTwo.getText().toString().length() == 0) {
+					btnGenPW.setEnabled(true);
+					btnGenPW.setTextColor(Color.parseColor("#A83232"));
+				}
+				
+				if(txtPassphraseOne.getText().toString().length() == 0 && txtPassphraseTwo.getText().toString().length() == 0 || txtPassphraseOne.getText().toString().length() == 0) {
+					btnGenPW.setEnabled(false);
+					btnGenPW.setTextColor(Color.WHITE);
 				}
 			}
 
