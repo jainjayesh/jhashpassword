@@ -57,12 +57,14 @@ public class HPHome extends Activity {
 	private ArrayAdapter<CharSequence> sprHostnameAdapter;
 	private ClipboardManager clipboard;
 	private NotificationManager notifitcationManager;
+	private boolean pwdGenerated;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home);
 		setWatcher();
+		pwdGenerated = false;
 
 		// Grab the spinners.
 		sprHostname = (Spinner) findViewById(R.id.sprHostname);
@@ -363,31 +365,37 @@ public class HPHome extends Activity {
 	}
 
 	private void closeJHP() {
-		Builder inputDialog = new AlertDialog.Builder(this);
-		inputDialog.setTitle(R.string.btnClearClipboard);
-		inputDialog.setMessage(R.string.msgClearClipboardQuestion);
-		inputDialog.setPositiveButton(getString(R.string.Yes),
-				new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						clipboard.setText("");
-						hpTimer.cancel();
-						notifitcationManager.cancel(NOTIFICATION_ID);
+		if (pwdGenerated) {
+			Builder inputDialog = new AlertDialog.Builder(this);
+			inputDialog.setTitle(R.string.btnClearClipboard);
+			inputDialog.setMessage(R.string.msgClearClipboardQuestion);
+			inputDialog.setPositiveButton(getString(R.string.Yes),
+					new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							clipboard.setText(new String());
+							pwdGenerated = false;
+							
+							hpTimer.cancel();
+							notifitcationManager.cancel(NOTIFICATION_ID);
 
-						Toast.makeText(getBaseContext(),
-								getString(R.string.msgClipboardCleared),
-								Toast.LENGTH_SHORT).show();
-						finish();
-					}
-				});
-		inputDialog.setNegativeButton(getString(R.string.No),
-				new OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						finish();
-					}
-				});
-		inputDialog.show();
+							Toast.makeText(getBaseContext(),
+									getString(R.string.msgClipboardCleared),
+									Toast.LENGTH_SHORT).show();
+							finish();
+						}
+					});
+			inputDialog.setNegativeButton(getString(R.string.No),
+					new OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							finish();
+						}
+					});
+			inputDialog.show();
+		} else {
+			finish();
+		}
 	}
 
 	/**
@@ -443,22 +451,27 @@ public class HPHome extends Activity {
 			}
 
 			clipboard.setText(pw);
+			pwdGenerated = true;
 			txtPassphraseOne.setText(new String());
 			txtPassphraseTwo.setText(new String());
 
 			startTimerShowNotification();
 			return true;
 		case R.id.btnShowClipboard:
-			AlertDialog.Builder infoDialog = new AlertDialog.Builder(this);
-			infoDialog.setTitle(R.string.titleClipboard);
-			infoDialog.setMessage(clipboard.getText());
-			infoDialog.setPositiveButton(getString(R.string.OK), null);
-			infoDialog.show();
+			showClipboardContent();
 			return true;
 		default:
 			Log.d(this.toString(), "Clicked button has no case.");
 			return false;
 		}
+	}
+
+	private void showClipboardContent() {
+		AlertDialog.Builder infoDialog = new AlertDialog.Builder(this);
+		infoDialog.setTitle(R.string.titleClipboard);
+		infoDialog.setMessage(clipboard.getText());
+		infoDialog.setPositiveButton(getString(R.string.OK), null);
+		infoDialog.show();
 	}
 
 	private void startTimerShowNotification() {
@@ -483,29 +496,47 @@ public class HPHome extends Activity {
 				@Override
 				public void run() {
 					clipboard.setText("");
+					pwdGenerated = false;
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							Toast.makeText(
-									getBaseContext(),
+							Toast.makeText(getBaseContext(),
 									getString(R.string.msgClipboardCleared),
 									Toast.LENGTH_LONG).show();
 						}
 					});
 					notifitcationManager.cancel(NOTIFICATION_ID);
-					Log.d(this.toString(),
-							"Removed password from clipboard!");
+					Log.d(this.toString(), "Removed password from clipboard!");
 				}
 			}, timeout);
 		}
 
-		Toast.makeText(getBaseContext(),
-				getString(R.string.msgPasswordCreated), Toast.LENGTH_LONG)
-				.show();
+		String msgPasswordCreated = String.format(
+				getString(R.string.msgPasswordCreated),
+				timeout.intValue() / 1000 / 60);
+		// Toast.makeText(getBaseContext(),
+		// msgPasswordCreated, Toast.LENGTH_LONG)
+		// .show();
 
-		Log.d(this.toString(), "Password generated, timer started: "
-				+ timeout);
-		finish();
+		Builder inputDialog = new AlertDialog.Builder(this);
+		inputDialog.setTitle(R.string.txtMinimize);
+		inputDialog.setMessage(msgPasswordCreated);
+		inputDialog.setPositiveButton(getString(R.string.btnMinimize),
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				});
+		inputDialog.setNeutralButton(getString(R.string.btnShowClipboard),
+				new OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						showClipboardContent();
+					}
+				});
+		inputDialog.setNegativeButton(getString(R.string.Nothing), null);
+		inputDialog.show();
 	}
 
 	@Override

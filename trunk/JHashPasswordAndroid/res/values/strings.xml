@@ -20,12 +20,14 @@
 
  <!-- Dialog Buttons -->
  <string name="OK">OK</string>
- <string name="Abort">Abort</string>
+ <string name="Cancel">Cancel</string>
  <string name="Yes">Yes</string>
  <string name="Permanent">Permanent</string>
  <string name="No">No</string>
+ <string name="Nothing">Nothing</string>
 
  <!-- GUI Elements -->
+ <string name="txtMinimize">Password generated!</string>
  <string name="txtConnectionEstablished">Connection established.</string>
  <string name="txtConnectionPending">Waiting..</string>
  <string name="txtNoConnection">No connection.</string>
@@ -64,6 +66,7 @@
  <string name="btnDonate">Donate</string>
  <string name="btnActivate">Activate</string>
  <string name="btnSendActCode">Send mail</string>
+ <string name="btnMinimize">Minimize</string>
 
  <!-- HPHome Options-Menu -->
  <string name="optmen_Settings">Settings</string>
@@ -113,7 +116,7 @@
  <string name="msgOnlyInPro"> Sorry, but this feature is only available in the pro version of JHashPassword.</string>
  <string name="msgFileImported"> File imported!</string>
  <string name="msgSelectedFile"> Selected file:</string>
- <string name="msgPasswordCreated"> Password created and stored in clipboard! The password will be removed from clipboard after the time you\'ve set.</string>
+ <string name="msgPasswordCreated"> Password created and stored in clipboard! The password will be removed from clipboard after a timeout of %1$s minutes.</string>
  <string name="msgDelete"> Attention! You are going to delete the HashPassword.xml.\nIt is possible, that you are no longer able to recover your passwords! \n\nAre you really sure that you want to delete it?</string>
  <string name="msgNotMounted"> There is no sdcard mounted or there is no write permission. Due to this situation, you can\'t make an import or backup.</string>
  <string name="msgCantWrite"> Could not write on sdcard. Please check your permissions.</string>
@@ -131,5 +134,5 @@
  <string name="pressbacktwice">Please double-tap back to return.</string>
  
  <!-- Help -->
- <string name="helpFile">software/jhashpassword/android™/jhashpassword-for-android-help/</string>
+ <string name="helpFile">software/jhashpassword/android/jhashpassword-for-android-help/</string>
 </resources>
