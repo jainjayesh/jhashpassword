@@ -72,6 +72,7 @@ public class Settings extends Activity {
 		programmInfo.add(createItem(getString(R.string.app_name) + " v"
 				+ getString(R.string.version),
 				CoreInformation.JHASHPASSWORD_COPYRIGHT + "\n\n"
+						+ CoreInformation.HASHPASSWORD_COPYRIGHT + "\n\n"
 						+ CoreInformation.ICONSET_COPYRIGHT + "\n\n"
 						+ "Hash-Core: " + CoreInformation.HASH_VERSION + "\n"
 						+ "XML-Core: " + HashPassword.jhpSXMLVersion));

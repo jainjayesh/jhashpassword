@@ -104,6 +104,7 @@
  <string name="msgCopiedToClipboard">
 	Selection copied to clipboard.
  </string>
+ <string name="msgQRCodeScanFailed">Scanning QR-Code failed!</string>
  <string name="msgClearClipboardQuestion"> Do you want to clear the clipboard?</string>
  <string name="msgSerialRejected"> The entered serial-number is not valid. Please ensure that the entered serial-number is correct and contact me, if the one I send you is not working!</string>
  <string name="msgSerialAccepted"> The entered serial-number is valid. Restarting JHashPassword..</string>
