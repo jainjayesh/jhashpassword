@@ -12,7 +12,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.res.ColorStateList;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -25,7 +24,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -46,10 +44,14 @@ import de.janbusch.jhashpassword.xml.simple.LoginName;
 
 public class HPHome extends Activity {
 
+	private static final String SCAN_RESULT = "SCAN_RESULT";
+	private static final String QR_CODE_MODE = "QR_CODE_MODE";
+	private static final String SCAN_MODE = "SCAN_MODE";
+	private static final String COM_GOOGLE_ZXING_CLIENT_ANDROID_SCAN = "com.google.zxing.client.android.SCAN";
 	private static final int REQUESTCODE_SETTINGSXML = 0;
 	private static final int REQUESTCODE_IMPEXP = 1;
 	private static final int REQUESTCODE_CLEAR_CLIPBOARD = 2;
-	private static final int SCAN_QRCODE = 3;
+	private static final int REQUESTCODE_SCAN_QRCODE = 3;
 
 	private static final int NOTIFICATION_ID = 1337;
 
@@ -342,8 +344,8 @@ public class HPHome extends Activity {
 		TextWatcher pwWatcher = new TextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
-				if (txtPassphraseOne.getText().toString().equals(
-						txtPassphraseTwo.getText().toString())) {
+				if (txtPassphraseOne.getText().toString()
+						.equals(txtPassphraseTwo.getText().toString())) {
 					btnGenPW.setEnabled(true);
 					btnGenPW.setTextColor(Color.parseColor("#56AB52"));
 				} else {
@@ -351,12 +353,15 @@ public class HPHome extends Activity {
 					btnGenPW.setTextColor(Color.parseColor("#A83232"));
 				}
 
-				if (txtPassphraseOne.getText().toString().length() != 0 && txtPassphraseTwo.getText().toString().length() == 0) {
+				if (txtPassphraseOne.getText().toString().length() != 0
+						&& txtPassphraseTwo.getText().toString().length() == 0) {
 					btnGenPW.setEnabled(true);
 					btnGenPW.setTextColor(Color.parseColor("#A83232"));
 				}
-				
-				if(txtPassphraseOne.getText().toString().length() == 0 && txtPassphraseTwo.getText().toString().length() == 0 || txtPassphraseOne.getText().toString().length() == 0) {
+
+				if (txtPassphraseOne.getText().toString().length() == 0
+						&& txtPassphraseTwo.getText().toString().length() == 0
+						|| txtPassphraseOne.getText().toString().length() == 0) {
 					btnGenPW.setEnabled(false);
 					btnGenPW.setTextColor(Color.WHITE);
 				}
@@ -390,7 +395,7 @@ public class HPHome extends Activity {
 						public void onClick(DialogInterface dialog, int which) {
 							clipboard.setText(new String());
 							pwdGenerated = false;
-							
+
 							hpTimer.cancel();
 							notifitcationManager.cancel(NOTIFICATION_ID);
 
@@ -585,6 +590,8 @@ public class HPHome extends Activity {
 			infoDialog.setTitle(getString(R.string.app_name) + " v"
 					+ getString(R.string.version));
 			infoDialog.setMessage(CoreInformation.JHASHPASSWORD_COPYRIGHT
+					+ "\n\n"
+					+ CoreInformation.HASHPASSWORD_COPYRIGHT
 					+ "\n\n" + CoreInformation.ICONSET_COPYRIGHT + "\n\n"
 					+ "Hash-Core: " + CoreInformation.HASH_VERSION + "\n"
 					+ "XML-Core: " + HashPassword.jhpSXMLVersion);
@@ -599,9 +606,9 @@ public class HPHome extends Activity {
 					.show();
 			return true;
 		case R.id.readqrcode:
-			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-			intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-			startActivityForResult(intent, SCAN_QRCODE);
+			Intent intent = new Intent(COM_GOOGLE_ZXING_CLIENT_ANDROID_SCAN);
+			intent.putExtra(SCAN_MODE, QR_CODE_MODE);
+			startActivityForResult(intent, REQUESTCODE_SCAN_QRCODE);
 			return true;
 		case R.id.exit:
 			closeJHP();
@@ -653,15 +660,15 @@ public class HPHome extends Activity {
 				break;
 			}
 			break;
-		case SCAN_QRCODE:
+		case REQUESTCODE_SCAN_QRCODE:
 			switch (resultCode) {
 			case Activity.RESULT_OK:
-				String contents = data.getStringExtra("SCAN_RESULT");
+				String contents = data.getStringExtra(SCAN_RESULT);
 				clipboard.setText(contents);
 				startTimerShowNotification();
 				break;
 			case Activity.RESULT_CANCELED:
-				Toast.makeText(this, "Scanning QR-Code failed.",
+				Toast.makeText(this, this.getString(R.string.msgQRCodeScanFailed),
 						Toast.LENGTH_SHORT).show();
 				break;
 			default:

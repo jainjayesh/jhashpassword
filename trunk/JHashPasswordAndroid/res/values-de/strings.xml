@@ -96,6 +96,7 @@
 	<string name="titleReqAckDialog">Eingehende Verbindungsanfrage</string>
 	 
 	<!-- Dialog Messages -->
+	<string name="msgQRCodeScanFailed">Scannen des QR-Codes ist fehlgeschlagen!</string>
 	<string name="msgCopiedToClipboard">
 		Auswahl in die Zwischenablage kopiert.
 	</string>
