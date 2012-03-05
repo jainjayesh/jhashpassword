@@ -18,6 +18,8 @@ public class Messages extends NLS {
 	public static String MainApplication_14;
 	public static String MainApplication_15;
 	public static String MainApplication_16;
+
+	public static String MainApplication_17;
 	public static String MainApplication_18;
 	public static String MainApplication_2;
 	public static String MainApplication_20;
@@ -60,8 +62,16 @@ public class Messages extends NLS {
 	public static String MainApplication_btnSync_text;
 	public static String MainApplication_grpHome_text;
 	public static String MainApplication_grpSettings_text;
+	public static String MainApplication_btnCharacterset_toolTipText;
 
 	public static String MainApplication_59;
+	public static String MainApplication_cacheCombo_toolTipText_1;
+	public static String MainApplication_hostCombo_toolTipText;
+	public static String MainApplication_loginCombo_toolTipText;
+	public static String MainApplication_btnGeneratePassword_toolTipText;
+	public static String MainApplication_btnShowClipboard_toolTipText;
+	public static String MainApplication_btnShowQRcode_toolTipText;
+	public static String MainApplication_btnSync_toolTipText;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);
