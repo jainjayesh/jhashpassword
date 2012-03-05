@@ -94,8 +94,11 @@
 	<string name="titleSaveSettings">Änderungen speichern</string>
 	<string name="titleSetTimeout">Timeout setzen</string>
 	<string name="titleReqAckDialog">Eingehende Verbindungsanfrage</string>
-	 
+	<string name="titleNoScannerFound">Kein Barcode-Scanner</string>
+	
 	<!-- Dialog Messages -->
+	<string name="msgNoMarketInstalled">Entschuldigung, aber es scheint so als ob Sie keinen Market auf Ihrem Gerät installiert haben.</string>
+	<string name="msgNoScannerFound">Es konnte kein Barcode-Scanner auf Ihrem Gerät gefunden werden. Möchten Sie zum Market wechseln und einen Scanner herunterladen?</string>
 	<string name="msgQRCodeScanFailed">Scannen des QR-Codes ist fehlgeschlagen!</string>
 	<string name="msgCopiedToClipboard">
 		Auswahl in die Zwischenablage kopiert.

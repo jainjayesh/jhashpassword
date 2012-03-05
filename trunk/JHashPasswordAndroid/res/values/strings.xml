@@ -99,8 +99,11 @@
  <string name="titleSaveSettings">Save changes</string>
  <string name="titleSetTimeout">Set timeout</string>
  <string name="titleReqAckDialog">Incoming request</string>
+ <string name="titleNoScannerFound">No barcode scanner</string>
  
  <!-- Dialog Messages -->
+ <string name="msgNoMarketInstalled">Sorry, but it seems like you have no market installed on your device.</string>
+ <string name="msgNoScannerFound">No barcode scanner found on your device. Would you like to go to the market to download one?</string>
  <string name="msgCopiedToClipboard">
 	Selection copied to clipboard.
  </string>
