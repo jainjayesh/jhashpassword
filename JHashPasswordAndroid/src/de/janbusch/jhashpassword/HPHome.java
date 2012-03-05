@@ -10,6 +10,7 @@ import android.app.AlertDialog.Builder;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -31,7 +32,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.hashpassword.core.EHashType;
 import de.janbusch.hashpassword.core.HashUtil;
@@ -44,6 +44,7 @@ import de.janbusch.jhashpassword.xml.simple.LoginName;
 
 public class HPHome extends Activity {
 
+	private static final String COM_GOOGLE_ZXING_CLIENT_ANDROID = "market://details?id=com.google.zxing.client.android";
 	private static final String SCAN_RESULT = "SCAN_RESULT";
 	private static final String QR_CODE_MODE = "QR_CODE_MODE";
 	private static final String SCAN_MODE = "SCAN_MODE";
@@ -590,9 +591,8 @@ public class HPHome extends Activity {
 			infoDialog.setTitle(getString(R.string.app_name) + " v"
 					+ getString(R.string.version));
 			infoDialog.setMessage(CoreInformation.JHASHPASSWORD_COPYRIGHT
-					+ "\n\n"
-					+ CoreInformation.HASHPASSWORD_COPYRIGHT
-					+ "\n\n" + CoreInformation.ICONSET_COPYRIGHT + "\n\n"
+					+ "\n\n" + CoreInformation.HASHPASSWORD_COPYRIGHT + "\n\n"
+					+ CoreInformation.ICONSET_COPYRIGHT + "\n\n"
 					+ "Hash-Core: " + CoreInformation.HASH_VERSION + "\n"
 					+ "XML-Core: " + HashPassword.jhpSXMLVersion);
 			infoDialog.setPositiveButton(getString(R.string.OK), null);
@@ -608,7 +608,33 @@ public class HPHome extends Activity {
 		case R.id.readqrcode:
 			Intent intent = new Intent(COM_GOOGLE_ZXING_CLIENT_ANDROID_SCAN);
 			intent.putExtra(SCAN_MODE, QR_CODE_MODE);
-			startActivityForResult(intent, REQUESTCODE_SCAN_QRCODE);
+			
+			try {
+				startActivityForResult(intent, REQUESTCODE_SCAN_QRCODE);
+			} catch (ActivityNotFoundException anfEx) {
+				Builder inputDialog = new AlertDialog.Builder(this);
+				inputDialog.setTitle(R.string.titleNoScannerFound);
+				inputDialog.setMessage(R.string.msgNoScannerFound);
+				inputDialog.setPositiveButton(getString(R.string.Yes),
+						new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								Intent goToMarket = null;
+								goToMarket = new Intent(Intent.ACTION_VIEW,
+										Uri.parse(COM_GOOGLE_ZXING_CLIENT_ANDROID));
+								goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+								try {
+									startActivity(goToMarket);
+								} catch (ActivityNotFoundException anfEx) {
+									Toast.makeText(getBaseContext(),
+											getString(R.string.msgNoMarketInstalled), Toast.LENGTH_LONG)
+											.show();
+								}
+							}
+						});
+				inputDialog.setNegativeButton(getString(R.string.No), null);
+				inputDialog.show();
+			}
 			return true;
 		case R.id.exit:
 			closeJHP();
@@ -668,7 +694,8 @@ public class HPHome extends Activity {
 				startTimerShowNotification();
 				break;
 			case Activity.RESULT_CANCELED:
-				Toast.makeText(this, this.getString(R.string.msgQRCodeScanFailed),
+				Toast.makeText(this,
+						this.getString(R.string.msgQRCodeScanFailed),
 						Toast.LENGTH_SHORT).show();
 				break;
 			default:
