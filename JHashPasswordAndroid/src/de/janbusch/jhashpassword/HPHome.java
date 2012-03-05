@@ -364,7 +364,7 @@ public class HPHome extends Activity {
 						&& txtPassphraseTwo.getText().toString().length() == 0
 						|| txtPassphraseOne.getText().toString().length() == 0) {
 					btnGenPW.setEnabled(false);
-					btnGenPW.setTextColor(Color.WHITE);
+					btnGenPW.setTextColor(Color.parseColor("#333333"));
 				}
 			}
 
