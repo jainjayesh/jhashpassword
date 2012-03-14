@@ -22,14 +22,16 @@ public class JHPServer extends Thread {
 	private DatagramSocket serverSocket;
 	private boolean isServer;
 	private IJHPMsgHandler msgHandler;
-	public static final int serverPort = 4832;
-	public static final int clientPort = 4833;
-	private static final int servertimeout = 1000;
-	private static final int clienttimeout = 1000;
-	private static int length = 512;
+	public static final int SERVER_PORT = 4832;
+	public static final int CLIENT_PORT = 4833;
+	private static final int SERVER_TIMEOUT = 1000;
+	private static final int CLIENT_TIMEOUT = 1000;
+	private static final int MAX_SOL_COUNT = 3;
+	private static int PACKET_SIZE = 512;
 	private InetAddress broadcast;
 	private String macAddress;
 	private String operatingSystem;
+	private int solCount;
 
 	public JHPServer(boolean isServer, IJHPMsgHandler msgHandler,
 			InetAddress inetAddress, String macAddress, String operatingSystem)
@@ -45,31 +47,40 @@ public class JHPServer extends Thread {
 		this.myState = ServerState.IDLE;
 
 		if (this.isServer) {
-			serverSocket = new DatagramSocket(serverPort);
-			serverSocket.setSoTimeout(servertimeout);
+			serverSocket = new DatagramSocket(SERVER_PORT);
+			serverSocket.setSoTimeout(SERVER_TIMEOUT);
 			myState = ServerState.LISTEN_SOLICITATION;
 		} else {
-			serverSocket = new DatagramSocket(clientPort);
-			serverSocket.setSoTimeout(clienttimeout);
-			myState = ServerState.SENDING_SOLICITATION;
-			
-			scheduledExecutor.scheduleWithFixedDelay(new Runnable() {
-				@Override
-				public void run() {
+			serverSocket = new DatagramSocket(CLIENT_PORT);
+			serverSocket.setSoTimeout(CLIENT_TIMEOUT);
+			startSolicitation();
+		}
+
+		System.out.println(this.getName() + ": ready! Running as server: "
+				+ isServer);
+	}
+
+	private void startSolicitation() {
+		myState = ServerState.SENDING_SOLICITATION;
+		solCount = 0;
+		scheduledExecutor.scheduleWithFixedDelay(new Runnable() {
+			@Override
+			public void run() {
+				if (solCount++ < MAX_SOL_COUNT) {
 					ENetCommand req = ENetCommand.SOLICITATION;
 					req.setParameter(JHPServer.this.macAddress + "|"
 							+ JHPServer.this.operatingSystem);
 
 					sendMessage(new InetSocketAddress(broadcast,
-							JHPServer.serverPort), req.toString());
+							JHPServer.SERVER_PORT), req.toString());
 
 					System.out.println("Sending solicitation...");
+				} else {
+					stopSolicitation();
+					myState = ServerState.LISTEN_CONNECTION;
 				}
-			}, 0, 3, TimeUnit.SECONDS);
-		}
-
-		System.out.println(this.getName() + ": ready! Running as server: "
-				+ isServer);
+			}
+		}, 0, 3, TimeUnit.SECONDS);
 	}
 
 	public void run() {
@@ -83,7 +94,7 @@ public class JHPServer extends Thread {
 			case LISTEN_CONNECTION:
 			case LISTEN_SOLICITATION:
 			case SENDING_SOLICITATION:
-				packet = new DatagramPacket(new byte[length], length);
+				packet = new DatagramPacket(new byte[PACKET_SIZE], PACKET_SIZE);
 				try {
 					serverSocket.receive(packet);
 					InetSocketAddress receivedFrom = (InetSocketAddress) packet
@@ -94,7 +105,7 @@ public class JHPServer extends Thread {
 						msgHandler.handleMessage(msg, receivedFrom);
 					}
 				} catch (SocketTimeoutException e) {
-					continue;
+					if(this.isInterrupted()) break;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -112,7 +123,7 @@ public class JHPServer extends Thread {
 				break;
 			}
 		}
-		
+
 		this.serverSocket.close();
 		System.out.println(this.getName() + ": stopped!");
 	}
@@ -137,7 +148,7 @@ public class JHPServer extends Thread {
 		myState = ServerState.SHUTTING_DOWN;
 		executor.shutdown();
 		scheduledExecutor.shutdown();
-		
+
 		try {
 			executor.awaitTermination(3, TimeUnit.SECONDS);
 			scheduledExecutor.awaitTermination(3, TimeUnit.SECONDS);
@@ -149,7 +160,7 @@ public class JHPServer extends Thread {
 	public void stopSolicitation() {
 		this.scheduledExecutor.shutdown();
 	}
-	
+
 	public void setState(ServerState state) {
 		this.myState = state;
 	}
