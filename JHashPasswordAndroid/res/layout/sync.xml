@@ -10,35 +10,34 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
     </RelativeLayout>
-
+
     <LinearLayout
         android:id="@+id/bottom_control_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bannerbottomnothard"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingBottom="4dip"
         android:paddingLeft="3dip"
         android:paddingRight="3dip"
         android:paddingTop="6dip" >
 
-        <Button
+        <Switch
             android:id="@+id/btnStartSync"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onButtonClicked"
-            android:text="@string/btnStartSync" >
-        </Button>
+            android:textOff="@string/btnStartSync"
+            android:textOn="@string/btnStopSync" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
-        <Button
-            android:id="@+id/btnStopSync"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:onClick="onButtonClicked"
-            android:text="@string/btnStopSync" >
-        </Button>
     </LinearLayout>
 
     <RelativeLayout

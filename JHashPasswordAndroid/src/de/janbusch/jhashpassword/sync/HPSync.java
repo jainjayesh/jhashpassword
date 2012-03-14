@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.janbusch.jhashpassword.R;
@@ -31,8 +32,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 	private HashPassword hashPassword;
 	private JHPServer myJHPServer;
 	private TextView txtSyncState;
-	private Button btnStartSync;
-	private Button btnStopSync;
+	private Switch btnStartSync;
 	private TextView txtLog;
 	private ScrollView scroller;
 	private WakeLock wl;
@@ -65,8 +65,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 
 		// Grab views
 		txtSyncState = (TextView) findViewById(R.id.txtSyncState);
-		btnStartSync = (Button) findViewById(R.id.btnStartSync);
-		btnStopSync = (Button) findViewById(R.id.btnStopSync);
+		btnStartSync = (Switch) findViewById(R.id.btnStartSync);
 		txtLog = (TextView) findViewById(R.id.txtViewLog);
 		scroller = (ScrollView) findViewById(R.id.scrollViewLog);
 
@@ -88,30 +87,28 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 	public boolean onButtonClicked(View btn) {
 		switch (btn.getId()) {
 		case R.id.btnStartSync:
-			btnStartSync.setEnabled(false);
-			txtSyncState.setText(R.string.txtConnectionPending);
-			btnStopSync.setEnabled(true);
-			wl.acquire();
+			if (btnStartSync.isChecked()) {
+				txtSyncState.setText(R.string.txtConnectionPending);
+				wl.acquire();
 
-			try {
-				myJHPServer = new JHPServer(false, this,
-						Util.getBroadcastAddress(getApplicationContext()),
-						Util.getMacAddressAndroid(getApplicationContext()),
-						Util.getOperatingSystemAndroid());
-				myJHPServer.start();
-			} catch (IOException e) {
-				e.printStackTrace();
+				try {
+					myJHPServer = new JHPServer(false, this,
+							Util.getBroadcastAddress(getApplicationContext()),
+							Util.getMacAddressAndroid(getApplicationContext()),
+							Util.getOperatingSystemAndroid());
+					myJHPServer.start();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				if (wl != null && wl.isHeld())
+					wl.release();
+
+				myJHPServer.killServer();
+				txtSyncState.setText(R.string.txtNoConnection);
+				return true;
+
 			}
-
-			return true;
-		case R.id.btnStopSync:
-			if (wl != null && wl.isHeld())
-				wl.release();
-
-			myJHPServer.killServer();
-			btnStopSync.setEnabled(false);
-			txtSyncState.setText(R.string.txtNoConnection);
-			btnStartSync.setEnabled(true);
 			return true;
 		default:
 			Log.d(this.toString(), "Clicked button has no case.");
@@ -205,7 +202,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		if (myJHPServer != null) {
 			myJHPServer.killServer();
 		}
-		
+
 		super.onPause();
 	}
 
