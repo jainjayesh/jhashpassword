@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JHPSync"/>
 	<classpathentry kind="lib" path="/JHPSimpleXML/lib/simple-xml-2.4.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
