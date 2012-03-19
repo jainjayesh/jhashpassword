@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -10,13 +10,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
     </RelativeLayout>
-
+
     <LinearLayout
         android:id="@+id/bottom_control_bar"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bannerbottomnothard"
+        android:gravity="center|center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="4dip"
         android:paddingLeft="3dip"
@@ -27,24 +28,45 @@
             android:id="@+id/btnStartSync"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
             android:onClick="onButtonClicked"
             android:textOff="@string/btnStartSync"
             android:textOn="@string/btnStopSync" />
-
-        <ProgressBar
-            android:id="@+id/progressBar1"
-            style="?android:attr/progressBarStyleSmall"
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_control_bar"
+        android:background="@drawable/bannerbottomnothard"
+        android:gravity="center|center_vertical"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/txtVisibility"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:text="Visibility" >
+        </TextView>
 
+        <ToggleButton
+            android:id="@+id/toggleVisibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onButtonClicked"
+            android:checked="false"
+            android:enabled="false"
+            android:textOn="Visible" />
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@id/bottom_control_bar"
         android:layout_below="@id/top_control_bar"
+        android:layout_above="@id/linearLayout2"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -107,13 +129,13 @@
             android:id="@+id/scrollViewLog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/linearLayout1"
+            android:layout_below="@id/linearLayout1"
             android:layout_centerHorizontal="true" >
 
             <TextView
                 android:id="@+id/txtViewLog"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="No connection.\n" />
         </ScrollView>
     </RelativeLayout>

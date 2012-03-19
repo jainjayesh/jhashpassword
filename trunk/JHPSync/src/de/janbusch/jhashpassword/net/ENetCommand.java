@@ -2,7 +2,8 @@ package de.janbusch.jhashpassword.net;
 
 public enum ENetCommand {
 	SOLICITATION("SOLICITATION"), ADVERTISEMENT("ADVERTISEMENT"), REQ("REQ"), ACK(
-			"ACK"), PAS_REQ("PAS_REQ"), PAS_REP("PAS_REP"), UNKNOWN("UNKNOWN");
+			"ACK"), PAS_REQ("PAS_REQ"), PAS_REP("PAS_REP"), UNKNOWN("UNKNOWN"), REQ_XML(
+			"REQ_XML"), EST_TCP("EST_TCP");
 
 	private String command;
 	private String parameter;

@@ -2,6 +2,7 @@ package de.janbusch.jhashpassword.sync;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,12 +17,13 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 import de.janbusch.jhashpassword.R;
+import de.janbusch.jhashpassword.net.EActionCommand;
 import de.janbusch.jhashpassword.net.ENetCommand;
 import de.janbusch.jhashpassword.net.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.JHPServer;
@@ -35,7 +37,10 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 	private Switch btnStartSync;
 	private TextView txtLog;
 	private ScrollView scroller;
+	private ToggleButton visibilityToggle;
 	private WakeLock wl;
+
+	private List<InetSocketAddress> acceptedList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +73,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		btnStartSync = (Switch) findViewById(R.id.btnStartSync);
 		txtLog = (TextView) findViewById(R.id.txtViewLog);
 		scroller = (ScrollView) findViewById(R.id.scrollViewLog);
-
+		visibilityToggle = (ToggleButton) findViewById(R.id.toggleVisibility);
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, TAG);
 
@@ -97,6 +102,8 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 							Util.getMacAddressAndroid(getApplicationContext()),
 							Util.getOperatingSystemAndroid());
 					myJHPServer.start();
+					visibilityToggle.setEnabled(true);
+					visibilityToggle.setChecked(true);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -104,14 +111,22 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 				if (wl != null && wl.isHeld())
 					wl.release();
 
+				visibilityToggle.setEnabled(false);
 				myJHPServer.killServer();
 				txtSyncState.setText(R.string.txtNoConnection);
 				return true;
 
 			}
 			return true;
+		case R.id.toggleVisibility:
+			if (!visibilityToggle.isChecked()) {
+				myJHPServer.stopSolicitation();
+			} else {
+				myJHPServer.startSolicitation();
+			}
+			return true;
 		default:
-			Log.d(this.toString(), "Clicked button has no case.");
+			Log.d(this.TAG, "Clicked button has no case.");
 			return false;
 		}
 	}
@@ -134,12 +149,42 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 					+ command.getParam());
 			showReqAckDialog(from, command);
 			break;
+		case EST_TCP:
+			if (acceptedList.contains(from)) {
+				log("Creating secure tcp connection.");
+			} else {
+				log("Refused request from " + from.getAddress() + ", "
+						+ command.getParam());
+			}
+			break;
 		case ADVERTISEMENT:
 			log("Advertisement received from " + from.getAddress());
 			// myJHPServer.stopSolicitation();
 			break;
 		default:
 			log("Unknown command received: " + msg);
+		}
+	}
+
+	@Override
+	public void handleAction(EActionCommand cmd) {
+		switch (cmd) {
+		case SOLICITATION_LEFT:
+			final int timeLeft = (Integer) cmd.getParam();
+			log("Visible for: " + timeLeft + " sec.");
+			break;
+		case SOLICITATION_END:
+			log("Visibility disabled.");
+
+			this.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					visibilityToggle.setChecked(false);
+				}
+			});
+			break;
+		default:
+			log("Unknown action command: " + cmd);
 		}
 	}
 
@@ -162,6 +207,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 									int which) {
 								myJHPServer.sendMessage(from,
 										ENetCommand.ACK.toString());
+								acceptedList.add(from);
 							}
 						});
 				inputDialog.setNegativeButton(getString(R.string.No),

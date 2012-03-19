@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.nio.channels.IllegalSelectorException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import de.janbusch.jhashpassword.net.EActionCommand;
 import de.janbusch.jhashpassword.net.ENetCommand;
 import de.janbusch.jhashpassword.net.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.JHPServer;
@@ -236,19 +238,23 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		btnconnect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				myServer.setState(ServerState.LISTEN_CONNECTION);
+				myServer.setState(ServerState.LISTEN_CONNECTION_UDP);
 				progressBar.setState(SWT.PAUSED);
 				btnAutorefresh.setSelection(false);
-				
+
 				ENetCommand command = ENetCommand.REQ;
 				try {
-					command.setParameter(Util.getMacAddress(InetAddress.getLocalHost()));
+					command.setParameter(Util.getMacAddress(InetAddress
+							.getLocalHost()));
 				} catch (UnknownHostException e) {
 					e.printStackTrace();
 				}
-				Partner[] p = availablePartners.values().toArray(new Partner[availablePartners.size()]);
-				
-				myServer.sendMessage(p[tblAvailableClients.getSelectionIndex()].getAddress(), command.toString());
+				Partner[] p = availablePartners.values().toArray(
+						new Partner[availablePartners.size()]);
+
+				myServer.sendMessage(
+						p[tblAvailableClients.getSelectionIndex()].getAddress(),
+						command.toString());
 			}
 		});
 		btnconnect.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
@@ -302,17 +308,18 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 			break;
 		case ACK:
 			System.out.println("Ack received from " + from.getAddress());
+			myServer.sendMessage(from, ENetCommand.EST_TCP.toString());
 			break;
 		case SOLICITATION:
 			System.out.println("Solicitation received!");
 			String[] params = command.getParam().split("[|]");
 			Partner p = new Partner(from, params[0], params[1]);
 
-			myServer.sendMessage(from, ENetCommand.ADVERTISEMENT.toString());
-
 			if (!availablePartners.containsKey(from.getHostName())) {
 				availablePartners.put(from.getHostName(), p);
 			}
+
+			myServer.sendMessage(from, ENetCommand.ADVERTISEMENT.toString());
 			break;
 		default:
 			System.out.println("Unknown command received.");
@@ -345,5 +352,11 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				}
 			}
 		});
+	}
+
+	@Override
+	public void handleAction(EActionCommand cmd) {
+		// TODO Auto-generated method stub
+		throw new IllegalSelectorException();
 	}
 }
