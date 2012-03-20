@@ -116,7 +116,8 @@ public class JHPServer extends Thread {
 			case SERVER_LISTEN_CONNECTION_TCP:
 				try {
 					connectedClient = (SSLSocket) serverSocketTCP.accept();
-					ProcessConnection pC = new ProcessConnection(connectedClient);
+					ProcessConnection pC = new ProcessConnection(
+							connectedClient);
 				} catch (IOException e) {
 					e.printStackTrace();
 					this.interrupt();
@@ -175,8 +176,10 @@ public class JHPServer extends Thread {
 			executor.shutdown();
 			executor.awaitTermination(3, TimeUnit.SECONDS);
 
-			scheduledExecutor.shutdown();
-			scheduledExecutor.awaitTermination(3, TimeUnit.SECONDS);
+			if (scheduledExecutor != null) {
+				scheduledExecutor.shutdown();
+				scheduledExecutor.awaitTermination(3, TimeUnit.SECONDS);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

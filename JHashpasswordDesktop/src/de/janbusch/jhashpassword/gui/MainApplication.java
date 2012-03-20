@@ -807,7 +807,7 @@ public class MainApplication {
 		{
 			Group grpButtons = new Group(shlJhashpassword, SWT.NONE);
 			grpButtons.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-					true, 2, 1));
+					false, 2, 1));
 			grpButtons.setLayout(new GridLayout(5, false));
 			{
 				btnSave = new Button(grpButtons, SWT.NONE);
@@ -818,7 +818,7 @@ public class MainApplication {
 						saveSettings();
 					}
 				});
-				btnSave.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+				btnSave.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 						false, 1, 1));
 				btnSave.setText(Messages.MainApplication_36);
 			}
