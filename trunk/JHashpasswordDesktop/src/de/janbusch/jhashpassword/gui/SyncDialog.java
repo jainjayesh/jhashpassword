@@ -238,6 +238,10 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		btnconnect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				int index = tblAvailableClients.getSelectionIndex();
+				if (index == -1)
+					return;
+
 				myServer.setState(ServerState.LISTEN_CONNECTION_UDP);
 				progressBar.setState(SWT.PAUSED);
 				btnAutorefresh.setSelection(false);
@@ -252,9 +256,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				Partner[] p = availablePartners.values().toArray(
 						new Partner[availablePartners.size()]);
 
-				myServer.sendMessage(
-						p[tblAvailableClients.getSelectionIndex()].getAddress(),
-						command.toString());
+				myServer.sendMessage(p[index].getAddress(), command.toString());
 			}
 		});
 		btnconnect.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
