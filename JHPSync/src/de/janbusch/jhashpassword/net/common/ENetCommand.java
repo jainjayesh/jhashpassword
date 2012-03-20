@@ -1,10 +1,11 @@
-package de.janbusch.jhashpassword.net;
+package de.janbusch.jhashpassword.net.common;
 
 public enum ENetCommand {
 	SOLICITATION("SOLICITATION"), ADVERTISEMENT("ADVERTISEMENT"), REQ("REQ"), ACK(
 			"ACK"), PAS_REQ("PAS_REQ"), PAS_REP("PAS_REP"), UNKNOWN("UNKNOWN"), REQ_XML(
-			"REQ_XML"), EST_TCP("EST_TCP");
+			"REQ_XML"), EST_TCP("EST_TCP"), REQ_OS("OS_REQ");
 
+	public static int PACKET_SIZE = 512;
 	private String command;
 	private String parameter;
 	private static String PRE = "<";
