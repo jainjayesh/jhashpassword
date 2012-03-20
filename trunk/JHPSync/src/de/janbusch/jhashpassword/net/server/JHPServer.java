@@ -1,4 +1,4 @@
-package de.janbusch.jhashpassword.net;
+package de.janbusch.jhashpassword.net.server;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,16 +18,15 @@ import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+import de.janbusch.jhashpassword.net.client.JHPClient;
+import de.janbusch.jhashpassword.net.common.EActionCommand;
+import de.janbusch.jhashpassword.net.common.ENetCommand;
+import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
+
 public class JHPServer extends Thread {
-	private static final int SOLICITATION_DELAY = 2;
-	private static final int MAX_SOL_COUNT = 5;
 	public static final int SERVER_PORT_UDP = 4832;
-	public static final int CLIENT_PORT_UDP = 4833;
 	public static final int SERVER_PORT_TCP = 4834;
-	public static final int CLIENT_PORT_TCP = 4835;
 	private static final int SERVER_TIMEOUT = 1000;
-	private static final int CLIENT_TIMEOUT = 1000;
-	private static int PACKET_SIZE = 512;
 
 	public enum ServerState {
 		LISTEN_SOLICITATION, IDLE, SENDING_SOLICITATION, SHUTTING_DOWN, LISTEN_CONNECTION_UDP, SERVER_LISTEN_CONNECTION_TCP, CLIENT_LISTEN_CONNECTION_TCP, LISTEN_MSG_TCP
@@ -35,9 +34,7 @@ public class JHPServer extends Thread {
 
 	private ServerState myState;
 	private ExecutorService executor;
-	private ScheduledExecutorService scheduledExecutor;
-	private DatagramSocket serverSocketUDP;
-	private boolean isServer;
+	private DatagramSocket inputSocketUDP;
 	private IJHPMsgHandler msgHandler;
 	private InetAddress broadcast;
 	private String macAddress;
@@ -49,10 +46,8 @@ public class JHPServer extends Thread {
 	private InputStream inputStream;
 	private OutputStream outputStream;
 
-	public JHPServer(boolean isServer, IJHPMsgHandler msgHandler,
-			InetAddress inetAddress, String macAddress, String operatingSystem)
-			throws IOException {
-		this.isServer = isServer;
+	public JHPServer(IJHPMsgHandler msgHandler, InetAddress inetAddress,
+			String macAddress, String operatingSystem) throws IOException {
 		this.msgHandler = msgHandler;
 		this.executor = Executors.newSingleThreadExecutor();
 		this.broadcast = inetAddress;
@@ -70,23 +65,16 @@ public class JHPServer extends Thread {
 			e.printStackTrace();
 		}
 
-		if (this.isServer) {
-			serverSocketUDP = new DatagramSocket(SERVER_PORT_UDP);
-			serverSocketUDP.setSoTimeout(SERVER_TIMEOUT);
-			myState = ServerState.LISTEN_SOLICITATION;
-		} else {
-			serverSocketUDP = new DatagramSocket(CLIENT_PORT_UDP);
-			serverSocketUDP.setSoTimeout(CLIENT_TIMEOUT);
-			startSolicitation();
-		}
+		inputSocketUDP = new DatagramSocket(SERVER_PORT_UDP);
+		inputSocketUDP.setSoTimeout(SERVER_TIMEOUT);
+		myState = ServerState.LISTEN_SOLICITATION;
 
-		System.out.println(this.getName() + ": ready! Running as server: "
-				+ isServer);
+		System.out.println(this.getName() + ": ready!");
 	}
 
 	public void run() {
 		System.out.println(this.getName() + ": starts listening on port: "
-				+ serverSocketUDP.getLocalPort());
+				+ inputSocketUDP.getLocalPort());
 
 		DatagramPacket packet;
 
@@ -95,15 +83,16 @@ public class JHPServer extends Thread {
 			case LISTEN_CONNECTION_UDP:
 			case LISTEN_SOLICITATION:
 			case SENDING_SOLICITATION:
-				packet = new DatagramPacket(new byte[PACKET_SIZE], PACKET_SIZE);
+				packet = new DatagramPacket(new byte[ENetCommand.PACKET_SIZE],
+						ENetCommand.PACKET_SIZE);
 				try {
-					serverSocketUDP.receive(packet);
+					inputSocketUDP.receive(packet);
 					InetSocketAddress receivedFrom = (InetSocketAddress) packet
 							.getSocketAddress();
 					String msg = new String(packet.getData(), 0,
 							packet.getLength()).trim();
 					if (msg != null && msg.length() > 0) {
-						msgHandler.handleMessage(msg, receivedFrom);
+						this.handleMessage(msg, receivedFrom);
 					}
 				} catch (SocketTimeoutException e) {
 					if (this.isInterrupted())
@@ -137,8 +126,25 @@ public class JHPServer extends Thread {
 			}
 		}
 
-		this.serverSocketUDP.close();
+		this.inputSocketUDP.close();
 		System.out.println(this.getName() + ": stopped!");
+	}
+
+	private void handleMessage(String msg, InetSocketAddress receivedFrom) {
+		ENetCommand command = ENetCommand.parse(msg);
+
+		switch (command) {
+		case REQ_OS:
+			ENetCommand req = ENetCommand.SOLICITATION;
+			req.setParameter(macAddress + "|" + operatingSystem);
+
+			sendMessage(new InetSocketAddress(broadcast, SERVER_PORT_UDP),
+					req.toString());
+			break;
+		default:
+			msgHandler.handleMessage(command, receivedFrom);
+		}
+
 	}
 
 	public void sendMessage(final InetSocketAddress recipient, final String msg) {
@@ -149,24 +155,12 @@ public class JHPServer extends Thread {
 						.getBytes().length);
 				packet.setSocketAddress(recipient);
 				try {
-					serverSocketUDP.send(packet);
+					inputSocketUDP.send(packet);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}
-
-	public void connectToServer(String serverHost, int port) {
-		try {
-			SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory
-					.getDefault();
-			clientSocketTCP = (SSLSocket) factory
-					.createSocket(serverHost, port);
-		} catch (IOException e) {
-			e.printStackTrace();
-			this.interrupt();
-		}
 	}
 
 	public void killServer() {
@@ -175,50 +169,9 @@ public class JHPServer extends Thread {
 		try {
 			executor.shutdown();
 			executor.awaitTermination(3, TimeUnit.SECONDS);
-
-			if (scheduledExecutor != null) {
-				scheduledExecutor.shutdown();
-				scheduledExecutor.awaitTermination(3, TimeUnit.SECONDS);
-			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void startSolicitation() {
-		this.scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
-		myState = ServerState.SENDING_SOLICITATION;
-		solCount = 0;
-		scheduledExecutor.scheduleWithFixedDelay(new Runnable() {
-			@Override
-			public void run() {
-				if (solCount < MAX_SOL_COUNT) {
-					ENetCommand req = ENetCommand.SOLICITATION;
-					req.setParameter(JHPServer.this.macAddress + "|"
-							+ JHPServer.this.operatingSystem);
-
-					sendMessage(new InetSocketAddress(broadcast,
-							JHPServer.SERVER_PORT_UDP), req.toString());
-
-					int sec = (MAX_SOL_COUNT - solCount) * SOLICITATION_DELAY;
-					EActionCommand action = EActionCommand.SOLICITATION_LEFT;
-					action.setParameter(sec);
-					msgHandler.handleAction(action);
-
-					System.out.println("Sending solicitation #" + solCount
-							+ "/" + MAX_SOL_COUNT + "...");
-				} else {
-					stopSolicitation();
-					msgHandler.handleAction(EActionCommand.SOLICITATION_END);
-					myState = ServerState.LISTEN_CONNECTION_UDP;
-				}
-				solCount++;
-			}
-		}, 0, SOLICITATION_DELAY, TimeUnit.SECONDS);
-	}
-
-	public void stopSolicitation() {
-		this.scheduledExecutor.shutdown();
 	}
 
 	public void setState(ServerState state) {

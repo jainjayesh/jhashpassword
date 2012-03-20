@@ -28,13 +28,14 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import de.janbusch.jhashpassword.net.EActionCommand;
-import de.janbusch.jhashpassword.net.ENetCommand;
-import de.janbusch.jhashpassword.net.IJHPMsgHandler;
-import de.janbusch.jhashpassword.net.JHPServer;
-import de.janbusch.jhashpassword.net.JHPServer.ServerState;
-import de.janbusch.jhashpassword.net.Partner;
-import de.janbusch.jhashpassword.net.Util;
+import de.janbusch.jhashpassword.net.common.EActionCommand;
+import de.janbusch.jhashpassword.net.common.ENetCommand;
+import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
+import de.janbusch.jhashpassword.net.common.Partner;
+import de.janbusch.jhashpassword.net.common.Util;
+import de.janbusch.jhashpassword.net.server.JHPServer;
+import de.janbusch.jhashpassword.net.server.JHPServer.ServerState;
+
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
@@ -64,7 +65,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
 		try {
 			availablePartners = new HashMap<String, Partner>();
-			myServer = new JHPServer(true, SyncDialog.this, null,
+			myServer = new JHPServer(SyncDialog.this, null,
 					Util.getMacAddress(InetAddress.getLocalHost()),
 					Util.getOperatingSystem());
 			myServer.start();
@@ -298,11 +299,10 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 	}
 
 	@Override
-	public void handleMessage(String msg, InetSocketAddress from) {
-		ENetCommand command = ENetCommand.parse(msg);
+	public void handleMessage(ENetCommand command, InetSocketAddress from) {
 
 		System.out.println("Received msg from " + from.getAddress()
-				+ " with content: " + msg);
+				+ " with content: " + command);
 
 		switch (command) {
 		case REQ:

@@ -1,4 +1,4 @@
-package de.janbusch.jhashpassword.net;
+package de.janbusch.jhashpassword.net.common;
 
 import java.io.Serializable;
 import java.util.ArrayList;

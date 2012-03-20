@@ -1,13 +1,14 @@
-package de.janbusch.jhashpassword.net;
+package de.janbusch.jhashpassword.net.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import de.janbusch.jhashpassword.net.JHPMessage.MessageType;
+import de.janbusch.jhashpassword.net.common.JHPMessage;
+import de.janbusch.jhashpassword.net.common.JHPMessage.MessageType;
 
-class ProcessConnection extends Thread {
+public class ProcessConnection extends Thread {
 	Socket client;
 	ObjectInputStream is;
 	ObjectOutputStream os;

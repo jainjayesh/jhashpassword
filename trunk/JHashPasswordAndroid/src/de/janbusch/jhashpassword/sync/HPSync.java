@@ -24,11 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import de.janbusch.jhashpassword.R;
-import de.janbusch.jhashpassword.net.EActionCommand;
-import de.janbusch.jhashpassword.net.ENetCommand;
-import de.janbusch.jhashpassword.net.IJHPMsgHandler;
-import de.janbusch.jhashpassword.net.JHPServer;
-import de.janbusch.jhashpassword.net.JHPServer.ServerState;
+import de.janbusch.jhashpassword.net.common.EActionCommand;
+import de.janbusch.jhashpassword.net.common.ENetCommand;
+import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
+import de.janbusch.jhashpassword.net.server.JHPServer;
+import de.janbusch.jhashpassword.net.server.JHPServer.ServerState;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 
 public class HPSync extends Activity implements IJHPMsgHandler {
@@ -101,7 +101,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 				wl.acquire();
 
 				try {
-					myJHPServer = new JHPServer(false, this,
+					myJHPServer = new JHPServer(this,
 							Util.getBroadcastAddress(getApplicationContext()),
 							Util.getMacAddressAndroid(getApplicationContext()),
 							Util.getOperatingSystemAndroid());
@@ -123,11 +123,11 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 			}
 			return true;
 		case R.id.toggleVisibility:
-			if (!visibilityToggle.isChecked()) {
-				myJHPServer.stopSolicitation();
-			} else {
-				myJHPServer.startSolicitation();
-			}
+//			if (!visibilityToggle.isChecked()) {
+//				myJHPServer.stopSolicitation();
+//			} else {
+//				myJHPServer.startSolicitation();
+//			}
 			return true;
 		default:
 			Log.d(this.TAG, "Clicked button has no case.");
@@ -144,9 +144,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 	}
 
 	@Override
-	public void handleMessage(String msg, final InetSocketAddress from) {
-		ENetCommand command = ENetCommand.parse(msg);
-
+	public void handleMessage(ENetCommand command, final InetSocketAddress from) {
 		switch (command) {
 		case REQ:
 			log("Request received from " + from.getAddress() + ", "
@@ -158,7 +156,6 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		case EST_TCP:
 			if (acceptedList.contains(from)) {
 				log("Creating secure tcp connection.");
-				myJHPServer.connectToServer(from.getHostName(), JHPServer.SERVER_PORT_TCP);
 			} else {
 				log("Refused request from " + from.getAddress() + ", "
 						+ command.getParam());
@@ -169,7 +166,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 			// myJHPServer.stopSolicitation();
 			break;
 		default:
-			log("Unknown command received: " + msg);
+			log("Unknown command received: " + command);
 		}
 	}
 

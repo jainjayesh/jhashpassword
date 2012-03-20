@@ -1,4 +1,4 @@
-package de.janbusch.jhashpassword.net;
+package de.janbusch.jhashpassword.net.common;
 
 public enum EActionCommand {
 	SOLICITATION_LEFT("SOLICITATION_LEFT"), SOLICITATION_END("SOLICITATION_END"), UNKNOWN("UNKNOWN");

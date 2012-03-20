@@ -1,8 +1,8 @@
-package de.janbusch.jhashpassword.net;
+package de.janbusch.jhashpassword.net.common;
 
 import java.net.InetSocketAddress;
 
 public interface IJHPMsgHandler {
-	void handleMessage(String msg, InetSocketAddress from);
+	void handleMessage(ENetCommand command, InetSocketAddress from);
 	void handleAction(EActionCommand cmd);
 }
