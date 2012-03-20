@@ -170,11 +170,12 @@ public class JHPServer extends Thread {
 
 	public void killServer() {
 		myState = ServerState.SHUTTING_DOWN;
-		executor.shutdown();
-		scheduledExecutor.shutdown();
 
 		try {
+			executor.shutdown();
 			executor.awaitTermination(3, TimeUnit.SECONDS);
+
+			scheduledExecutor.shutdown();
 			scheduledExecutor.awaitTermination(3, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();

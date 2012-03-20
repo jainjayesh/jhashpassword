@@ -2,6 +2,7 @@ package de.janbusch.jhashpassword.sync;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -27,6 +28,7 @@ import de.janbusch.jhashpassword.net.EActionCommand;
 import de.janbusch.jhashpassword.net.ENetCommand;
 import de.janbusch.jhashpassword.net.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.JHPServer;
+import de.janbusch.jhashpassword.net.JHPServer.ServerState;
 import de.janbusch.jhashpassword.xml.simple.HashPassword;
 
 public class HPSync extends Activity implements IJHPMsgHandler {
@@ -76,6 +78,8 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		visibilityToggle = (ToggleButton) findViewById(R.id.toggleVisibility);
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, TAG);
+
+		acceptedList = new ArrayList<InetSocketAddress>(1);
 
 		// Get the hashPassword object.
 		this.hashPassword = (HashPassword) getIntent().getSerializableExtra(
@@ -147,11 +151,14 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		case REQ:
 			log("Request received from " + from.getAddress() + ", "
 					+ command.getParam());
-			showReqAckDialog(from, command);
+			if (!acceptedList.contains(from)) {
+				showReqAckDialog(from, command);
+			}
 			break;
 		case EST_TCP:
 			if (acceptedList.contains(from)) {
 				log("Creating secure tcp connection.");
+				myJHPServer.connectToServer(from.getHostName(), JHPServer.SERVER_PORT_TCP);
 			} else {
 				log("Refused request from " + from.getAddress() + ", "
 						+ command.getParam());
@@ -207,7 +214,9 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 									int which) {
 								myJHPServer.sendMessage(from,
 										ENetCommand.ACK.toString());
-								acceptedList.add(from);
+								if (!acceptedList.contains(from)) {
+									acceptedList.add(from);
+								}
 							}
 						});
 				inputDialog.setNegativeButton(getString(R.string.No),
