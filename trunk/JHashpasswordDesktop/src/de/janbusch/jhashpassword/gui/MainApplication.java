@@ -47,10 +47,10 @@ import de.janbusch.hashpassword.core.EHashType;
 import de.janbusch.hashpassword.core.HashUtil;
 import de.janbusch.jhashpassword.gui.MainApplication.ClipboardTimerTask;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
-import de.janbusch.jhashpassword.xml.simple.Host;
-import de.janbusch.jhashpassword.xml.simple.Hosts;
-import de.janbusch.jhashpassword.xml.simple.LoginName;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
+import de.janbusch.jhashpassword.xml.simple.data.Host;
+import de.janbusch.jhashpassword.xml.simple.data.Hosts;
+import de.janbusch.jhashpassword.xml.simple.data.LoginName;
 
 /**
  * An object of this class represents the main application window.
@@ -142,7 +142,7 @@ public class MainApplication {
 	 */
 	private void loadXMLFile() {
 		try {
-			this.hashPassword = SimpleXMLUtil.getXML(XML_PATH);
+			this.hashPassword = SimpleXMLUtil.getXML();
 
 			Hosts hosts = hashPassword.getHosts();
 			Host currentHost = null;
@@ -173,7 +173,7 @@ public class MainApplication {
 				hashPassword.setDefaultPasswordLength(passwordLengthText
 						.getText());
 				try {
-					SimpleXMLUtil.writeXML(hashPassword, XML_PATH);
+					SimpleXMLUtil.writeXML(hashPassword);
 				} catch (Exception e2) {
 					e2.printStackTrace();
 				}
@@ -241,7 +241,7 @@ public class MainApplication {
 		}
 
 		try {
-			SimpleXMLUtil.writeXML(hashPassword, XML_PATH);
+			SimpleXMLUtil.writeXML(hashPassword);
 		} catch (Exception e1) {
 			ErrorDialog.openError(shlJhashpassword,
 					Messages.MainApplication_34, Messages.MainApplication_35,

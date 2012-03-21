@@ -28,20 +28,20 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import de.janbusch.jhashpassword.net.client.JHPClient;
+import de.janbusch.jhashpassword.net.client.JHPClient.ClientState;
 import de.janbusch.jhashpassword.net.common.EActionCommand;
 import de.janbusch.jhashpassword.net.common.ENetCommand;
 import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.common.Partner;
 import de.janbusch.jhashpassword.net.common.Util;
-import de.janbusch.jhashpassword.net.server.JHPServer;
-import de.janbusch.jhashpassword.net.server.JHPServer.ServerState;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
-	private JHPServer myServer;
+	private JHPClient myClient;
 	private Object result;
 	private Shell shlSynchronisation;
 	private Map<String, Partner> availablePartners;
@@ -65,10 +65,10 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
 		try {
 			availablePartners = new HashMap<String, Partner>();
-			myServer = new JHPServer(SyncDialog.this, null,
+			myClient = new JHPClient(SyncDialog.this, null,
 					Util.getMacAddress(InetAddress.getLocalHost()),
 					Util.getOperatingSystem());
-			myServer.start();
+			myClient.start();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -86,7 +86,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		shlSynchronisation.addListener(SWT.Close, new Listener() {
 			@Override
 			public void handleEvent(Event arg0) {
-				myServer.killServer();
+				myClient.killServer();
 			}
 		});
 
@@ -221,10 +221,10 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 					Button toggle = (Button) sender;
 
 					if (toggle.getSelection()) {
-						myServer.setState(ServerState.LISTEN_SOLICITATION);
+						myClient.setState(ClientState.LISTEN_ADVERTISEMENT);
 						progressBar.setState(SWT.NORMAL);
 					} else {
-						myServer.setState(ServerState.IDLE);
+						myClient.setState(ClientState.IDLE);
 						progressBar.setState(SWT.PAUSED);
 					}
 				}
@@ -243,7 +243,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				if (index == -1)
 					return;
 
-				myServer.setState(ServerState.LISTEN_CONNECTION_UDP);
+				myClient.setState(ClientState.LISTEN_CONNECTION_UDP);
 				progressBar.setState(SWT.PAUSED);
 				btnAutorefresh.setSelection(false);
 
@@ -257,7 +257,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				Partner[] p = availablePartners.values().toArray(
 						new Partner[availablePartners.size()]);
 
-				myServer.sendMessage(p[index].getAddress(), command.toString());
+				myClient.sendMessage(p[index].getAddress(), command.toString());
 			}
 		});
 		btnconnect.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
@@ -310,18 +310,16 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 			break;
 		case ACK:
 			System.out.println("Ack received from " + from.getAddress());
-			myServer.sendMessage(from, ENetCommand.EST_TCP.toString());
+			myClient.sendMessage(from, ENetCommand.EST_TCP.toString());
 			break;
-		case SOLICITATION:
-			System.out.println("Solicitation received!");
+		case ADVERTISEMENT:
+			System.out.println("Advertisement received from " + from.getAddress());
 			String[] params = command.getParam().split("[|]");
 			Partner p = new Partner(from, params[0], params[1]);
 
 			if (!availablePartners.containsKey(from.getHostName())) {
 				availablePartners.put(from.getHostName(), p);
 			}
-
-			myServer.sendMessage(from, ENetCommand.ADVERTISEMENT.toString());
 			break;
 		default:
 			System.out.println("Unknown command received.");

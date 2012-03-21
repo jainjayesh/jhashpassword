@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.swtdesigner.SWTResourceManager;
 
 import de.janbusch.hashpassword.core.CoreInformation;
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
 
 public class AboutDialog extends Dialog {
 

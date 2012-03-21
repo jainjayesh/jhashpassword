@@ -38,9 +38,9 @@ import de.janbusch.hashpassword.core.HashUtil;
 import de.janbusch.jhashpassword.impexp.HPImpExp;
 import de.janbusch.jhashpassword.settings.Settings;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
-import de.janbusch.jhashpassword.xml.simple.Host;
-import de.janbusch.jhashpassword.xml.simple.LoginName;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
+import de.janbusch.jhashpassword.xml.simple.data.Host;
+import de.janbusch.jhashpassword.xml.simple.data.LoginName;
 
 public class HPHome extends Activity {
 

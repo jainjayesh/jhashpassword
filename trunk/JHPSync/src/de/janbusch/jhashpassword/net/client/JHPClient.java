@@ -33,7 +33,7 @@ public class JHPClient extends Thread {
 	private static final int CLIENT_TIMEOUT = 1000;
 
 	public enum ClientState {
-		LISTEN_SOLICITATION, IDLE, SENDING_SOLICITATION, SHUTTING_DOWN, LISTEN_CONNECTION_UDP, SERVER_LISTEN_CONNECTION_TCP, CLIENT_LISTEN_CONNECTION_TCP, LISTEN_MSG_TCP
+		LISTEN_ADVERTISEMENT, IDLE, SENDING_SOLICITATION, SHUTTING_DOWN, LISTEN_CONNECTION_UDP, SERVER_LISTEN_CONNECTION_TCP, CLIENT_LISTEN_CONNECTION_TCP, LISTEN_MSG_TCP
 	};
 
 	private ClientState myState;
@@ -73,7 +73,6 @@ public class JHPClient extends Thread {
 
 		inputSocketUDP = new DatagramSocket(CLIENT_PORT_UDP);
 		inputSocketUDP.setSoTimeout(CLIENT_TIMEOUT);
-		startSolicitation();
 
 		System.out.println(this.getName() + ": ready!");
 	}
@@ -83,11 +82,11 @@ public class JHPClient extends Thread {
 				+ inputSocketUDP.getLocalPort());
 
 		DatagramPacket packet;
+		startSolicitation();
 
 		while (!this.isInterrupted()) {
 			switch (myState) {
 			case LISTEN_CONNECTION_UDP:
-			case LISTEN_SOLICITATION:
 			case SENDING_SOLICITATION:
 				packet = new DatagramPacket(new byte[ENetCommand.PACKET_SIZE], ENetCommand.PACKET_SIZE);
 				try {
@@ -140,7 +139,7 @@ public class JHPClient extends Thread {
 
 		switch (command) {
 		case REQ_OS:
-			ENetCommand req = ENetCommand.SOLICITATION;
+			ENetCommand req = ENetCommand.REP_OS;
 			req.setParameter(macAddress + "|" + operatingSystem);
 
 			sendMessage(new InetSocketAddress(broadcast, JHPServer.SERVER_PORT_UDP),
@@ -205,8 +204,6 @@ public class JHPClient extends Thread {
 			public void run() {
 				if (solCount < MAX_SOL_COUNT) {
 					ENetCommand req = ENetCommand.SOLICITATION;
-					req.setParameter(JHPClient.this.macAddress + "|"
-							+ JHPClient.this.operatingSystem);
 
 					sendMessage(new InetSocketAddress(broadcast,
 							JHPServer.SERVER_PORT_UDP), req.toString());

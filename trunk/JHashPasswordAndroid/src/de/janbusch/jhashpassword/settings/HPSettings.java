@@ -15,9 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import de.janbusch.jhashpassword.R;
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
-import de.janbusch.jhashpassword.xml.simple.Host;
-import de.janbusch.jhashpassword.xml.simple.LoginName;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
+import de.janbusch.jhashpassword.xml.simple.data.Host;
+import de.janbusch.jhashpassword.xml.simple.data.LoginName;
 
 public class HPSettings extends Activity {
 	private HashPassword hashPassword;
