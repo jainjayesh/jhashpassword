@@ -5,7 +5,7 @@
 // Generated on: 2009.12.20 at 07:43:59 PM MEZ 
 //
 
-package de.janbusch.jhashpassword.xml.simple;
+package de.janbusch.jhashpassword.xml.simple.data;
 
 import java.io.Serializable;
 

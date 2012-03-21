@@ -1,4 +1,4 @@
-package de.janbusch.jhashpassword.xml.simple;
+package de.janbusch.jhashpassword.xml.simple.data;
 
 import java.io.Serializable;
 import java.math.BigInteger;

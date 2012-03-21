@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 import de.janbusch.jhashpassword.sync.SyncMessage.MsgType;
 import de.janbusch.jhashpassword.sync.SyncMessage.ObserverData;
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
 
 
 public class SyncClient extends Thread {

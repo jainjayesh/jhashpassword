@@ -2,7 +2,7 @@ package de.janbusch.jhashpassword.sync;
 
 import java.io.Serializable;
 
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
 
 
 

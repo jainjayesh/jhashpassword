@@ -2,7 +2,6 @@ package de.janbusch.jhashpassword.sync;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -24,15 +23,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import de.janbusch.jhashpassword.R;
+import de.janbusch.jhashpassword.net.client.JHPClient;
 import de.janbusch.jhashpassword.net.common.EActionCommand;
 import de.janbusch.jhashpassword.net.common.ENetCommand;
 import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
+import de.janbusch.jhashpassword.net.common.Partner;
 import de.janbusch.jhashpassword.net.server.JHPServer;
-import de.janbusch.jhashpassword.net.server.JHPServer.ServerState;
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
+import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
+import de.janbusch.jhashpassword.xml.simple.config.Host;
+import de.janbusch.jhashpassword.xml.simple.config.JHPConfig;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
 
 public class HPSync extends Activity implements IJHPMsgHandler {
 	private final String TAG = "de.janbusch.jhashpassword.sync.HPSync";
+	private JHPConfig config;
 	private HashPassword hashPassword;
 	private JHPServer myJHPServer;
 	private TextView txtSyncState;
@@ -42,7 +46,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 	private ToggleButton visibilityToggle;
 	private WakeLock wl;
 
-	private List<InetSocketAddress> acceptedList;
+	private List<Host> acceptedList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +83,36 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, TAG);
 
-		acceptedList = new ArrayList<InetSocketAddress>(1);
-
 		// Get the hashPassword object.
 		this.hashPassword = (HashPassword) getIntent().getSerializableExtra(
 				getString(R.string.hp));
+
+		// Read config xml
+		readConfigXML();
+	}
+
+	private boolean readConfigXML() {
+		try {
+			config = SimpleXMLUtil.getConfigXML(this.getApplicationContext());
+			acceptedList = config.getSynchronization().getHosts();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean writeConfigXML() {
+		try {
+			SimpleXMLUtil.writeConfigXML(config, this.getApplicationContext());
+			acceptedList = config.getSynchronization().getHosts();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
@@ -123,11 +152,11 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 			}
 			return true;
 		case R.id.toggleVisibility:
-//			if (!visibilityToggle.isChecked()) {
-//				myJHPServer.stopSolicitation();
-//			} else {
-//				myJHPServer.startSolicitation();
-//			}
+			// if (!visibilityToggle.isChecked()) {
+			// myJHPServer.stopSolicitation();
+			// } else {
+			// myJHPServer.startSolicitation();
+			// }
 			return true;
 		default:
 			Log.d(this.TAG, "Clicked button has no case.");
@@ -160,10 +189,6 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 				log("Refused request from " + from.getAddress() + ", "
 						+ command.getParam());
 			}
-			break;
-		case ADVERTISEMENT:
-			log("Advertisement received from " + from.getAddress());
-			// myJHPServer.stopSolicitation();
 			break;
 		default:
 			log("Unknown command received: " + command);
@@ -211,8 +236,12 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 									int which) {
 								myJHPServer.sendMessage(from,
 										ENetCommand.ACK.toString());
-								if (!acceptedList.contains(from)) {
-									acceptedList.add(from);
+								
+								Host host = new Host();
+								host.setIpAddress(from.getAddress().toString());
+								
+								if (!acceptedList.contains(host)) {
+									acceptedList.add(host);
 								}
 							}
 						});
@@ -254,6 +283,8 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		if (myJHPServer != null) {
 			myJHPServer.killServer();
 		}
+		
+		writeConfigXML();
 
 		super.onPause();
 	}

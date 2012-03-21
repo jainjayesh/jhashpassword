@@ -10,16 +10,12 @@ import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 
-import de.janbusch.jhashpassword.net.client.JHPClient;
-import de.janbusch.jhashpassword.net.common.EActionCommand;
 import de.janbusch.jhashpassword.net.common.ENetCommand;
 import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
 
@@ -140,6 +136,13 @@ public class JHPServer extends Thread {
 
 			sendMessage(new InetSocketAddress(broadcast, SERVER_PORT_UDP),
 					req.toString());
+			break;
+		case SOLICITATION:
+			System.out.println("Solicitation received!");
+			ENetCommand advertisement = ENetCommand.ADVERTISEMENT;
+					advertisement.setParameter(macAddress + "|"
+					+ operatingSystem);
+			sendMessage(receivedFrom, advertisement.toString());
 			break;
 		default:
 			msgHandler.handleMessage(command, receivedFrom);

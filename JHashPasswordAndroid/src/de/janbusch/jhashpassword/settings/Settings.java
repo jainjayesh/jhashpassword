@@ -28,7 +28,7 @@ import de.janbusch.jhashpassword.R;
 import de.janbusch.jhashpassword.impexp.HPImpExp;
 import de.janbusch.jhashpassword.sync.HPSync;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
-import de.janbusch.jhashpassword.xml.simple.HashPassword;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
 
 public class Settings extends Activity {
 	public final static String ITEM_TITLE = "title";
