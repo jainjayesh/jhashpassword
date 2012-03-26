@@ -22,9 +22,20 @@ public class Host implements Serializable {
 
 	@Override
 	public boolean equals(Object otherHost) {
-		if (otherHost instanceof Host) {
-			if (((Host) otherHost).getMacAddress().compareTo(this.macAddress) == 0) {
-				return true;
+		if (otherHost != null) {
+			if (otherHost instanceof Host) {
+				Host host = (Host) otherHost;
+
+				if (host.getMacAddress() != null && this.macAddress != null) {
+					if (host.getMacAddress().compareTo(this.macAddress) == 0) {
+						return true;
+					}
+				} else {
+					if (host.getIpAddress().compareTo(this.ipAddress) == 0) {
+						return true;
+					}
+				}
+
 			}
 		}
 

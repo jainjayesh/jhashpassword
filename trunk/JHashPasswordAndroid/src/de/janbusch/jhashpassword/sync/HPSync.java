@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 
+import org.xml.sax.SAXParseException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -95,23 +97,25 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		try {
 			config = SimpleXMLUtil.getConfigXML(this.getApplicationContext());
 			acceptedList = config.getSynchronization().getHosts();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		
-		return true;
-	}
-	
-	private boolean writeConfigXML() {
-		try {
-			SimpleXMLUtil.writeConfigXML(config, this.getApplicationContext());
+		} catch (SAXParseException spE) {
+			config = new JHPConfig();
 			acceptedList = config.getSynchronization().getHosts();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-		
+
+		return true;
+	}
+
+	private boolean writeConfigXML() {
+		try {
+			SimpleXMLUtil.writeConfigXML(config, this.getApplicationContext());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
 		return true;
 	}
 
@@ -141,8 +145,9 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 					e.printStackTrace();
 				}
 			} else {
-				if (wl != null && wl.isHeld())
+				if (wl != null && wl.isHeld()) {
 					wl.release();
+				}
 
 				visibilityToggle.setEnabled(false);
 				myJHPServer.killServer();
@@ -152,11 +157,11 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 			}
 			return true;
 		case R.id.toggleVisibility:
-			// if (!visibilityToggle.isChecked()) {
-			// myJHPServer.stopSolicitation();
-			// } else {
-			// myJHPServer.startSolicitation();
-			// }
+			if (!visibilityToggle.isChecked()) {
+				myJHPServer.stopAdvertising();
+			} else {
+				myJHPServer.startAdvertising();
+			}
 			return true;
 		default:
 			Log.d(this.TAG, "Clicked button has no case.");
@@ -174,20 +179,32 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 
 	@Override
 	public void handleMessage(ENetCommand command, final InetSocketAddress from) {
+		Host fromHost = null;
+		fromHost = new Host();
+		fromHost.setIpAddress(from.getAddress().getHostAddress());
+		
 		switch (command) {
 		case REQ:
 			log("Request received from " + from.getAddress() + ", "
 					+ command.getParam());
-			if (!acceptedList.contains(from)) {
+			fromHost = new Host();
+			fromHost.setIpAddress(from.getAddress().getHostAddress());
+			
+			if (!acceptedList.contains(fromHost)) {
 				showReqAckDialog(from, command);
 			}
 			break;
 		case EST_TCP:
-			if (acceptedList.contains(from)) {
+			if (acceptedList.contains(fromHost)) {
 				log("Creating secure tcp connection.");
 			} else {
 				log("Refused request from " + from.getAddress() + ", "
 						+ command.getParam());
+			}
+			break;
+		case REQ_PAIR:
+			if (acceptedList.contains(fromHost)) {
+				showPairDialog(from, command);
 			}
 			break;
 		default:
@@ -198,11 +215,11 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 	@Override
 	public void handleAction(EActionCommand cmd) {
 		switch (cmd) {
-		case SOLICITATION_LEFT:
+		case ADVERTISEMENT_LEFT:
 			final int timeLeft = (Integer) cmd.getParam();
 			log("Visible for: " + timeLeft + " sec.");
 			break;
-		case SOLICITATION_END:
+		case ADVERTISEMENT_END:
 			log("Visibility disabled.");
 
 			this.runOnUiThread(new Runnable() {
@@ -234,14 +251,62 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
+								myJHPServer.stopAdvertising();
+								
 								myJHPServer.sendMessage(from,
 										ENetCommand.ACK.toString());
-								
+
 								Host host = new Host();
 								host.setIpAddress(from.getAddress().toString());
-								
+								host.setMacAddress(command.getParam());
+
 								if (!acceptedList.contains(host)) {
 									acceptedList.add(host);
+								}
+							}
+						});
+				inputDialog.setNegativeButton(getString(R.string.No),
+						new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								Toast.makeText(
+										getBaseContext(),
+										getString(R.string.toastReqAckDiscarded),
+										Toast.LENGTH_SHORT).show();
+							}
+						});
+				inputDialog.show();
+			}
+		});
+	}
+
+	private void showPairDialog(final InetSocketAddress from,
+			final ENetCommand command) {
+		this.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				String msgReqAckDialog = String.format(
+						getString(R.string.msgPairDialog), command.getParam());
+
+				Builder inputDialog = new AlertDialog.Builder(HPSync.this);
+				inputDialog.setTitle(R.string.titleReqAckDialog);
+				inputDialog.setMessage(msgReqAckDialog);
+				inputDialog.setPositiveButton(getString(R.string.Yes),
+						new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								myJHPServer.sendMessage(from,
+										ENetCommand.ACK_PAIR.toString());
+
+								Host host = new Host();
+								host.setIpAddress(from.getAddress().toString());
+
+								if (acceptedList.contains(host)) {
+									int index = config.getSynchronization().getHosts().indexOf(host);
+									host = config.getSynchronization().getHosts().get(index);
+									host.setCode(command.getParam());
 								}
 							}
 						});
@@ -277,13 +342,17 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 
 	@Override
 	protected void onPause() {
-		if (wl != null && wl.isHeld())
+		if (wl != null && wl.isHeld()) {
 			wl.release();
+		}
 
 		if (myJHPServer != null) {
 			myJHPServer.killServer();
 		}
-		
+
+		visibilityToggle.setEnabled(false);
+		txtSyncState.setText(R.string.txtNoConnection);
+
 		writeConfigXML();
 
 		super.onPause();

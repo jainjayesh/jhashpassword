@@ -26,11 +26,10 @@ import de.janbusch.jhashpassword.net.server.ProcessConnection;
 
 public class JHPClient extends Thread {
 	private static final int SOLICITATION_DELAY = 2;
-	private static final int MAX_SOL_COUNT = 5;
 
 	public static final int CLIENT_PORT_UDP = 4833;
 	public static final int CLIENT_PORT_TCP = 4835;
-	private static final int CLIENT_TIMEOUT = 1000;
+	private static final int CLIENT_TIMEOUT = 500;
 
 	public enum ClientState {
 		LISTEN_ADVERTISEMENT, IDLE, SENDING_SOLICITATION, SHUTTING_DOWN, LISTEN_CONNECTION_UDP, SERVER_LISTEN_CONNECTION_TCP, CLIENT_LISTEN_CONNECTION_TCP, LISTEN_MSG_TCP
@@ -40,23 +39,21 @@ public class JHPClient extends Thread {
 	private ExecutorService executor;
 	private ScheduledExecutorService scheduledExecutor;
 	private DatagramSocket inputSocketUDP;
-	private boolean isServer;
 	private IJHPMsgHandler msgHandler;
 	private InetAddress broadcast;
 	private String macAddress;
 	private String operatingSystem;
-	private int solCount;
 	private SSLServerSocket serverSocketTCP;
 	private SSLSocket clientSocketTCP;
 	private SSLSocket connectedClient;
 	private InputStream inputStream;
 	private OutputStream outputStream;
 
-	public JHPClient(IJHPMsgHandler msgHandler, InetAddress inetAddress,
+	public JHPClient(IJHPMsgHandler msgHandler, InetAddress broadcastAddress,
 			String macAddress, String operatingSystem) throws IOException {
 		this.msgHandler = msgHandler;
 		this.executor = Executors.newSingleThreadExecutor();
-		this.broadcast = inetAddress;
+		this.broadcast = broadcastAddress;
 		this.setName("JHashPassword Client");
 		this.operatingSystem = operatingSystem;
 		this.macAddress = macAddress;
@@ -74,6 +71,8 @@ public class JHPClient extends Thread {
 		inputSocketUDP = new DatagramSocket(CLIENT_PORT_UDP);
 		inputSocketUDP.setSoTimeout(CLIENT_TIMEOUT);
 
+		startSolicitation();
+
 		System.out.println(this.getName() + ": ready!");
 	}
 
@@ -82,13 +81,13 @@ public class JHPClient extends Thread {
 				+ inputSocketUDP.getLocalPort());
 
 		DatagramPacket packet;
-		startSolicitation();
 
 		while (!this.isInterrupted()) {
 			switch (myState) {
 			case LISTEN_CONNECTION_UDP:
 			case SENDING_SOLICITATION:
-				packet = new DatagramPacket(new byte[ENetCommand.PACKET_SIZE], ENetCommand.PACKET_SIZE);
+				packet = new DatagramPacket(new byte[ENetCommand.PACKET_SIZE],
+						ENetCommand.PACKET_SIZE);
 				try {
 					inputSocketUDP.receive(packet);
 					InetSocketAddress receivedFrom = (InetSocketAddress) packet
@@ -122,7 +121,7 @@ public class JHPClient extends Thread {
 			case IDLE:
 			default:
 				try {
-					JHPClient.sleep(100);
+					JHPClient.sleep(50);
 				} catch (InterruptedException e1) {
 					// Interrupted
 				}
@@ -133,7 +132,7 @@ public class JHPClient extends Thread {
 		this.inputSocketUDP.close();
 		System.out.println(this.getName() + ": stopped!");
 	}
-	
+
 	private void handleMessage(String msg, InetSocketAddress receivedFrom) {
 		ENetCommand command = ENetCommand.parse(msg);
 
@@ -142,8 +141,8 @@ public class JHPClient extends Thread {
 			ENetCommand req = ENetCommand.REP_OS;
 			req.setParameter(macAddress + "|" + operatingSystem);
 
-			sendMessage(new InetSocketAddress(broadcast, JHPServer.SERVER_PORT_UDP),
-					req.toString());
+			sendMessage(new InetSocketAddress(broadcast,
+					JHPServer.SERVER_PORT_UDP), req.toString());
 			break;
 		default:
 			msgHandler.handleMessage(command, receivedFrom);
@@ -198,35 +197,23 @@ public class JHPClient extends Thread {
 	public void startSolicitation() {
 		this.scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
 		myState = ClientState.SENDING_SOLICITATION;
-		solCount = 0;
+
 		scheduledExecutor.scheduleWithFixedDelay(new Runnable() {
 			@Override
 			public void run() {
-				if (solCount < MAX_SOL_COUNT) {
+				if (!Thread.interrupted()) {
 					ENetCommand req = ENetCommand.SOLICITATION;
 
 					sendMessage(new InetSocketAddress(broadcast,
 							JHPServer.SERVER_PORT_UDP), req.toString());
-
-					int sec = (MAX_SOL_COUNT - solCount) * SOLICITATION_DELAY;
-					EActionCommand action = EActionCommand.SOLICITATION_LEFT;
-					action.setParameter(sec);
-					msgHandler.handleAction(action);
-
-					System.out.println("Sending solicitation #" + solCount
-							+ "/" + MAX_SOL_COUNT + "...");
-				} else {
-					stopSolicitation();
-					msgHandler.handleAction(EActionCommand.SOLICITATION_END);
-					myState = ClientState.LISTEN_CONNECTION_UDP;
 				}
-				solCount++;
 			}
 		}, 0, SOLICITATION_DELAY, TimeUnit.SECONDS);
 	}
 
 	public void stopSolicitation() {
-		this.scheduledExecutor.shutdown();
+		this.scheduledExecutor.shutdownNow();
+		myState = ClientState.IDLE;
 	}
 
 	public void setState(ClientState state) {

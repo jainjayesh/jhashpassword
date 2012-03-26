@@ -1,7 +1,7 @@
 package de.janbusch.jhashpassword.net.common;
 
 public enum EActionCommand {
-	SOLICITATION_LEFT("SOLICITATION_LEFT"), SOLICITATION_END("SOLICITATION_END"), UNKNOWN("UNKNOWN");
+	ADVERTISEMENT_LEFT("SOLICITATION_LEFT"), ADVERTISEMENT_END("SOLICITATION_END"), UNKNOWN("UNKNOWN");
 
 	private String command;
 	private Object parameter;

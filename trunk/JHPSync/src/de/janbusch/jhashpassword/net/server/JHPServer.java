@@ -10,42 +10,47 @@ import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 
+import de.janbusch.jhashpassword.net.client.JHPClient.ClientState;
+import de.janbusch.jhashpassword.net.common.EActionCommand;
 import de.janbusch.jhashpassword.net.common.ENetCommand;
 import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
 
 public class JHPServer extends Thread {
 	public static final int SERVER_PORT_UDP = 4832;
 	public static final int SERVER_PORT_TCP = 4834;
-	private static final int SERVER_TIMEOUT = 1000;
+	private static final int SERVER_TIMEOUT = 500;
+	private static final int ADVERTISEMENT_TIMEOUT = 100;
 
 	public enum ServerState {
-		LISTEN_SOLICITATION, IDLE, SENDING_SOLICITATION, SHUTTING_DOWN, LISTEN_CONNECTION_UDP, SERVER_LISTEN_CONNECTION_TCP, CLIENT_LISTEN_CONNECTION_TCP, LISTEN_MSG_TCP
+		LISTEN_SOLICITATION, IDLE, SHUTTING_DOWN, LISTEN_CONNECTION_UDP, SERVER_LISTEN_CONNECTION_TCP, LISTEN_MSG_TCP
 	};
 
 	private ServerState myState;
 	private ExecutorService executor;
+	private ScheduledExecutorService scheduledExecutor;
 	private DatagramSocket inputSocketUDP;
 	private IJHPMsgHandler msgHandler;
 	private InetAddress broadcast;
 	private String macAddress;
 	private String operatingSystem;
-	private int solCount;
 	private SSLServerSocket serverSocketTCP;
 	private SSLSocket clientSocketTCP;
 	private SSLSocket connectedClient;
 	private InputStream inputStream;
 	private OutputStream outputStream;
+	private int advertisementTime;
 
 	public JHPServer(IJHPMsgHandler msgHandler, InetAddress inetAddress,
 			String macAddress, String operatingSystem) throws IOException {
 		this.msgHandler = msgHandler;
-		this.executor = Executors.newSingleThreadExecutor();
+		this.executor = Executors.newFixedThreadPool(4);
 		this.broadcast = inetAddress;
 		this.setName("JHashPassword Server");
 		this.operatingSystem = operatingSystem;
@@ -63,8 +68,9 @@ public class JHPServer extends Thread {
 
 		inputSocketUDP = new DatagramSocket(SERVER_PORT_UDP);
 		inputSocketUDP.setSoTimeout(SERVER_TIMEOUT);
-		myState = ServerState.LISTEN_SOLICITATION;
 
+		startAdvertising();
+		
 		System.out.println(this.getName() + ": ready!");
 	}
 
@@ -78,9 +84,9 @@ public class JHPServer extends Thread {
 			switch (myState) {
 			case LISTEN_CONNECTION_UDP:
 			case LISTEN_SOLICITATION:
-			case SENDING_SOLICITATION:
 				packet = new DatagramPacket(new byte[ENetCommand.PACKET_SIZE],
 						ENetCommand.PACKET_SIZE);
+				
 				try {
 					inputSocketUDP.receive(packet);
 					InetSocketAddress receivedFrom = (InetSocketAddress) packet
@@ -126,28 +132,32 @@ public class JHPServer extends Thread {
 		System.out.println(this.getName() + ": stopped!");
 	}
 
-	private void handleMessage(String msg, InetSocketAddress receivedFrom) {
-		ENetCommand command = ENetCommand.parse(msg);
+	private void handleMessage(final String msg, final InetSocketAddress receivedFrom) {
+		executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				ENetCommand command = ENetCommand.parse(msg);
 
-		switch (command) {
-		case REQ_OS:
-			ENetCommand req = ENetCommand.SOLICITATION;
-			req.setParameter(macAddress + "|" + operatingSystem);
+				switch (command) {
+				case REQ_OS:
+					ENetCommand req = ENetCommand.SOLICITATION;
+					req.setParameter(macAddress + "|" + operatingSystem);
 
-			sendMessage(new InetSocketAddress(broadcast, SERVER_PORT_UDP),
-					req.toString());
-			break;
-		case SOLICITATION:
-			System.out.println("Solicitation received!");
-			ENetCommand advertisement = ENetCommand.ADVERTISEMENT;
-					advertisement.setParameter(macAddress + "|"
-					+ operatingSystem);
-			sendMessage(receivedFrom, advertisement.toString());
-			break;
-		default:
-			msgHandler.handleMessage(command, receivedFrom);
-		}
-
+					sendMessage(new InetSocketAddress(broadcast, SERVER_PORT_UDP),
+							req.toString());
+					break;
+				case SOLICITATION:
+					if (myState == ServerState.LISTEN_SOLICITATION) {
+						ENetCommand advertisement = ENetCommand.ADVERTISEMENT;
+						advertisement.setParameter(macAddress + "|" + operatingSystem);
+						sendMessage(receivedFrom, advertisement.toString());
+					}
+					break;
+				default:
+					msgHandler.handleMessage(command, receivedFrom);
+				}
+			}
+		});
 	}
 
 	public void sendMessage(final InetSocketAddress recipient, final String msg) {
@@ -172,6 +182,8 @@ public class JHPServer extends Thread {
 		try {
 			executor.shutdown();
 			executor.awaitTermination(3, TimeUnit.SECONDS);
+			scheduledExecutor.shutdown();
+			scheduledExecutor.awaitTermination(3, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -181,4 +193,32 @@ public class JHPServer extends Thread {
 		this.myState = state;
 	}
 
+	public void startAdvertising() {
+		this.scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+		myState = ServerState.LISTEN_SOLICITATION;
+		advertisementTime = 0;
+
+		scheduledExecutor.scheduleWithFixedDelay(new Runnable() {
+			@Override
+			public void run() {
+				if (advertisementTime < ADVERTISEMENT_TIMEOUT && !Thread.interrupted()) {
+					advertisementTime++;
+
+					int sec = (ADVERTISEMENT_TIMEOUT - advertisementTime);
+					EActionCommand cmd = EActionCommand.ADVERTISEMENT_LEFT;
+					cmd.setParameter(sec);
+					msgHandler.handleAction(cmd);
+				} else {
+					stopAdvertising();
+					EActionCommand cmd = EActionCommand.ADVERTISEMENT_END;
+					msgHandler.handleAction(cmd);
+				}
+			}
+		}, 0, 1, TimeUnit.SECONDS);
+	}
+
+	public void stopAdvertising() {
+		myState = ServerState.LISTEN_CONNECTION_UDP;
+		this.scheduledExecutor.shutdownNow();
+	}
 }
