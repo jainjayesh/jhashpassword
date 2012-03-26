@@ -1,8 +1,10 @@
 package de.janbusch.jhashpassword.net.common;
 
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.Enumeration;
 
 public class Util {
 	public static String getMacAddress(InetAddress address) {
@@ -44,6 +46,26 @@ public class Util {
 
 		return System.getProperty(nameOS) + "/" + System.getProperty(versionOS)
 				+ "/" + System.getProperty(architectureOS);
+	}
+
+	public static InetAddress getBroadcastAddress(InetAddress localHost)
+			throws SocketException {
+		Enumeration<NetworkInterface> interfaces = NetworkInterface
+				.getNetworkInterfaces();
+		while (interfaces.hasMoreElements()) {
+			NetworkInterface networkInterface = interfaces.nextElement();
+			if (networkInterface.isLoopback()) {
+				continue; // Don't want to broadcast to the loopback interface
+			}
+			for (InterfaceAddress interfaceAddress : networkInterface
+					.getInterfaceAddresses()) {
+				InetAddress broadcast = interfaceAddress.getBroadcast();
+				if (broadcast != null) {
+					return broadcast;
+				}
+			}
+		}
+		return null;
 	}
 
 }

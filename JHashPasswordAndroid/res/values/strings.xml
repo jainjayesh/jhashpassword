@@ -135,6 +135,7 @@
  <string name="settingsSaved">Saved settings!</string>
  <string name="settingsSavingDiscarded">Saving settings has been rejected!</string>
  <string name="msgReqAckDialog">Do you want to accept the incoming request from %1$s?</string>
+ <string name="msgPairDialog">Do both devices show this code: %1$s?</string>
  <string name="pressbacktwice">Please double-tap back to return.</string>
  
  <!-- Help -->

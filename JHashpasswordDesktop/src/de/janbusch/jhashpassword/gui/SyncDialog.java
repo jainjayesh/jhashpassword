@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -65,7 +66,8 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
 		try {
 			availablePartners = new HashMap<String, Partner>();
-			myClient = new JHPClient(SyncDialog.this, null,
+			myClient = new JHPClient(SyncDialog.this,
+					Util.getBroadcastAddress(InetAddress.getLocalHost()),
 					Util.getMacAddress(InetAddress.getLocalHost()),
 					Util.getOperatingSystem());
 			myClient.start();
@@ -221,10 +223,10 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 					Button toggle = (Button) sender;
 
 					if (toggle.getSelection()) {
-						myClient.setState(ClientState.LISTEN_ADVERTISEMENT);
+						myClient.startSolicitation();
 						progressBar.setState(SWT.NORMAL);
 					} else {
-						myClient.setState(ClientState.IDLE);
+						myClient.stopSolicitation();
 						progressBar.setState(SWT.PAUSED);
 					}
 				}
@@ -235,15 +237,15 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		btnAutorefresh.setSelection(true);
 		btnAutorefresh.setText("Autorefresh");
 
-		Button btnconnect = new Button(grpControls_1, SWT.NONE);
-		btnconnect.addSelectionListener(new SelectionAdapter() {
+		Button btnConnect = new Button(grpControls_1, SWT.NONE);
+		btnConnect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				int index = tblAvailableClients.getSelectionIndex();
 				if (index == -1)
 					return;
 
-				myClient.setState(ClientState.LISTEN_CONNECTION_UDP);
+				myClient.startSolicitation();
 				progressBar.setState(SWT.PAUSED);
 				btnAutorefresh.setSelection(false);
 
@@ -260,9 +262,9 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				myClient.sendMessage(p[index].getAddress(), command.toString());
 			}
 		});
-		btnconnect.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
+		btnConnect.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
 				1, 1));
-		btnconnect.setText("&Connect");
+		btnConnect.setText("&Connect");
 
 		TabItem tbtmSynchronisation = new TabItem(tabFolder, SWT.NONE);
 		tbtmSynchronisation.setText("Synchronisation");
@@ -305,15 +307,32 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				+ " with content: " + command);
 
 		switch (command) {
-		case REQ:
-			System.out.println("Request received from " + command.getParam());
-			break;
 		case ACK:
 			System.out.println("Ack received from " + from.getAddress());
-			myClient.sendMessage(from, ENetCommand.EST_TCP.toString());
+			ENetCommand pair = ENetCommand.REQ_PAIR;
+
+			String pariCode = "";
+			for (int i = 0; i < 4; i++) {
+				pariCode += ((int)(Math.random() * 9)) + "";
+			}
+			final String finalPariCode = pariCode;
+			
+			pair.setParameter(finalPariCode);
+
+			shlSynchronisation.getDisplay().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					MessageBox mB = new MessageBox(shlSynchronisation);
+					mB.setText("Pairing");
+					mB.setMessage("Paringcode: " + finalPariCode
+							+ "?");
+					mB.open();
+				}
+			});
+
+			myClient.sendMessage(from, pair.toString());
 			break;
 		case ADVERTISEMENT:
-			System.out.println("Advertisement received from " + from.getAddress());
 			String[] params = command.getParam().split("[|]");
 			Partner p = new Partner(from, params[0], params[1]);
 
