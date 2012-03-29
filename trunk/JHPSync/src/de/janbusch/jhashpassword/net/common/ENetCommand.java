@@ -3,7 +3,7 @@ package de.janbusch.jhashpassword.net.common;
 public enum ENetCommand {
 	SOLICITATION("SOLICITATION"), ADVERTISEMENT("ADVERTISEMENT"), REQ("REQ"), ACK(
 			"ACK"), PAS_REQ("PAS_REQ"), PAS_REP("PAS_REP"), UNKNOWN("UNKNOWN"), REQ_XML(
-			"REQ_XML"), EST_TCP("EST_TCP"), REQ_OS("REQ_OS"), REP_OS("REP_OS"), REQ_PAIR("REQ_PAIR"), ACK_PAIR("ACK_PAIR");
+			"REQ_XML"), EST_TCP("EST_TCP"), REQ_OS("REQ_OS"), REP_OS("REP_OS"), REQ_PAIR("REQ_PAIR"), ACK_PAIR("ACK_PAIR"), REF("REF");
 
 	public static int PACKET_SIZE = 512;
 	private String command;

@@ -8,6 +8,7 @@ import java.nio.channels.IllegalSelectorException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,6 +40,7 @@ import de.janbusch.jhashpassword.net.common.Util;
 
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 
 public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
@@ -53,6 +55,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 	private Label imgMyOS;
 	private ProgressBar progressBar;
 	private Button btnAutorefresh;
+	private MessageDialog connectionMsg;
 
 	/**
 	 * Create the dialog.
@@ -187,6 +190,14 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				true, true, 2, 1));
 		tblAvailableClients.setHeaderVisible(true);
 		tblAvailableClients.setLinesVisible(true);
+		tblAvailableClients.addSelectionListener(new SelectionListener() {
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				sendConnectionReq();
+			}
+
+			public void widgetSelected(SelectionEvent arg0) {
+			}
+		});
 
 		tblclmnIpaddress = new TableColumn(tblAvailableClients, SWT.NONE);
 		tblclmnIpaddress.setWidth(176);
@@ -241,25 +252,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		btnConnect.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				int index = tblAvailableClients.getSelectionIndex();
-				if (index == -1)
-					return;
-
-				myClient.startSolicitation();
-				progressBar.setState(SWT.PAUSED);
-				btnAutorefresh.setSelection(false);
-
-				ENetCommand command = ENetCommand.REQ;
-				try {
-					command.setParameter(Util.getMacAddress(InetAddress
-							.getLocalHost()));
-				} catch (UnknownHostException e) {
-					e.printStackTrace();
-				}
-				Partner[] p = availablePartners.values().toArray(
-						new Partner[availablePartners.size()]);
-
-				myClient.sendMessage(p[index].getAddress(), command.toString());
+				sendConnectionReq();
 			}
 		});
 		btnConnect.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false,
@@ -313,24 +306,19 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
 			String pariCode = "";
 			for (int i = 0; i < 4; i++) {
-				pariCode += ((int)(Math.random() * 9)) + "";
+				pariCode += ((int) (Math.random() * 9)) + "";
 			}
-			final String finalPariCode = pariCode;
-			
-			pair.setParameter(finalPariCode);
 
-			shlSynchronisation.getDisplay().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					MessageBox mB = new MessageBox(shlSynchronisation);
-					mB.setText("Pairing");
-					mB.setMessage("Paringcode: " + finalPariCode
-							+ "?");
-					mB.open();
-				}
-			});
+			pair.setParameter(pariCode);
+
+			closeMessageDialog(connectionMsg);
+			messageBox("Pairing", "Paringcode: " + pariCode + "?");
 
 			myClient.sendMessage(from, pair.toString());
+			break;
+		case REF:
+			closeMessageDialog(connectionMsg);
+			messageBox("Connection", "The other device refused the request.");
 			break;
 		case ADVERTISEMENT:
 			String[] params = command.getParam().split("[|]");
@@ -347,6 +335,41 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		updateUI();
 	}
 
+	private void messageBox(final String text, final String message) {
+		shlSynchronisation.getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				MessageBox mB = new MessageBox(shlSynchronisation);
+				mB.setText(text);
+				mB.setMessage(message);
+				mB.open();
+			}
+		});
+	}
+
+	private MessageDialog messageDialog(String text, String message, int img,
+			String[] buttonLabels, int defIndex) {
+		final MessageDialog mD = new MessageDialog(shlSynchronisation, text,
+				null, message, img, buttonLabels, defIndex);
+		shlSynchronisation.getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				mD.open();
+			}
+		});
+		return mD;
+	}
+
+	private int closeMessageDialog(final MessageDialog mD) {
+		shlSynchronisation.getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				mD.close();
+			}
+		});
+		return mD.getReturnCode();
+	}
+
 	private void updateUI() {
 		shlSynchronisation.getDisplay().asyncExec(new Runnable() {
 			@Override
@@ -355,6 +378,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 			}
 
 			private void rebuildTable() {
+				int index = tblAvailableClients.getSelectionIndex();
 				Partner[] addresses = availablePartners.values().toArray(
 						new Partner[availablePartners.values().size()]);
 				final TableItem[] items = new TableItem[availablePartners
@@ -369,8 +393,33 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 							addresses[i].getMacAddress(),
 							addresses[i].getOperatingSystem() });
 				}
+				tblAvailableClients.setSelection(index);
 			}
 		});
+	}
+
+	private void sendConnectionReq() {
+		int index = tblAvailableClients.getSelectionIndex();
+		if (index == -1)
+			return;
+
+		connectionMsg = messageDialog("Connecting", "Connecting to client...",
+				MessageDialog.INFORMATION, new String[] { "Cancel" }, 0);
+
+		myClient.startSolicitation();
+		progressBar.setState(SWT.PAUSED);
+		btnAutorefresh.setSelection(false);
+
+		ENetCommand command = ENetCommand.REQ;
+		try {
+			command.setParameter(Util.getMacAddress(InetAddress.getLocalHost()));
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		Partner[] p = availablePartners.values().toArray(
+				new Partner[availablePartners.size()]);
+
+		myClient.sendMessage(p[index].getAddress(), command.toString());
 	}
 
 	@Override

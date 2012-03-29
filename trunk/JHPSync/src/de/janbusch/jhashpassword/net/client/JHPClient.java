@@ -8,8 +8,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -31,12 +35,16 @@ public class JHPClient extends Thread {
 	public static final int CLIENT_PORT_TCP = 4835;
 	private static final int CLIENT_TIMEOUT = 500;
 
+	private static final int PARALLELISM_FACTOR = 2;
+
 	public enum ClientState {
 		LISTEN_ADVERTISEMENT, IDLE, SENDING_SOLICITATION, SHUTTING_DOWN, LISTEN_CONNECTION_UDP, SERVER_LISTEN_CONNECTION_TCP, CLIENT_LISTEN_CONNECTION_TCP, LISTEN_MSG_TCP
 	};
 
 	private ClientState myState;
+	private Queue<Runnable> taskQueue;
 	private ExecutorService executor;
+	private ExecutorService taskQueueExecutor;
 	private ScheduledExecutorService scheduledExecutor;
 	private DatagramSocket inputSocketUDP;
 	private IJHPMsgHandler msgHandler;
@@ -53,6 +61,9 @@ public class JHPClient extends Thread {
 			String macAddress, String operatingSystem) throws IOException {
 		this.msgHandler = msgHandler;
 		this.executor = Executors.newSingleThreadExecutor();
+		this.taskQueueExecutor = Executors.newFixedThreadPool(Runtime
+				.getRuntime().availableProcessors() * PARALLELISM_FACTOR);
+		this.taskQueue = new LinkedList<Runnable>();
 		this.broadcast = broadcastAddress;
 		this.setName("JHashPassword Client");
 		this.operatingSystem = operatingSystem;
@@ -70,6 +81,25 @@ public class JHPClient extends Thread {
 
 		inputSocketUDP = new DatagramSocket(CLIENT_PORT_UDP);
 		inputSocketUDP.setSoTimeout(CLIENT_TIMEOUT);
+
+		executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				while (!Thread.interrupted()) {
+					try {
+						taskQueueExecutor.execute(taskQueue.remove());
+					} catch (NoSuchElementException ne) {
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException ie) {
+							// STOP
+						}
+					} catch (RejectedExecutionException re) {
+						// STOP
+					}
+				}
+			}
+		});
 
 		startSolicitation();
 
@@ -117,6 +147,10 @@ public class JHPClient extends Thread {
 				break;
 			case SHUTTING_DOWN:
 				this.interrupt();
+				taskQueue.clear();
+				executor.shutdown();
+				taskQueueExecutor.shutdown();
+				scheduledExecutor.shutdown();
 				break;
 			case IDLE:
 			default:
@@ -128,30 +162,45 @@ public class JHPClient extends Thread {
 				break;
 			}
 		}
-
-		this.inputSocketUDP.close();
+		
+		try {
+			this.inputSocketUDP.close();
+			this.serverSocketTCP.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		System.out.println(this.getName() + ": stopped!");
 	}
 
-	private void handleMessage(String msg, InetSocketAddress receivedFrom) {
-		ENetCommand command = ENetCommand.parse(msg);
+	private void handleMessage(final String msg,
+			final InetSocketAddress receivedFrom) {
+		taskQueue.add(new Runnable() {
+			@Override
+			public void run() {
+				final ENetCommand command = ENetCommand.parse(msg);
 
-		switch (command) {
-		case REQ_OS:
-			ENetCommand req = ENetCommand.REP_OS;
-			req.setParameter(macAddress + "|" + operatingSystem);
+				switch (command) {
+				case REQ_OS:
+					ENetCommand req = ENetCommand.REP_OS;
+					req.setParameter(macAddress + "|" + operatingSystem);
 
-			sendMessage(new InetSocketAddress(broadcast,
-					JHPServer.SERVER_PORT_UDP), req.toString());
-			break;
-		default:
-			msgHandler.handleMessage(command, receivedFrom);
-		}
-
+					sendMessage(new InetSocketAddress(broadcast,
+							JHPServer.SERVER_PORT_UDP), req.toString());
+					break;
+				default:
+					taskQueue.add(new Runnable() {
+						@Override
+						public void run() {
+							msgHandler.handleMessage(command, receivedFrom);
+						}
+					});
+				}
+			}
+		});
 	}
 
 	public void sendMessage(final InetSocketAddress recipient, final String msg) {
-		executor.execute(new Runnable() {
+		taskQueue.add(new Runnable() {
 			@Override
 			public void run() {
 				DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg
@@ -180,18 +229,6 @@ public class JHPClient extends Thread {
 
 	public void killServer() {
 		myState = ClientState.SHUTTING_DOWN;
-
-		try {
-			executor.shutdown();
-			executor.awaitTermination(3, TimeUnit.SECONDS);
-
-			if (scheduledExecutor != null) {
-				scheduledExecutor.shutdown();
-				scheduledExecutor.awaitTermination(3, TimeUnit.SECONDS);
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void startSolicitation() {

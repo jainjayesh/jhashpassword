@@ -47,7 +47,7 @@ public class Host implements Serializable {
 	}
 
 	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
+		this.ipAddress = ipAddress.replaceAll("[^0-9.]", "");
 	}
 
 	public String getMacAddress() {
@@ -55,7 +55,7 @@ public class Host implements Serializable {
 	}
 
 	public void setMacAddress(String macAddress) {
-		this.macAddress = macAddress;
+		this.macAddress = macAddress.replaceAll("[^0-9a-zA-Z:]", "");
 	}
 
 	public String getCode() {
