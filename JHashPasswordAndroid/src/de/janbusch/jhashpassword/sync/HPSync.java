@@ -236,6 +236,9 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 
 	private void showReqAckDialog(final InetSocketAddress from,
 			final ENetCommand command) {
+		myJHPServer.stopAdvertising();
+		this.handleAction(EActionCommand.ADVERTISEMENT_END);
+
 		this.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -251,11 +254,6 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
-								myJHPServer.stopAdvertising();
-								
-								myJHPServer.sendMessage(from,
-										ENetCommand.ACK.toString());
-
 								Host host = new Host();
 								host.setIpAddress(from.getAddress().toString());
 								host.setMacAddress(command.getParam());
@@ -263,6 +261,9 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 								if (!acceptedList.contains(host)) {
 									acceptedList.add(host);
 								}
+								
+								myJHPServer.sendMessage(from,
+										ENetCommand.ACK.toString());
 							}
 						});
 				inputDialog.setNegativeButton(getString(R.string.No),
@@ -274,6 +275,8 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 										getBaseContext(),
 										getString(R.string.toastReqAckDiscarded),
 										Toast.LENGTH_SHORT).show();
+								myJHPServer.sendMessage(from,
+										ENetCommand.REF.toString());
 							}
 						});
 				inputDialog.show();
@@ -307,6 +310,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 									int index = config.getSynchronization().getHosts().indexOf(host);
 									host = config.getSynchronization().getHosts().get(index);
 									host.setCode(command.getParam());
+									writeConfigXML();
 								}
 							}
 						});
