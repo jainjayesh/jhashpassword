@@ -23,7 +23,10 @@
 
 	<target name="win_x86">
 		<echo>Building JHP for Windows x86</echo>
-
+		
+		<delete dir="${windows}" />
+		<mkdir dir="${windows}" />
+		
 		<jar destfile="${windows}/JHashPassword.jar" basedir="${bin}">
 			<manifest>
 				<attribute name="Main-Class" value="de.janbusch.jhashpassword.gui.MainApplication" />
@@ -65,6 +68,9 @@
 	<target name="win_x64">
 			<echo>Building JHP for Windows x64</echo>
 
+			<delete dir="${windows_x64}" />
+			<mkdir dir="${windows_x64}" />
+		
 			<jar destfile="${windows_x64}/JHashPassword.jar" basedir="${bin}">
 				<manifest>
 					<attribute name="Main-Class" value="de.janbusch.jhashpassword.gui.MainApplication" />
@@ -106,6 +112,9 @@
 	<target name="lin_x86">
 		<echo>Building JHP for Linux x86</echo>
 
+		<delete dir="${linux}" />
+		<mkdir dir="${linux}" />
+		
 		<jar destfile="${linux}/JHashPassword.jar" basedir="${bin}">
 			<manifest>
 				<attribute name="Main-Class" value="de.janbusch.jhashpassword.gui.MainApplication" />
@@ -148,6 +157,9 @@
 	<target name="lin_x64">
 			<echo>Building JHP for Linux x64</echo>
 
+		<delete dir="${linux_x64}" />
+		<mkdir dir="${linux_x64}" />
+			
 			<jar destfile="${linux_x64}/JHashPassword.jar" basedir="${bin}">
 				<manifest>
 					<attribute name="Main-Class" value="de.janbusch.jhashpassword.gui.MainApplication" />
