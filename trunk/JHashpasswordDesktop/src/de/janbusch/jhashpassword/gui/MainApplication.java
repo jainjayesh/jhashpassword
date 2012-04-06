@@ -105,7 +105,7 @@ public class MainApplication {
 	 * Open the window.
 	 */
 	public void open() {
-		Display display = Display.getDefault();
+		final Display display = Display.getDefault();
 		createContents();
 		loadXMLFile();
 		timer = new Timer();
@@ -126,7 +126,8 @@ public class MainApplication {
 				if (btnSave.isEnabled()) {
 					saveSettings();
 				}
-//				saveXMLFile();
+				System.exit(0);
+				// saveXMLFile();
 			}
 		});
 
@@ -305,7 +306,8 @@ public class MainApplication {
 			new Label(grpHome, SWT.NONE);
 			{
 				hostCombo = new Combo(grpHome, SWT.READ_ONLY);
-				hostCombo.setToolTipText(Messages.MainApplication_hostCombo_toolTipText);
+				hostCombo
+						.setToolTipText(Messages.MainApplication_hostCombo_toolTipText);
 				hostCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 						true, false, 2, 1));
 				hostCombo.addSelectionListener(new SelectionAdapter() {
@@ -401,7 +403,8 @@ public class MainApplication {
 			new Label(grpHome, SWT.NONE);
 			{
 				loginCombo = new Combo(grpHome, SWT.READ_ONLY);
-				loginCombo.setToolTipText(Messages.MainApplication_loginCombo_toolTipText);
+				loginCombo
+						.setToolTipText(Messages.MainApplication_loginCombo_toolTipText);
 				loginCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 						true, false, 2, 1));
 				loginCombo.addSelectionListener(new SelectionAdapter() {
@@ -579,7 +582,8 @@ public class MainApplication {
 				composite.setLayout(new GridLayout(2, false));
 				{
 					btnGeneratePassword = new Button(composite, SWT.NONE);
-					btnGeneratePassword.setToolTipText(Messages.MainApplication_btnGeneratePassword_toolTipText);
+					btnGeneratePassword
+							.setToolTipText(Messages.MainApplication_btnGeneratePassword_toolTipText);
 					btnGeneratePassword.setLayoutData(new GridData(SWT.FILL,
 							SWT.CENTER, true, false, 2, 1));
 					btnGeneratePassword
@@ -627,7 +631,8 @@ public class MainApplication {
 				}
 				{
 					btnShowClipboard = new Button(composite, SWT.NONE);
-					btnShowClipboard.setToolTipText(Messages.MainApplication_btnShowClipboard_toolTipText);
+					btnShowClipboard
+							.setToolTipText(Messages.MainApplication_btnShowClipboard_toolTipText);
 					btnShowClipboard.setLayoutData(new GridData(SWT.FILL,
 							SWT.CENTER, true, false, 1, 1));
 					btnShowClipboard
@@ -648,7 +653,8 @@ public class MainApplication {
 				}
 				{
 					Button btnShowQRcode = new Button(composite, SWT.NONE);
-					btnShowQRcode.setToolTipText(Messages.MainApplication_btnShowQRcode_toolTipText);
+					btnShowQRcode
+							.setToolTipText(Messages.MainApplication_btnShowQRcode_toolTipText);
 					btnShowQRcode.setLayoutData(new GridData(SWT.FILL,
 							SWT.CENTER, true, false, 1, 1));
 					btnShowQRcode.addSelectionListener(new SelectionAdapter() {
@@ -799,7 +805,8 @@ public class MainApplication {
 			cacheCombo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 					false, 2, 1));
 			cacheCombo.setVisibleItemCount(3);
-			cacheCombo.setToolTipText(Messages.MainApplication_cacheCombo_toolTipText_1); //$NON-NLS-1$
+			cacheCombo
+					.setToolTipText(Messages.MainApplication_cacheCombo_toolTipText_1); //$NON-NLS-1$
 			cacheCombo.setItems(new String[] { Messages.MainApplication_21,
 					Messages.MainApplication_22, Messages.MainApplication_23 });
 			cacheCombo.select(1);
@@ -876,7 +883,7 @@ public class MainApplication {
 						default:
 							break;
 						}
-//						saveXMLFile();
+						// saveXMLFile();
 						System.exit(0);
 					}
 				});
