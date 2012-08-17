@@ -65,8 +65,8 @@ public class Settings extends Activity {
 				getString(R.string.optmen_SettingsXMLDesc)));
 		xmlSettings.add(createItem(getString(R.string.optmen_SettingsIE),
 				getString(R.string.optmen_SettingsIEDesc)));
-		xmlSettings.add(createItem(getString(R.string.optmen_SettingsSync),
-				getString(R.string.optmen_SettingsSyncDesc)));
+//		xmlSettings.add(createItem(getString(R.string.optmen_SettingsSync),
+//				getString(R.string.optmen_SettingsSyncDesc)));
 
 		List<Map<String, ?>> programmInfo = new LinkedList<Map<String, ?>>();
 		programmInfo.add(createItem(getString(R.string.app_name) + " v"
