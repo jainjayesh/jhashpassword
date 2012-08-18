@@ -7,11 +7,6 @@
         android:showAsAction="ifRoom|withText"
         android:title="@string/optmen_Settings"/>
     <item
-        android:id="@+id/help"
-        android:icon="@android:drawable/ic_menu_help"
-        android:showAsAction="ifRoom"
-        android:title="@string/optmen_Help"/>
-    <item
         android:id="@+id/clearclipb"
         android:icon="@android:drawable/ic_menu_delete"
         android:showAsAction="ifRoom|withText"
@@ -22,15 +17,20 @@
         android:showAsAction="ifRoom|withText"
         android:title="@string/btnReadQRCode"/>
     <item
-        android:id="@+id/goPro"
-        android:icon="@drawable/paypal_logo"
-        android:showAsAction="ifRoom"
-        android:title="@string/btnDonate"/>
+        android:id="@+id/help"
+        android:icon="@android:drawable/ic_menu_help"
+        android:showAsAction="ifRoom|withText"
+        android:title="@string/optmen_Help"/>
     <item
         android:id="@+id/aboutjhp"
         android:icon="@drawable/icon_50px"
         android:showAsAction="ifRoom"
         android:title="@string/optmen_Aboutjhp"/>
+    <item
+        android:id="@+id/goPro"
+        android:icon="@drawable/paypal_logo"
+        android:showAsAction="ifRoom"
+        android:title="@string/btnDonate"/>
     <item
         android:id="@+id/exit"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
