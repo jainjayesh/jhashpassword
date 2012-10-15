@@ -837,7 +837,7 @@ public class MainApplication {
 				btnSync.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						new SyncDialog(shlJhashpassword, SWT.DIALOG_TRIM)
+						new RMISyncDialog(shlJhashpassword, SWT.DIALOG_TRIM)
 								.open();
 					}
 				});
