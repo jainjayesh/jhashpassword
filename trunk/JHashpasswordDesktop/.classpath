@@ -4,6 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JHPSimpleXML"/>
 	<classpathentry kind="lib" path="/JHPSimpleXML/lib/simple-xml-2.4.1.jar"/>
+	<classpathentry kind="lib" path="libs/swt-4.2.1-win32-x86.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JHPCore"/>
 	<classpathentry kind="lib" path="libs/org.eclipse.core.commands_3.5.0.I20090525-2000.jar"/>
 	<classpathentry kind="lib" path="libs/org.eclipse.core.runtime_3.5.0.v20090525.jar"/>
@@ -19,6 +20,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/JHPSync"/>
 	<classpathentry kind="lib" path="libs/com.google.zxing.core.jar"/>
 	<classpathentry kind="lib" path="libs/com.google.zxing.javase.jar"/>
-	<classpathentry kind="lib" path="libs/swt-3.7.2-win32-win32-x86.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
