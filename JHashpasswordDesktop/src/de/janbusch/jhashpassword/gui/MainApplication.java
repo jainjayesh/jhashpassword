@@ -3,7 +3,6 @@ package de.janbusch.jhashpassword.gui;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Timer;
@@ -45,7 +44,6 @@ import com.swtdesigner.SWTResourceManager;
 import de.janbusch.hashpassword.core.CoreInformation;
 import de.janbusch.hashpassword.core.EHashType;
 import de.janbusch.hashpassword.core.HashUtil;
-import de.janbusch.jhashpassword.gui.MainApplication.ClipboardTimerTask;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
 import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
 import de.janbusch.jhashpassword.xml.simple.data.Host;
@@ -63,7 +61,7 @@ public class MainApplication {
 	private static final String HAS_CHANGED = "hasChanged"; //$NON-NLS-1$
 	public static final String APPLICATION_TITLE = "JHashPassword"; //$NON-NLS-1$
 	public static final String APPLICATION_VERSION = "2.0.0"; //$NON-NLS-1$
-	private static final String XML_PATH = CoreInformation.HASH_PASSWORD_XML;
+//	private static final String XML_PATH = CoreInformation.HASH_PASSWORD_XML;
 	private static final int TIMEOUT = 1000 * 60;
 	protected Shell shlJhashpassword;
 	private HashPassword hashPassword;
@@ -281,7 +279,7 @@ public class MainApplication {
 	 */
 	protected void createContents() {
 		shlJhashpassword = new Shell(SWT.CLOSE | SWT.TITLE | SWT.MIN);
-		shlJhashpassword.setSize(585, 400);
+		shlJhashpassword.setSize(585, 383);
 		shlJhashpassword
 				.setImage(SWTResourceManager
 						.getImage(MainApplication.class,
@@ -293,7 +291,7 @@ public class MainApplication {
 			grpHome.setLayout(new GridLayout(5, false));
 			GridData gd_grpHome = new GridData(SWT.FILL, SWT.FILL, true, true,
 					1, 1);
-			gd_grpHome.widthHint = 217;
+			gd_grpHome.widthHint = 264;
 			grpHome.setLayoutData(gd_grpHome);
 			grpHome.setText(Messages.MainApplication_grpHome_text);
 			{
@@ -610,9 +608,6 @@ public class MainApplication {
 
 									ClipBoardUtil.addToClipboard(password);
 
-									txtPassphrase.setText(""); //$NON-NLS-1$
-									txtPassphraseR.setText(""); //$NON-NLS-1$
-
 									switch (cacheCombo.getSelectionIndex()) {
 									case 1:
 										if (timerTask != null) {
@@ -837,7 +832,7 @@ public class MainApplication {
 				btnSync.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						new RMISyncDialog(shlJhashpassword, SWT.DIALOG_TRIM)
+						new SyncDialog(shlJhashpassword, SWT.DIALOG_TRIM)
 								.open();
 					}
 				});

@@ -1,5 +1,6 @@
 package de.janbusch.jhashpassword.gui;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -9,7 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -28,19 +34,24 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import de.janbusch.jhashpassword.net.client.JHPClient;
-import de.janbusch.jhashpassword.net.client.JHPClient.ClientState;
 import de.janbusch.jhashpassword.net.common.EActionCommand;
 import de.janbusch.jhashpassword.net.common.ENetCommand;
 import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.common.Partner;
+import de.janbusch.jhashpassword.net.common.SecureMessage;
+import de.janbusch.jhashpassword.net.common.SecureMessage.MessageType;
 import de.janbusch.jhashpassword.net.common.Util;
-
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
+import de.janbusch.jhashpassword.net.server.JHPServer;
+import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
+import de.janbusch.jhashpassword.xml.simple.data.HashPassword;
+import de.janbusch.jhashpassword.xml.simple.data.Host;
+import de.janbusch.jhashpassword.xml.simple.data.Hosts;
+import de.janbusch.jhashpassword.xml.simple.data.LoginName;
 
 public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
@@ -55,7 +66,14 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 	private Label imgMyOS;
 	private ProgressBar progressBar;
 	private Button btnAutorefresh;
-	private MessageDialog connectionMsg;
+	private MessageDialog messageDialog;
+	private MessageBox mB;
+	private TabItem tbtmConnection;
+	private TabItem tbtmSynchronisation;
+	private TabFolder tabFolder;
+	private Tree treeLocal;
+	private Tree treeRemote;
+	private HashPassword remoteHashPassword;
 
 	/**
 	 * Create the dialog.
@@ -167,11 +185,11 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		group.setLayout(new GridLayout(1, false));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 
-		TabFolder tabFolder = new TabFolder(group, SWT.NONE);
+		tabFolder = new TabFolder(group, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1,
 				1));
 
-		TabItem tbtmConnection = new TabItem(tabFolder, SWT.NONE);
+		tbtmConnection = new TabItem(tabFolder, SWT.NONE);
 		tbtmConnection.setText("Connection");
 
 		Composite composite_1 = new Composite(tabFolder, SWT.NONE);
@@ -259,7 +277,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				1, 1));
 		btnConnect.setText("&Connect");
 
-		TabItem tbtmSynchronisation = new TabItem(tabFolder, SWT.NONE);
+		tbtmSynchronisation = new TabItem(tabFolder, SWT.NONE);
 		tbtmSynchronisation.setText("Synchronisation");
 
 		Composite composite = new Composite(tabFolder, SWT.NONE);
@@ -268,19 +286,50 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
 		Group grpYourSettings = new Group(composite, SWT.NONE);
 		grpYourSettings.setText("Your Settings");
+		grpYourSettings.setLayout(new FillLayout(SWT.HORIZONTAL));
 		grpYourSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
 		grpYourSettings.setSize(332, 196);
 
+		TreeViewer treeViewer = new TreeViewer(grpYourSettings, SWT.BORDER);
+		treeLocal = treeViewer.getTree();
+
 		Group grpControls = new Group(composite, SWT.NONE);
 		grpControls.setText("Controls");
-		grpControls.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true,
+		grpControls.setLayout(new FillLayout(SWT.VERTICAL));
+		grpControls.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true,
 				1, 1));
+
+		Button btnLoadReset = new Button(grpControls, SWT.NONE);
+		btnLoadReset.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				LoadLocalTree();
+				LoadRemoteTree();
+			}
+		});
+		btnLoadReset.setText("Load/Reset");
+
+		Button btnSingleLR = new Button(grpControls, SWT.NONE);
+		btnSingleLR.setText(">");
+
+		Button btnSingleRL = new Button(grpControls, SWT.NONE);
+		btnSingleRL.setText("<");
+
+		Button btnAllLR = new Button(grpControls, SWT.NONE);
+		btnAllLR.setText(">>");
+
+		Button btnAllRL = new Button(grpControls, SWT.NONE);
+		btnAllRL.setText("<<");
 
 		Group grpRemoteSettings = new Group(composite, SWT.NONE);
 		grpRemoteSettings.setText("Remote Settings");
+		grpRemoteSettings.setLayout(new FillLayout(SWT.HORIZONTAL));
 		grpRemoteSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
+
+		TreeViewer treeViewer_1 = new TreeViewer(grpRemoteSettings, SWT.BORDER);
+		treeRemote = treeViewer_1.getTree();
 
 		String os = Util.getOperatingSystem();
 
@@ -293,8 +342,48 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		}
 	}
 
+	protected void LoadRemoteTree() {
+	}
+
+	protected void LoadLocalTree() {
+		try {
+			HashPassword hashPassword = SimpleXMLUtil.getXML();
+
+			BuildTree(hashPassword, treeLocal);
+		} catch (Exception e1) {
+			MessageBox messageBox = new MessageBox(shlSynchronisation,
+					SWT.ICON_ERROR | SWT.OK);
+			messageBox.setText("JHashPassword"); //$NON-NLS-1$
+			messageBox.setMessage("Could not load XML-File");
+			messageBox.open();
+		}
+
+	}
+
+	private void BuildTree(HashPassword hashPassword, Tree tree) {
+		tree.clearAll(true);
+
+		for (Host host : hashPassword.getHosts().getHost()) {
+			TreeItem itemHost = new TreeItem(tree, 0);
+			itemHost.setText(host.getName());
+			for (LoginName login : host.getLoginNames().getLoginName()) {
+				TreeItem itemLogin = new TreeItem(itemHost, 0);
+				itemLogin.setText(login.getName());
+
+				TreeItem itemHashType = new TreeItem(itemLogin, 0);
+				itemHashType.setText(login.getHashType());
+
+				TreeItem itemCH = new TreeItem(itemLogin, 0);
+				itemCH.setText(login.getCharset());
+
+				TreeItem itemPWLength = new TreeItem(itemLogin, 0);
+				itemPWLength.setText(login.getPasswordLength());
+			}
+		}
+	}
+
 	@Override
-	public void handleMessage(ENetCommand command, InetSocketAddress from) {
+	public void handleMessage(ENetCommand command, final InetSocketAddress from) {
 
 		System.out.println("Received msg from " + from.getAddress()
 				+ " with content: " + command);
@@ -311,14 +400,16 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
 			pair.setParameter(pariCode);
 
-			closeMessageDialog(connectionMsg);
-			messageBox("Pairing", "Paringcode: " + pariCode + "?");
-
+			closeMessageDialog(messageDialog);
+			messageDialog = messageDialog("Pairing", "Paringcode: " + pariCode
+					+ "?", MessageDialog.INFORMATION, new String[] { "OK" }, 0);
 			myClient.sendMessage(from, pair.toString());
 			break;
 		case REF:
-			closeMessageDialog(connectionMsg);
-			messageBox("Connection", "The other device refused the request.");
+			closeMessageDialog(messageDialog);
+			messageDialog = messageDialog("Connection",
+					"The other device refused the request.",
+					MessageDialog.INFORMATION, new String[] { "OK" }, 0);
 			break;
 		case ADVERTISEMENT:
 			String[] params = command.getParam().split("[|]");
@@ -328,6 +419,27 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 				availablePartners.put(from.getHostName(), p);
 			}
 			break;
+		case ACK_PAIR:
+			System.out.println("Ackpair received from " + from.getAddress());
+			closeMessageDialog(messageDialog);
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					myClient.connectToServer(from.getHostName(),
+							JHPServer.SERVER_PORT_TCP);
+				}
+			}).start();
+			
+			shlSynchronisation.getDisplay().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					tabFolder.setSelection(tbtmSynchronisation);
+				}
+			});
+			
+			myClient.sendSecureMessage(from, new SecureMessage(
+					MessageType.REQ_HASHPASSWORD_XML));
+			break;
 		default:
 			System.out.println("Unknown command received.");
 		}
@@ -335,16 +447,19 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		updateUI();
 	}
 
-	private void messageBox(final String text, final String message) {
-		shlSynchronisation.getDisplay().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				MessageBox mB = new MessageBox(shlSynchronisation);
-				mB.setText(text);
-				mB.setMessage(message);
-				mB.open();
-			}
-		});
+	@Override
+	public void handleMessage(SecureMessage recMsg, InetAddress remoteAddress) {
+		switch (recMsg.getType()) {
+		case REC_HASHPASSWORD_XML:
+			System.out.println("Received HashPassword.xml from remote.");
+			this.remoteHashPassword = (HashPassword) recMsg.getPayload();
+			BuildTree(remoteHashPassword, treeRemote);
+			break;
+		default:
+			break;
+		}
+
+		updateUI();
 	}
 
 	private MessageDialog messageDialog(String text, String message, int img,
@@ -360,7 +475,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		return mD;
 	}
 
-	private int closeMessageDialog(final MessageDialog mD) {
+	private int closeMessageDialog(final org.eclipse.jface.dialogs.Dialog mD) {
 		shlSynchronisation.getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -403,7 +518,7 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 		if (index == -1)
 			return;
 
-		connectionMsg = messageDialog("Connecting", "Connecting to client...",
+		messageDialog = messageDialog("Connecting", "Connecting to client...",
 				MessageDialog.INFORMATION, new String[] { "Cancel" }, 0);
 
 		myClient.startSolicitation();
@@ -424,7 +539,11 @@ public class SyncDialog extends Dialog implements IJHPMsgHandler {
 
 	@Override
 	public void handleAction(EActionCommand cmd) {
-		// TODO Auto-generated method stub
+		throw new IllegalSelectorException();
+	}
+
+	@Override
+	public boolean isClientAccepted(InetAddress inetAddress) {
 		throw new IllegalSelectorException();
 	}
 }
