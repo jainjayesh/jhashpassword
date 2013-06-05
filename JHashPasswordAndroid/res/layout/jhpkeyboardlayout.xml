@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<de.janbusch.jhashpassword.inputmethod.LatinKeyboardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:gravity="bottom"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/bottom_control_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bannerbottomnothard"
+        android:orientation="vertical"
+        android:paddingBottom="4dip"
+        android:paddingLeft="3dip"
+        android:paddingRight="3dip"
+        android:paddingTop="6dip" >
+
+        <Button
+            android:id="@+id/btnGenPW"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:onClick="onButtonClicked"
+            android:shadowColor="#FF000000"
+            android:shadowDx="0"
+            android:shadowDy="-1"
+            android:shadowRadius="0.2"
+            android:text="@string/btnGenPW" >
+        </Button>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_control_bar"
+        android:layout_below="@id/top_control_bar"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+
+        <Spinner
+            android:id="@+id/sprHostname"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hapticFeedbackEnabled="true"
+            android:longClickable="true"
+            android:prompt="@string/hostname_prompt"
+            android:shadowColor="#FF000000"
+            android:shadowDx="0"
+            android:shadowDy="-1"
+            android:shadowRadius="0.2" >
+        </Spinner>
+
+        <Spinner
+            android:id="@+id/sprLoginname"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hapticFeedbackEnabled="true"
+            android:longClickable="true"
+            android:prompt="@string/loginname_prompt" >
+        </Spinner>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dip"
+            android:layout_weight="1"
+            android:background="@drawable/divider" />
+
+        <EditText
+            android:id="@+id/etPasswordOne"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textPassword" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/etPasswordTwo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textPassword" >
+        </EditText>
+    </LinearLayout>
+</de.janbusch.jhashpassword.inputmethod.LatinKeyboardView>

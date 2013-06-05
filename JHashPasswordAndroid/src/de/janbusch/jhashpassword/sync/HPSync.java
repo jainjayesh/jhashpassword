@@ -1,7 +1,10 @@
 package de.janbusch.jhashpassword.sync;
 
 import java.io.IOException;
+import java.io.NotSerializableException;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.List;
 
 import org.xml.sax.SAXParseException;
@@ -30,7 +33,10 @@ import de.janbusch.jhashpassword.net.common.EActionCommand;
 import de.janbusch.jhashpassword.net.common.ENetCommand;
 import de.janbusch.jhashpassword.net.common.IJHPMsgHandler;
 import de.janbusch.jhashpassword.net.common.Partner;
+import de.janbusch.jhashpassword.net.common.SecureMessage;
+import de.janbusch.jhashpassword.net.common.SecureMessage.MessageType;
 import de.janbusch.jhashpassword.net.server.JHPServer;
+import de.janbusch.jhashpassword.net.server.JHPServer.ServerState;
 import de.janbusch.jhashpassword.xml.SimpleXMLUtil;
 import de.janbusch.jhashpassword.xml.simple.config.Host;
 import de.janbusch.jhashpassword.xml.simple.config.JHPConfig;
@@ -97,12 +103,9 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		try {
 			config = SimpleXMLUtil.getConfigXML(this.getApplicationContext());
 			acceptedList = config.getSynchronization().getHosts();
-		} catch (SAXParseException spE) {
+		} catch (Exception spE) {
 			config = new JHPConfig();
 			acceptedList = config.getSynchronization().getHosts();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
 		}
 
 		return true;
@@ -178,28 +181,48 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 	}
 
 	@Override
+	public void handleMessage(SecureMessage recMsg, InetAddress remoteAddress) {
+		if (acceptedList.contains(remoteAddress)) {
+			log("Received secure message of type "
+					+ recMsg.getType().toString());
+			switch (recMsg.getType()) {
+			case REQ_HASHPASSWORD_XML:
+				SecureMessage msg = new SecureMessage(
+						MessageType.REC_HASHPASSWORD_XML);
+				try {
+					msg.setPayload(hashPassword);
+				} catch (NotSerializableException e) {
+					e.printStackTrace();
+				}
+				myJHPServer.sendSecureMessage(msg);
+				break;
+			default:
+				break;
+			}
+		} else {
+			log("Refused secure message from because he's not allowed to talk to us. Disconnecting him! "
+					+ remoteAddress.getAddress());
+			myJHPServer.disconnectSecureConnection();
+		}
+	}
+
+	@Override
 	public void handleMessage(ENetCommand command, final InetSocketAddress from) {
 		Host fromHost = null;
 		fromHost = new Host();
 		fromHost.setIpAddress(from.getAddress().getHostAddress());
-		
+
 		switch (command) {
 		case REQ:
 			log("Request received from " + from.getAddress() + ", "
 					+ command.getParam());
 			fromHost = new Host();
 			fromHost.setIpAddress(from.getAddress().getHostAddress());
-			
+
 			if (!acceptedList.contains(fromHost)) {
 				showReqAckDialog(from, command);
-			}
-			break;
-		case EST_TCP:
-			if (acceptedList.contains(fromHost)) {
-				log("Creating secure tcp connection.");
 			} else {
-				log("Refused request from " + from.getAddress() + ", "
-						+ command.getParam());
+				myJHPServer.sendMessage(from, ENetCommand.ACK.toString());
 			}
 			break;
 		case REQ_PAIR:
@@ -261,7 +284,7 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 								if (!acceptedList.contains(host)) {
 									acceptedList.add(host);
 								}
-								
+
 								myJHPServer.sendMessage(from,
 										ENetCommand.ACK.toString());
 							}
@@ -307,11 +330,15 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 								host.setIpAddress(from.getAddress().toString());
 
 								if (acceptedList.contains(host)) {
-									int index = config.getSynchronization().getHosts().indexOf(host);
-									host = config.getSynchronization().getHosts().get(index);
+									int index = config.getSynchronization()
+											.getHosts().indexOf(host);
+									host = config.getSynchronization()
+											.getHosts().get(index);
 									host.setCode(command.getParam());
 									writeConfigXML();
 								}
+								myJHPServer
+										.setState(ServerState.SERVER_LISTEN_CONNECTION_TCP);
 							}
 						});
 				inputDialog.setNegativeButton(getString(R.string.No),
@@ -362,4 +389,16 @@ public class HPSync extends Activity implements IJHPMsgHandler {
 		super.onPause();
 	}
 
+	@Override
+	public boolean isClientAccepted(InetAddress inetAddress) {
+		if (acceptedList.contains(inetAddress)) {
+			log("Accepted secure connection from " + inetAddress.getAddress()
+					+ ".");
+			return true;
+		} else {
+			log("Refused secure connection request from "
+					+ inetAddress.getAddress() + ".");
+			return false;
+		}
+	}
 }
