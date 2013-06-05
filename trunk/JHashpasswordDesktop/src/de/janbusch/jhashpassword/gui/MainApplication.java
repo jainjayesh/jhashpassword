@@ -60,7 +60,7 @@ public class MainApplication {
 
 	private static final String HAS_CHANGED = "hasChanged"; //$NON-NLS-1$
 	public static final String APPLICATION_TITLE = "JHashPassword"; //$NON-NLS-1$
-	public static final String APPLICATION_VERSION = "2.0.0"; //$NON-NLS-1$
+	public static final String APPLICATION_VERSION = "1.7.0"; //$NON-NLS-1$
 //	private static final String XML_PATH = CoreInformation.HASH_PASSWORD_XML;
 	private static final int TIMEOUT = 1000 * 60;
 	protected Shell shlJhashpassword;
@@ -826,6 +826,7 @@ public class MainApplication {
 			}
 			{
 				Button btnSync = new Button(grpButtons, SWT.NONE);
+				btnSync.setEnabled(false);
 				btnSync.setToolTipText(Messages.MainApplication_btnSync_toolTipText);
 				btnSync.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 						false, 1, 1));
