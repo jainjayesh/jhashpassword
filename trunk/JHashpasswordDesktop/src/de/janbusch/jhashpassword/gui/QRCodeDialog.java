@@ -25,7 +25,7 @@ public class QRCodeDialog extends Dialog {
 	 * @param style
 	 */
 	public QRCodeDialog(Shell parent) {
-		super(parent, SWT.DIALOG_TRIM);
+		super(parent, SWT.CENTER | SWT.DIALOG_TRIM);
 		setText("QR-Code");
 	}
 
@@ -45,7 +45,7 @@ public class QRCodeDialog extends Dialog {
 				f.delete();
 			}
 		});
-		
+
 		Display display = getParent().getDisplay();
 		while (!shlQRCode.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -59,7 +59,7 @@ public class QRCodeDialog extends Dialog {
 	 * Create contents of the dialog.
 	 */
 	private void createContents() {
-		shlQRCode = new Shell(getParent(), SWT.DIALOG_TRIM
+		shlQRCode = new Shell(getParent(), SWT.CENTER | SWT.DIALOG_TRIM
 				| SWT.APPLICATION_MODAL);
 		shlQRCode.setText("QR-Code");
 		shlQRCode.setSize(310, 315);
