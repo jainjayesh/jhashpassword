@@ -61,7 +61,7 @@ public class MainApplication {
 	private static final String HAS_CHANGED = "hasChanged"; //$NON-NLS-1$
 	public static final String APPLICATION_TITLE = "JHashPassword"; //$NON-NLS-1$
 	public static final String APPLICATION_VERSION = "1.7.0"; //$NON-NLS-1$
-//	private static final String XML_PATH = CoreInformation.HASH_PASSWORD_XML;
+	// private static final String XML_PATH = CoreInformation.HASH_PASSWORD_XML;
 	private static final int TIMEOUT = 1000 * 60;
 	protected Shell shlJhashpassword;
 	private HashPassword hashPassword;
@@ -106,6 +106,7 @@ public class MainApplication {
 		final Display display = Display.getDefault();
 		createContents();
 		loadXMLFile();
+		createListeners();
 		timer = new Timer();
 
 		shlJhashpassword.open();
@@ -134,6 +135,15 @@ public class MainApplication {
 				display.sleep();
 			}
 		}
+	}
+
+	private void createListeners() {
+		characterSetText.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
+				characterSetText.setData(HAS_CHANGED, true);
+				btnSave.setEnabled(true);
+			}
+		});
 	}
 
 	/**
@@ -190,6 +200,7 @@ public class MainApplication {
 	}
 
 	private void loadHostSettingsAndLogins() {
+		boolean enabled = btnSave.getEnabled();
 		Hosts hosts = hashPassword.getHosts();
 		Host currentHost = hosts.getHostByName(hostCombo.getText());
 		LoginName currentLogin = null;
@@ -211,14 +222,19 @@ public class MainApplication {
 		} else {
 			try {
 				loginCombo.setText(currentLogin.getName());
-				passwordLengthText.setText(currentLogin.getPasswordLength()
-						.replaceAll("[^0-9]", "")); //$NON-NLS-1$ //$NON-NLS-2$
-				characterSetText.setText(currentLogin.getCharset());
-				hashCombo.setText(currentLogin.getHashType());
+				if (currentLogin.getPasswordLength() != null)
+					passwordLengthText.setText(currentLogin.getPasswordLength()
+							.replaceAll("[^0-9]", "")); //$NON-NLS-1$ //$NON-NLS-2$
+				if (currentLogin.getCharset() != null)
+					characterSetText.setText(currentLogin.getCharset());
+				if (currentLogin.getHashType() != null)
+					hashCombo.setText(currentLogin.getHashType());
 			} catch (NullPointerException e) {
 				// No settings found
 			}
 		}
+		
+		btnSave.setEnabled(enabled);
 	}
 
 	/**
@@ -312,6 +328,9 @@ public class MainApplication {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						loadHostSettingsAndLogins();
+						if (!btnSave.getEnabled()) {
+							saveXMLFile();
+						}
 						ClipBoardUtil.addToClipboard(hostCombo.getText());
 					}
 				});
@@ -429,6 +448,10 @@ public class MainApplication {
 							} catch (NullPointerException e1) {
 								// No settings found
 							}
+						}
+
+						if (!btnSave.getEnabled()) {
+							saveXMLFile();
 						}
 
 						ClipBoardUtil.addToClipboard(loginCombo.getText());
@@ -773,20 +796,6 @@ public class MainApplication {
 			gd_characterSetText.heightHint = 106;
 			gd_characterSetText.widthHint = 232;
 			characterSetText.setLayoutData(gd_characterSetText);
-			characterSetText.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusLost(FocusEvent e) {
-					if ((Boolean) characterSetText.getData(HAS_CHANGED)) {
-						btnSave.setEnabled(true);
-						characterSetText.setData(HAS_CHANGED, false);
-					}
-				}
-			});
-			characterSetText.addModifyListener(new ModifyListener() {
-				public void modifyText(ModifyEvent arg0) {
-					characterSetText.setData(HAS_CHANGED, true);
-				}
-			});
 			characterSetText.setSize(100, characterSetText.getSize().y);
 			characterSetText.setText(CoreInformation.DEFAULT_CHARACTERSET);
 		}
