@@ -6,7 +6,6 @@
     android:orientation="vertical" >
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/top_control_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
@@ -56,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical" >
-
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -104,7 +103,7 @@
                     android:prompt="@string/loginname_prompt"
                     android:textColor="#fff" >
                 </Spinner>
-
+
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="25dip"
@@ -115,7 +114,7 @@
                     android:layout_height="2dip"
                     android:layout_weight="1"
                     android:background="@drawable/divider" />
-
+
                 <View
                     android:layout_width="wrap_content"
                     android:layout_height="25dip"
@@ -156,7 +155,6 @@
                     android:inputType="textPassword" >
                 </EditText>
             </LinearLayout>
-
         </ScrollView>
     </RelativeLayout>
 
